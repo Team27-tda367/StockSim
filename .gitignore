@@ -88,3 +88,11 @@ nb-configuration.xml
 ## Miscellaneous
 ##############################
 *.log
+
+
+##############################
+## Database files
+##############################
+*.db
+*.sqlite
+*.sqlite3
