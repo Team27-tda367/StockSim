@@ -1,0 +1,10 @@
+
+/* /src/main/resources/org/team27/stocksim/css/main.css
+    JavaFX button styles - base, variants, states
+*/
+
+/* Base button - applies to all JavaFX Buttons */
+.button {
+     -fx-font-size: 20px;
+     -fx-background-color: linear-gradient(#4a90e2, #3378d8);
+}
