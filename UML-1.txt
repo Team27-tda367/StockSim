@@ -1,0 +1,86 @@
+@startuml
+title Playground Trading Simulator - Model Summary (MVP)
+
+enum OrderType {
+  BUY
+  SELL
+}
+
+class SimulationEngine {
+  - market : Market
+  - priceModel : PriceModel
+  + start() : void
+  + tick() : void
+}
+
+class Market {
+  - stocks : List~Stock~
+  - traders : List~Trader~
+  - openOrders : List~Order~
+  + updatePrices(model : PriceModel) : void
+  + placeOrder(order : Order) : void
+}
+
+class Stock {
+  - symbol : String
+  - name : String
+  - currentPrice : double
+  - priceHistory : List~PricePoint~
+}
+
+class PricePoint {
+  - time : Instant
+  - price : double
+}
+
+class Trader {
+  - name : String
+  - cashBalance : double
+  - portfolio : Portfolio
+}
+
+class Portfolio {
+  - positions : List~Position~
+  + getTotalValue(market : Market) : double
+}
+
+class Position {
+  - stock : Stock
+  - quantity : int
+  - averageBuyPrice : double
+}
+
+class Order {
+  - trader : Trader
+  - stock : Stock
+  - quantity : int
+  - limitPrice : double
+  - type : OrderType
+}
+
+interface PriceModel {
+  + nextPrice(prev : double, now : Instant) : double
+}
+
+class RandomWalkPriceModel {
+  - volatility : double
+  - rnd : Random
+}
+
+' ==== RELATIONER ====
+SimulationEngine *-- Market
+SimulationEngine *-- PriceModel
+PriceModel <|.. RandomWalkPriceModel
+
+Market o-- Stock
+Market o-- Trader
+Market o-- Order
+
+Stock o-- PricePoint
+Trader *-- Portfolio
+Portfolio *-- Position
+Order --> Trader
+Order --> Stock
+Position --> Stock
+
+@enduml
