@@ -1,4 +1,4 @@
-package org.team27.stocksim.market;
+package org.team27.stocksim.model.market;
 
 
 public class Stock extends Instrument {

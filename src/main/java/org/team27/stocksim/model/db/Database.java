@@ -1,4 +1,4 @@
-package org.team27.stocksim.db;
+package org.team27.stocksim.model.db;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;

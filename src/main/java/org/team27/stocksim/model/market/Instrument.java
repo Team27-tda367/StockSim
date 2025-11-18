@@ -1,4 +1,4 @@
-package org.team27.stocksim.market;
+package org.team27.stocksim.model.market;
 
 public abstract class Instrument {
     protected final String symbol;
