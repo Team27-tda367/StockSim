@@ -4,7 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.team27.stocksim.controller.StockSimController;
 import org.team27.stocksim.model.db.Database;
+import org.team27.stocksim.model.market.StockSim;
 
 public class Main extends Application {
 
@@ -35,6 +37,10 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        StockSim model = new StockSim();
+        StockSimController controller = new StockSimController(model);
+
+        // start Java-FX app
+        //launch(args);
     }
 }

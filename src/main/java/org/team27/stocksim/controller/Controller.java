@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import org.team27.stocksim.model.market.Stock;
+import org.team27.stocksim.model.market.StockSim;
 
 public class Controller {
 
