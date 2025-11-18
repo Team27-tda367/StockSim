@@ -3,9 +3,9 @@ package org.team27.stocksim.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import org.team27.stocksim.market.Stock;
+import org.team27.stocksim.model.market.Stock;
 
-public class ExampleController {
+public class Controller {
 
     @FXML
     private Label outputLabel;

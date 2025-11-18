@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.team27.stocksim.db.Database;
+import org.team27.stocksim.model.db.Database;
 
 public class Main extends Application {
 
