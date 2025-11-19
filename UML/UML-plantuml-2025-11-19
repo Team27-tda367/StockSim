@@ -1,0 +1,279 @@
+@startuml
+class StockSim{
+  - stocks        : Map<String, Instrument>
+  - traders       : Map<String, Trader>
+  - matchingEngine: MatchingEngine
+  - listeners     : List<ModelUpdateListener>
+
+  + StockSim(matchingEngine : MatchingEngine)
+  + addStock(instrument : Instrument) : void
+  + registerTrader(trader : Trader) : void
+  + placeOrder(order : Order) : void
+  + tick() : void
+  + addListener(listener : ModelUpdateListener) : void
+  + notifyListeners() : void
+}
+
+interface ModelUpdateListener {
+  + onModelUpdated(model : StockSim) : void
+}
+
+class StockSimView {
+  - controller : StockSimController
+
+  + StockSimView()
+  + setController(controller : StockSimController) : void
+  + show() : void
+  + render(model : StockSim) : void
+  + onModelUpdated(model : StockSim) : void
+}
+
+class StockSimController {
+  - model : StockSim
+  - view  : StockSimView
+  - running : boolean
+
+  + StockSimController(model : StockSim, view : StockSimView)
+  + startSimulation() : void
+  + stopSimulation() : void
+  + handlePlaceOrder(order : Order) : void
+  + handleTick() : void
+}
+
+class Main {
+  + main(args : String[]) : void
+}
+
+
+' MatchingEngine '
+class MatchingEngine{
+  - orderBooks : Map<String, OrderBook>
+
+  + MatchingEngine()
+  + match(order : Order) : List<Trade>
+  + getOrderBook(symbol : String) : OrderBook
+}
+
+class OrderBook {
+  - symbol : String
+  - bids   : PriorityQueue<Order>
+  - asks   : PriorityQueue<Order>
+
+  + OrderBook(symbol : String)
+  + add(order : Order) : void
+  + getBestBid() : Order
+  + getBestAsk() : Order
+}
+
+class Order {
+  - id               : String
+  - traderId         : String
+  - instrumentSymbol : String
+  - price            : double
+  - quantity         : long
+  - remainingQty     : long
+  - side             : OrderSide
+  - type             : OrderType
+
+  + Order(id : String, traderId : String, instrumentSymbol : String, price : double, quantity : long)
+  + getTraderId() : String
+  + getInstrumentSymbol() : String
+  + getRemainingQty() : long
+  + reduceQuantity(qty : long) : void
+}
+
+enum OrderSide{
+  BUY 
+  SELL
+}
+
+enum OrderType{
+  MARKET
+  LIMIT
+}
+
+class Trade {
+  - id               : String
+  - instrumentSymbol : String
+  - price            : double
+  - quantity         : long
+  - buyerId          : String
+  - sellerId         : String
+
+  + Trade(id : String, instrumentSymbol : String, price : double, quantity : long, buyerId : String, sellerId : String)
+  + getInstrumentSymbol() : String
+  + getPrice() : double
+  + getQuantity() : long
+}
+
+
+' Klasser hör till Trader '
+abstract class Trader {
+  - id        : String
+  - portfolio : Portfolio
+  - cash      : double
+
+  + Trader(id : String, initialCash : double)
+  + getId() : String
+  + getPortfolio() : Portfolio
+  + getCash() : double
+  + deposit(amount : double) : void
+  + withdraw(amount : double) : void
+}
+
+class User{
+  - displayName : String
+
+  + User(id : String, displayName : String, initialCash : double)
+  + getDisplayName() : String
+}
+
+class Bot{
+  - strategy : BotStrategy
+
+  + Bot(id : String, initialCash : double, strategy : BotStrategy)
+  + getStrategy() : BotStrategy
+  + setStrategy(strategy : BotStrategy) : void
+  + decide(model : StockSim) : List<Order>
+}
+
+
+' Botstrategy '
+interface BotStrategy {
+  + decide(model : StockSim, bot : Bot) : List<Order>
+}
+
+class WSBStrategy{
+  - randomnessSeed : long
+
+  + WSBStrategy(seed : long)
+  + decide(model : StockSim, bot : Bot) : List<Order>
+}
+
+class OtherStrategy{
+  + OtherStrategy()
+  + decide(model : StockSim, bot : Bot) : List<Order>
+}
+
+
+' Portfolio'
+class Portfolio {
+  - cash      : double
+  - positions : Map<String, Position>
+
+  + getCash() : double
+  + deposit(amount : double) : void
+  + withdraw(amount : double) : void
+  + getPosition(symbol : String) : Position
+  + applyTrade(trade : Trade, isBuyer : boolean) : void
+}
+
+class Position {
+  - instrumentSymbol : String
+  - quantity         : long
+  - avgPrice         : double
+
+  + Position(instrumentSymbol : String)
+  + getQuantity() : long
+  + getAvgPrice() : double
+  + onBuy(qty : long, price : double) : void
+  + onSell(qty : long, price : double) : void
+}
+
+
+' Klasser hör till instrument '
+abstract class Instrument{
+  - symbol : String
+  - name   : String
+
+  + Instrument(symbol : String, name : String)
+  + getSymbol() : String
+  + getName() : String
+}
+
+class Stock{
+  - lastPrice    : double
+  - priceHistory : PriceHistory
+
+  + Stock(symbol : String, name : String, initialPrice : double)
+  + getLastPrice() : double
+  + setLastPrice(price : double) : void
+  + getPriceHistory() : PriceHistory
+}
+
+class PriceHistory{
+  - points : List<PricePoint>
+
+  + addPoint(point : PricePoint) : void
+  + getLatest() : PricePoint
+}
+
+class PricePoint{
+  - timestamp : Instant
+  - price     : double
+
+  + PricePoint(timestamp : Instant, price : double)
+  + getTimestamp() : Instant
+  + getPrice() : double
+}
+
+
+' -- ALLA RELATIONER -- '
+
+
+' Main '
+Main --> StockSim : creates
+Main --> StockSimView : creates
+Main --> StockSimController : creates
+
+' Controller '
+StockSimController --> StockSim : controls
+StockSimController --> StockSimView : updatesView
+
+'Relationer StockSim
+StockSim o-- Instrument
+StockSim o-- Trader
+StockSim --> MatchingEngine
+
+StockSim --> ModelUpdateListener: observer
+StockSimView ..|> ModelUpdateListener
+
+' Relationer MatchingEngine '
+MatchingEngine --> Trade
+MatchingEngine *-- OrderBook
+OrderBook o-- Order
+
+' Relationer Order '
+Order --> OrderType
+Order --> OrderSide
+
+'Relationer Instrument - stock - price
+Stock --|> Instrument
+Stock --> PriceHistory
+PriceHistory --> PricePoint
+
+' Trader ' 
+User --|> Trader
+Bot --|> Trader
+
+' Portfolio '
+Trader *-- Portfolio
+Portfolio *-- Position
+
+' Bot ' 
+Bot --> BotStrategy
+
+' BotStrategy ' 
+WSBStrategy ..|> BotStrategy
+OtherStrategy  ..|>  BotStrategy
+
+' Order kopplat till Trader & Instrument '
+'Trader "1" <-- Order : placedBy
+'Order "1" --> Instrument : instrument
+
+' Trade kopplat till instrument, orders & traders '
+'Trade --> Instrument : instrument
+'Trade --> Order : buyOrder/sellOrder
+'Trade --> Trader : buyer/seller
+
+@enduml
