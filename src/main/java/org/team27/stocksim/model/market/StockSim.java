@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class StockSim {
+    MarketState state;
 
     private final StringProperty message = new SimpleStringProperty("");
 
