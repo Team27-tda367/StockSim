@@ -11,7 +11,11 @@ public class Controller {
 
     public void setModel(StockSim model) {
         this.model = model;
-        System.out.println("Model has been set successfully");
+
+        model.messageProperty().addListener((obs, oldVal, newVal) -> {
+            outputLabel.setText(newVal);
+        });
+
     }
 
     @FXML
@@ -19,8 +23,7 @@ public class Controller {
 
     @FXML
     private void handleSampleAction(ActionEvent event) {
-        String testText = model.testFetch();
-        outputLabel.setText(testText);
+        model.testFetch();
     }
 
 }

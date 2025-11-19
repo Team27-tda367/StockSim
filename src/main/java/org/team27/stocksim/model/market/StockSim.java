@@ -1,13 +1,23 @@
 package org.team27.stocksim.model.market;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class StockSim {
+
+    private final StringProperty message = new SimpleStringProperty("");
+
+    public StringProperty messageProperty() {
+        return message;
+    }
 
     public StockSim() {
         System.out.println("Succesfully created Sim-model");
     }
 
-    public String testFetch() {
-        return "test successfull";
+    public void testFetch() {
+        String testString = "Test string from model";
+        message.set(testString);
     }
 
 }
