@@ -6,4 +6,8 @@ public class StockSim {
         System.out.println("Succesfully created Sim-model");
     }
 
+    public String testFetch() {
+        return "test successfull";
+    }
+
 }

@@ -2,9 +2,10 @@ package org.team27.stocksim;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.team27.stocksim.controller.StockSimController;
+import org.team27.stocksim.controller.Controller;
 import org.team27.stocksim.model.db.Database;
 import org.team27.stocksim.model.market.StockSim;
 
@@ -20,12 +21,17 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/org/team27/stocksim/view/exampel.fxml"));
+        // creating model
+        StockSim model = new StockSim();
 
-        Scene scene = new Scene(loader.load(), 400, 300);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/team27/stocksim/view/exampel.fxml"));
+        Parent root = loader.load();  // This auto-creates the controller
 
+        Controller controller = loader.getController();
+        controller.setModel(model);
+
+        primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Stocksim");
-        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -37,10 +43,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        StockSim model = new StockSim();
-        StockSimController controller = new StockSimController(model);
-
         // start Java-FX app
-        //launch(args);
+        launch(args);
     }
+
 }
