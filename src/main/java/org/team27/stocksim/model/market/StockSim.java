@@ -35,12 +35,13 @@ public class StockSim {
 
     public void createStock(String symbol, String stockName, String tickSize, String lotSize){
         // checking if symbol already exists (if yes -> error)
-        if (stocks.containsKey(symbol)) {
+        String highSymbol = symbol.toUpperCase();
+        if (stocks.containsKey(highSymbol)) {
             createdStockMsg.set("Symbol already exists!");
         } else {
-            Instrument stock = stockFactory.createInstrument(symbol, stockName, Double.parseDouble(tickSize), Integer.parseInt(lotSize));
-            stocks.put(stockName, stock); //should be unique-symbol, not stockName
-            String createdStock = symbol + " " + stockName + " " + tickSize + " " + lotSize;
+            Instrument stock = stockFactory.createInstrument(highSymbol, stockName, Double.parseDouble(tickSize), Integer.parseInt(lotSize));
+            stocks.put(highSymbol, stock);
+            String createdStock = highSymbol + " " + stockName + " " + tickSize + " " + lotSize;
             createdStockMsg.set(createdStock);
         }
 
