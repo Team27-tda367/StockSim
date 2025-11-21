@@ -11,6 +11,7 @@ import org.team27.stocksim.controller.SimControllerImpl;
 import org.team27.stocksim.model.db.Database;
 import org.team27.stocksim.model.market.StockSim;
 import org.team27.stocksim.ui.fx.MainViewController;
+import org.team27.stocksim.ui.fx.MainViewAdapter;
 
 public class Main extends Application {
 
@@ -30,13 +31,15 @@ public class Main extends Application {
         // Create fascade controller for model
         SimController simController = new SimControllerImpl(model);
 
+        // Create ViewModel
+        MainViewAdapter viewModel = new MainViewAdapter(model);
+
         // Create FXML loader
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/team27/stocksim/view/exampel.fxml"));
 
         loader.setControllerFactory(type -> {
             if (type == MainViewController.class) {
-                System.out.println("Creating MainViewController with SimController dependency");
-                return new MainViewController(simController);
+                return new MainViewController(simController, viewModel);
             }
             try {
                 return type.getDeclaredConstructor().newInstance();
@@ -45,7 +48,7 @@ public class Main extends Application {
             }
         });
 
-        // Load FXML. Now the controller is created by the factory
+        // Load FXML. The controller is created by the factory
         Parent root = loader.load();
 
         primaryStage.setScene(new Scene(root));
