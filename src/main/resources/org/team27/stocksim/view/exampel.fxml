@@ -22,16 +22,17 @@
         <Label fx:id="outputLabel" layoutX="14.0" layoutY="90.0" text="" />
 
         <!-- Create new Stock -->
-        <TextField fx:id="inputStockName" layoutX="14.0" layoutY="130.0" prefWidth="200.0" />
-        <TextField fx:id="inputTickSize" layoutX="14.0" layoutY="160.0" prefWidth="30.0" />
-        <TextField fx:id="inputLotSize" layoutX="14.0" layoutY="190.0" prefWidth="30.0" />
+        <TextField fx:id="inputSymbol" layoutX="14.0" layoutY="130.0" prefWidth="200.0" />
+        <TextField fx:id="inputStockName" layoutX="14.0" layoutY="160.0" prefWidth="200.0" />
+        <TextField fx:id="inputTickSize" layoutX="14.0" layoutY="190.0" prefWidth="30.0" />
+        <TextField fx:id="inputLotSize" layoutX="14.0" layoutY="220.0" prefWidth="30.0" />
 
         <!-- Submit Button -->
-        <Button layoutX="220.0" layoutY="130.0" text="Submit"
+        <Button layoutX="220.0" layoutY="160.0" text="Submit"
                 onAction="#createStock" />
 
         <!-- Label to show submitted stock-values -->
-        <Label fx:id="createdStockLabel" layoutX="50.0" layoutY="160.0" text="" />
+        <Label fx:id="createdStockLabel" layoutX="50.0" layoutY="210.0" text="" />
 
     </children>
 

@@ -30,6 +30,8 @@ public class Controller {
         model.testFetch();
     }
     @FXML
+    private TextField inputSymbol;
+    @FXML
     private TextField inputStockName;
     @FXML
     private TextField inputTickSize;
@@ -41,10 +43,11 @@ public class Controller {
 
     @FXML
     private void createStock(ActionEvent event) {
+        String symbol = inputSymbol.getText();
         String stockName = inputStockName.getText();
         String tickSize = inputTickSize.getText();
         String lotSize = inputLotSize.getText();
-        model.createStock(stockName, tickSize, lotSize);
+        model.createStock(symbol, stockName, tickSize, lotSize);
     }
 
 }

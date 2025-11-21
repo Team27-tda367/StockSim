@@ -10,8 +10,8 @@ public abstract class Instrument {
     public Instrument(String symbol, String name, double tickSize, int lotSize) {
         this.symbol = symbol;
         this.name = name;
-        this.tickSize = 0.01;
-        this.lotSize = 100;
+        this.tickSize = tickSize;
+        this.lotSize = lotSize;
     }
     public String getSymbol() {return symbol;}
     public String getName() {return name;}

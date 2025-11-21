@@ -33,13 +33,18 @@ public class StockSim {
         message.set(testString);
     }
 
-    public void createStock(String stockName, String tickSize, String lotSize){
-        System.out.println(stocks);
-        Instrument stock = stockFactory.createInstrument(stockName, Double.parseDouble(tickSize), Integer.parseInt(lotSize));
-        stocks.put(stockName, stock); //should be unique-symbol, not stockName
-        String createdStock = stockName + " " + tickSize + " " + lotSize;
-        createdStockMsg.set(createdStock);
-        System.out.println(stocks);
+    public void createStock(String symbol, String stockName, String tickSize, String lotSize){
+        // checking if symbol already exists (if yes -> error)
+        if (stocks.containsKey(symbol)) {
+            createdStockMsg.set("Symbol already exists!");
+        } else {
+            Instrument stock = stockFactory.createInstrument(symbol, stockName, Double.parseDouble(tickSize), Integer.parseInt(lotSize));
+            stocks.put(stockName, stock); //should be unique-symbol, not stockName
+            String createdStock = symbol + " " + stockName + " " + tickSize + " " + lotSize;
+            createdStockMsg.set(createdStock);
+        }
+
+        System.out.println(stocks); // test-print
     }
 
 }
