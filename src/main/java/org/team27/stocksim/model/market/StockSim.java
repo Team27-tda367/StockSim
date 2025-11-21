@@ -18,6 +18,7 @@ public class StockSim {
 
     public void testFetch() {
         String testString = "Test string from model";
+        System.out.println("Model testFetch called, setting message to: " + testString);
         message.set(testString);
     }
 
