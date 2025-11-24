@@ -9,19 +9,11 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.team27.stocksim.ui.fx.MainViewController"
-
             prefHeight="400.0" prefWidth="600.0"
             stylesheets="@../css/main.css"
             >
-
     <children>
-
         <Label layoutX="14.0" layoutY="14.0" text="Stocksim" />
-
-        <Button layoutX="14.0" layoutY="50.0" text="Call model" onAction="#handleSampleAction" />
-
-        <Label fx:id="outputLabel" layoutX="14.0" layoutY="90.0" text="" />
-
         <!-- Create new Stock -->
         <TextField fx:id="inputSymbol" layoutX="14.0" layoutY="130.0" prefWidth="200.0" />
         <TextField fx:id="inputStockName" layoutX="14.0" layoutY="160.0" prefWidth="200.0" />

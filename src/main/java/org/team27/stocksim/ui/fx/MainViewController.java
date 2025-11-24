@@ -18,28 +18,11 @@ public class MainViewController {
     }
 
     @FXML
-    private Label outputLabel;
-
-    @FXML
-    private void handleSampleAction(ActionEvent event) {
-        simController.handleSampleAction();
-    }
-
-    @FXML
     private void initialize() {
         /*
          * Initialize all bindings
          */
-        outputLabel.textProperty().bind(viewAdapter.messageProperty());
-
-        /*
-         * model.messageProperty().addListener((obs, oldVal, newVal) -> {
-         * outputLabel.setText(newVal);
-         * });
-         * model.messageCreatedStock().addListener((obs, oldVal, newVal) -> {
-         * createdStockLabel.setText(newVal);
-         * });
-         */
+        createdStockLabel.textProperty().bind(viewAdapter.messageProperty());
     }
 
     @FXML

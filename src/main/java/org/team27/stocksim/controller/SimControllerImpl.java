@@ -9,10 +9,6 @@ public class SimControllerImpl implements SimController {
         this.model = model;
     }
 
-    @Override
-    public void handleSampleAction() {
-        model.testFetch();
-    }
 
     @Override
     public void createStock(String symbol, String stockName, String tickSize, String lotSize) {

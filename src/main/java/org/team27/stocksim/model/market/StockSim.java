@@ -10,7 +10,7 @@ public class StockSim {
     HashMap<String, Instrument> stocks;
     InstrumentFactory stockFactory;
 
-    private String createdStockMsg = "";
+    private String createdStockMsg = "Initial message";
 
     public String messageCreatedStock() {
         return createdStockMsg;
@@ -21,7 +21,6 @@ public class StockSim {
         stocks = new HashMap<>();
         stockFactory = new StockFactory();
 
-        System.out.println("Succesfully created Sim-model");
     }
 
     /* Listeners */
@@ -35,19 +34,10 @@ public class StockSim {
         listeners.remove(l);
     }
 
-    private void notifyMessageChanged(String newMessage) {
+    private void notifyListeners(String newMessage) {
         for (StockSimListener l : List.copyOf(listeners)) {
             l.messageChanged(newMessage);
         }
-    }
-
-    /* Test string and methods */
-    private String message = "Initial message";
-
-    public void testFetch() {
-        String msg = "Test string from model";
-        this.message = msg;
-        notifyMessageChanged(msg);
     }
 
     public void createStock(String symbol, String stockName, String tickSize, String lotSize) {
@@ -63,8 +53,7 @@ public class StockSim {
             createdStockMsg = createdStock;
         }
 
-        System.out.println(stocks); // test-print
-        notifyMessageChanged(createdStockMsg);
+        notifyListeners(createdStockMsg);
     }
 
 }

@@ -9,8 +9,8 @@ import javafx.beans.property.StringProperty;
 
 public class MainViewAdapter implements StockSimListener {
 
-    private final StringProperty message = new SimpleStringProperty("");
     private final StockSim model;
+    private final StringProperty message = new SimpleStringProperty("");
 
     public MainViewAdapter(StockSim model) {
         this.model = model;
