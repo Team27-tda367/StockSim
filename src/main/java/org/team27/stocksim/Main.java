@@ -31,15 +31,15 @@ public class Main extends Application {
         // Create fascade controller for model
         SimController simController = new SimControllerImpl(model);
 
-        // Create ViewModel
-        MainViewAdapter viewModel = new MainViewAdapter(model);
+        // Create ViewAdapter
+        MainViewAdapter viewAdapter = new MainViewAdapter(model);
 
         // Create FXML loader
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/team27/stocksim/view/exampel.fxml"));
 
         loader.setControllerFactory(type -> {
             if (type == MainViewController.class) {
-                return new MainViewController(simController, viewModel);
+                return new MainViewController(simController, viewAdapter);
             }
             try {
                 return type.getDeclaredConstructor().newInstance();

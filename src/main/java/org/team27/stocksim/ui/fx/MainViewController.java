@@ -9,11 +9,11 @@ import javafx.scene.control.Label;
 
 public class MainViewController {
     private final SimController simController;
-    private final MainViewAdapter viewModel;
+    private final MainViewAdapter viewAdapter;
 
-    public MainViewController(SimController simController, MainViewAdapter viewModel) {
+    public MainViewController(SimController simController, MainViewAdapter viewAdapter) {
         this.simController = simController;
-        this.viewModel = viewModel;
+        this.viewAdapter = viewAdapter;
     }
 
     @FXML
@@ -29,6 +29,6 @@ public class MainViewController {
         /*
          * Initialize all bindings
          */
-        outputLabel.textProperty().bind(viewModel.messageProperty());
+        outputLabel.textProperty().bind(viewAdapter.messageProperty());
     }
 }
