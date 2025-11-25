@@ -1,7 +1,7 @@
 package org.team27.stocksim.model.users;
 
-public class Bot extends Trader{
-    public Bot(String id) {
+public class User extends Trader {
+    public User(String id) {
         super(id);
     }
 }
