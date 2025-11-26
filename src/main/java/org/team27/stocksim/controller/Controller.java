@@ -49,5 +49,10 @@ public class Controller {
         String lotSize = inputLotSize.getText();
         model.createStock(symbol, stockName, tickSize, lotSize);
     }
+    @FXML
+    public void onMainView(ActionEvent event){
+        
+        ViewSwitcher.switchTo(View.MAINVIEW);
 
+    }
 }

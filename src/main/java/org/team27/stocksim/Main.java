@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.team27.stocksim.controller.Controller;
+import org.team27.stocksim.controller.View;
+import org.team27.stocksim.controller.ViewSwitcher;
 import org.team27.stocksim.model.db.Database;
 import org.team27.stocksim.model.market.StockSim;
 
@@ -30,7 +32,10 @@ public class Main extends Application {
         Controller controller = loader.getController();
         controller.setModel(model);
 
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        ViewSwitcher.setScene(scene);
+         
+        primaryStage.setScene(scene);
         primaryStage.setTitle("Stocksim");
         primaryStage.show();
     }
