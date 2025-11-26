@@ -9,99 +9,83 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.team27.stocksim.controller.MainViewController"
       prefHeight="800.0" prefWidth="1400.0"
-      style="@../css/main.css">
+      styleClass="root-container"
+      stylesheets="@../css/main.css">
 
     <!-- Header -->
-    <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #f8f9fa; -fx-padding: 20 30 20 30;">
+    <HBox alignment="CENTER_LEFT" styleClass="header-bar, spacing-large">
         
-        <Label text="StonkSim">
-            <font>
-                <Font name="System Bold" size="24"/>
-            </font>
-        </Label>
+        <Label text="StonkSim" styleClass="logo"/>
         
-        <Button text="Home" style="-fx-background-color: transparent; -fx-cursor: hand;" onAction="#onExampel"/>
-        <Button text="Portfolio" style="-fx-background-color: transparent; -fx-cursor: hand;"/>
+        <Button text="Home" styleClass="btn-ghost" onAction="#onExample"/>
+        <Button text="Portfolio" styleClass="btn-ghost"/>
         
         <Region HBox.hgrow="ALWAYS"/>
         
-        <VBox alignment="CENTER_RIGHT" spacing="5">
-            <Label text="Available Balance" style="-fx-text-fill: #666666;">
-                <font>
-                    <Font size="12"/>
-                </font>
-            </Label>
-            
+        <VBox alignment="CENTER_RIGHT" styleClass="spacing-small">
+            <Label text="Available Balance" styleClass="text-small, text-muted"/>
         </VBox>
     </HBox>
 
     <!-- Main Content -->
-    <VBox VBox.vgrow="ALWAYS" spacing="20" style="-fx-padding: 30;">
+    <VBox VBox.vgrow="ALWAYS" styleClass="content-area, spacing-large">
         
         <!-- Title -->
-        <Label text="Stocks">
-            <font>
-                <Font name="System Bold" size="36"/>
-            </font>
-        </Label>
+        <Label text="Stocks" styleClass="title-large"/>
         
         <!-- Search Bar -->
-        <TextField fx:id="searchField" promptText="Search for a stock..." 
-                   prefHeight="45" style="-fx-font-size: 14px;"/>
+        <TextField fx:id="searchField" 
+                   promptText="Search for a stock..." 
+                   styleClass="input-field"/>
         
         <!-- Filter Buttons -->
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Button text="All" style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-background-radius: 5;"/>
-            <Button text="Technology" style="-fx-background-color: #f3f4f6; -fx-background-radius: 5;" />
-            <Button text="Finance" style="-fx-background-color: #f3f4f6; -fx-background-radius: 5;" />
-            <Button text="Consumer" style="-fx-background-color: #f3f4f6; -fx-background-radius: 5;" />
-            <Button text="Entertainment" style="-fx-background-color: #f3f4f6; -fx-background-radius: 5;" />
-            <Button text="Aviation" style="-fx-background-color: #f3f4f6; -fx-background-radius: 5;" />
-            <Button text="Semiconductors" style="-fx-background-color: #f3f4f6; -fx-background-radius: 5;" />
+        <HBox alignment="CENTER_LEFT" styleClass="spacing-medium">
+            <Button text="All" styleClass="btn-primary"/>
+            <Button text="Technology" styleClass="btn-secondary"/>
+            <Button text="Finance" styleClass="btn-secondary"/>
+            <Button text="Consumer" styleClass="btn-secondary"/>
+            <Button text="Entertainment" styleClass="btn-secondary"/>
+            <Button text="Aviation" styleClass="btn-secondary"/>
+            <Button text="Semiconductors" styleClass="btn-secondary"/>
             <Region HBox.hgrow="SOMETIMES"/>
-            <Button text="Show favorites only" style="-fx-background-color: #f3f4f6; -fx-background-radius: 5;" />
+            <Button text="Show favorites only" styleClass="btn-secondary"/>
         </HBox>
         
         <!-- Stock List Header -->
-        <HBox spacing="10" style="-fx-padding: 10 20 10 20; -fx-background-color: #f9fafb;">
-            <Label text="Name" prefWidth="180" style="-fx-font-weight: bold;"/>
-            <Label text="Today" prefWidth="100" alignment="CENTER" style="-fx-font-weight: bold;"/>
-            <Label text="1 day" prefWidth="100" alignment="CENTER" style="-fx-font-weight: bold;"/>
-            <Label text="1 week" prefWidth="100" alignment="CENTER" style="-fx-font-weight: bold;"/>
-            <Label text="1 year" prefWidth="100" alignment="CENTER" style="-fx-font-weight: bold;"/>
-            <Label text="Last price" prefWidth="100" alignment="CENTER_RIGHT" style="-fx-font-weight: bold;"/>
+        <HBox styleClass="list-header, spacing-medium">
+            <Label text="Name" prefWidth="180" styleClass="text-bold"/>
+            <Label text="Today" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="1 day" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="1 week" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="1 year" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="Last price" prefWidth="100" alignment="CENTER_RIGHT" styleClass="text-bold"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="Watchlist" prefWidth="80" alignment="CENTER" style="-fx-font-weight: bold;"/>
-            <Label text="Trade" prefWidth="100" alignment="CENTER" style="-fx-font-weight: bold;"/>
+            <Label text="Watchlist" prefWidth="80" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="Trade" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
         </HBox>
         
         <!-- Stock List Items -->
-        <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" style="-fx-background-color: transparent;">
-            <VBox spacing="5">
+        <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="scroll-pane">
+            <VBox styleClass="spacing-small, clickable">
                 
-                <!--Structure of a stock in the list view-->
-                
-                <HBox spacing="10" style="-fx-padding: 15 20 15 20; -fx-background-color: white; -fx-border-color: #e5e7eb; -fx-border-width: 0 0 1 0;">
-                    <VBox spacing="3" prefWidth="180">
-                        <Label text="AAPL">
-                            <font>
-                                <Font name="System Bold" size="14"/>
-                            </font>
-                        </Label>
-                        <Label text="Technology · USA" style="-fx-text-fill: #666666; -fx-font-size: 12px;"/>
+                <!-- Structure of a stock in the list view -->
+                <HBox styleClass="list-item, spacing-medium">
+                    <VBox prefWidth="180" styleClass="spacing-small">
+                        <Label text="AAPL" styleClass="stock-symbol"/>
+                        <Label text="Technology" styleClass="stock-meta"/>
                     </VBox>
-                    <Label text="+1.33%" prefWidth="100" alignment="CENTER" style="-fx-text-fill: #16a34a;"/>
-                    <Label text="+0.30%" prefWidth="100" alignment="CENTER" style="-fx-text-fill: #16a34a;"/>
-                    <Label text="-3.00%" prefWidth="100" alignment="CENTER" style="-fx-text-fill: #dc2626;"/>
-                    <Label text="+28.80%" prefWidth="100" alignment="CENTER" style="-fx-text-fill: #16a34a;"/>
-                    <Label text="178.45" prefWidth="100" alignment="CENTER_RIGHT">
-                        <font>
-                            <Font name="System Bold" size="14"/>
-                        </font>
-                    </Label>
+                    <Label text="+1.33%" prefWidth="100" alignment="CENTER" styleClass="text-positive"/>
+                    <Label text="+0.30%" prefWidth="100" alignment="CENTER" styleClass="text-positive"/>
+                    <Label text="-3.00%" prefWidth="100" alignment="CENTER" styleClass="text-negative"/>
+                    <Label text="+28.80%" prefWidth="100" alignment="CENTER" styleClass="text-positive"/>
+                    <Label text="178.45" prefWidth="100" alignment="CENTER_RIGHT" styleClass="text-bold"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Label text="☆" prefWidth="80" alignment="CENTER" style="-fx-font-size: 18px; -fx-cursor: hand;"/>
-                    <Button text="Trade" prefWidth="100" style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-background-radius: 5;"/>
+                    <Label text="☆" prefWidth="100" alignment="CENTER" styleClass="icon-large, clickable">
+                        <tooltip>
+                            <Tooltip text="Your tooltip text here"/>
+                        </tooltip>
+                    </Label>
+                    <Button text="Trade" prefWidth="100" styleClass="btn-primary, clickable"/>
                 </HBox>
                 
             </VBox>

@@ -1,10 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter');
 
-/* /src/main/resources/org/team27/stocksim/css/main.css
-    JavaFX button styles - base, variants, states
-*/
+/* Root container */
+.root-container {
+    -fx-background-color: white;
+}
 
-/* Base button - applies to all JavaFX Buttons */
-.button {
-     -fx-font-size: 20px;
-     -fx-background-color: linear-gradient(#4a90e2, #3378d8);
+/* 
+    FONTS Etc.
+    */
+
+.title-large {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Inter', sans-serif;
+}
+
+.title-medium {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.title-small {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.text-bold {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.text-regular {
+    -fx-font-size: 14px;
+}
+
+.text-small {
+    -fx-font-size: 12px;
+}
+
+.text-muted {
+    -fx-text-fill: #666666;
+}
+
+/* LAYOUT */
+
+/* Header bar */
+.header-bar {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20 30 20 30;
+}
+
+/* Content area with padding */
+.content-area {
+    -fx-padding: 30;
+}
+
+.content-area-small {
+    -fx-padding: 20;
+}
+
+/* List header */
+.list-header {
+    -fx-padding: 10 20 10 20;
+    -fx-background-color: #f9fafb;
+}
+
+/* List item */
+.list-item {
+    -fx-padding: 15 20 15 20;
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.list-item:hover {
+    -fx-background-color: #f9fafb;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+/* Primary button (blue) */
+.btn-primary {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-background-radius: 15;
+    -fx-cursor: hand;
+    -fx-font-family:"Inter", sans-serif;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+/* Secondary button (gray) */
+.btn-secondary {
+    -fx-background-color: #f3f4f6;
+    -fx-background-radius: 15;
+    -fx-cursor: hand;
+    -fx-font-family:"Inter", sans-serif;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #e5e7eb;
+}
+
+/* Transparent/ghost button */
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.btn-ghost:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Success button (green) */
+.btn-success {
+    -fx-background-color: #16a34a;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-success:hover {
+    -fx-background-color: #15803d;
+}
+
+/* Danger button (red) */
+.btn-danger {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #b91c1c;
+}
+
+/* ============================================
+   FORM INPUTS
+   ============================================ */
+
+.input-field {
+    -fx-pref-height: 45;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5;
+}
+
+.input-field-small {
+    -fx-pref-height: 35;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5;
+}
+
+/* ============================================
+   COLOR UTILITIES
+   ============================================ */
+
+.text-positive {
+    -fx-text-fill: #16a34a;
+}
+
+.text-negative {
+    -fx-text-fill: #dc2626;
+}
+
+.text-primary {
+    -fx-text-fill: #2563eb;
+}
+
+.text-warning {
+    -fx-text-fill: #d97706;
+}
+
+.bg-light {
+    -fx-background-color: #f9fafb;
+}
+
+.bg-white {
+    -fx-background-color: white;
+}
+
+/* ============================================
+   CARDS & CONTAINERS
+   ============================================ */
+
+.card {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 20;
+}
+
+.card-header {
+    -fx-background-color: #f9fafb;
+    -fx-padding: 15 20 15 20;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* 
+   INTERACTIVE ELEMENTS
+   */
+
+.clickable {
+    -fx-cursor: hand;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    cursor: pointer;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 130px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.icon-large {
+    -fx-font-size: 18px;
+}
+
+.icon-medium {
+    -fx-font-size: 16px;
+}
+
+.icon-small {
+    -fx-font-size: 14px;
+}
+
+/*
+   SPACING UTILITIES
+ */
+
+.spacing-small {
+    -fx-spacing: 5;
+}
+
+.spacing-medium {
+    -fx-spacing: 10;
+}
+
+.spacing-large {
+    -fx-spacing: 20;
+}
+
+/* ============================================
+   SPECIFIC COMPONENTS (Stock app specific)
+   ============================================ */
+
+.logo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.stock-symbol {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.stock-meta {
+    -fx-text-fill: #666666;
+    -fx-font-size: 12px;
 }
