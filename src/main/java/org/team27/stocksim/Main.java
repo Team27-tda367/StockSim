@@ -1,3 +1,4 @@
+
 package org.team27.stocksim;
 
 import javafx.application.Application;
