@@ -6,15 +6,21 @@ import java.util.List;
 import java.util.Random;
 
 import org.team27.stocksim.model.market.Instrument;
+import org.team27.stocksim.model.market.Stock;
 import org.team27.stocksim.model.market.StockSim;
 import org.team27.stocksim.model.users.Bot;
 
 public class RandomStrategy implements BotStrategy {
 
+    private enum Action {
+        BUY, SELL, NONE
+    }
+
     private final Random random;
 
     // Configuration parameters
-    private final double buyProbability; // probability of placing a buy order (0–1)
+    private final double doSomethingProbability; // probability of buying or selling
+    private final double buyProbability = 0.5; // Buy vs Sell probability
     private final int minQuantity; // minimum quantity to buy
     private final int maxQuantity; // maximum quantity to buy
 
@@ -22,41 +28,66 @@ public class RandomStrategy implements BotStrategy {
         this(new Random(), 0.01, 1, 10);
     }
 
-    public RandomStrategy(Random random, double buyProbability, int minQuantity, int maxQuantity) {
+    public RandomStrategy(Random random, double doSomethingProbability, int minQuantity, int maxQuantity) {
         this.random = random;
-        this.buyProbability = buyProbability;
+        this.doSomethingProbability = doSomethingProbability;
         this.minQuantity = minQuantity;
         this.maxQuantity = maxQuantity;
     }
 
     @Override
     public void decide(StockSim model, Bot bot) {
-        // 1. Determine if we should buy anything in this tick
-        if (!shouldBuy()) {
+        // 1Determine if we should buy or sell anything in this tick
+        Action action = randomAction();
+
+        if (action == Action.NONE) {
             return;
         }
+        if (action == Action.SELL) {
+            sell(model);
+        } else if (action == Action.BUY) {
+            buy(model);
+        }
 
-        // 2. Choose a random instrument
+    }
+
+    private void sell(StockSim model) {
+        // If portfolio is empty, cannot sell
+        /*
+         * if (bot.getPortfolio().isEmpty()) {
+         * return;
+         * }
+         */
+        // 1. Choose a random instrument in portfolio
+
+        // 2. pickRandomQuantity from holding
+
+        // 3. get current price
+        // double price = stock.getCurrentPrice();
+
+        // Create the order
+        // model.placeOrder(Order.createSellOrder(bot, stock, quantity, price));
+
+    }
+
+    private void buy(StockSim model) {
+        // Choose a random instrument in market
         Instrument stock = pickRandomStock(model);
         if (stock == null) {
             return;
         }
 
-        // 3. Determine a random quantity
         int quantity = randomQuantity();
 
-        // 4. Determine price (here: buy at current price – but you can randomize around
-        // it later)
         double price = stock.getCurrentPrice();
 
-        // 5. Create the order
+        // Create order
         // model.placeOrder(Order.createBuyOrder(bot, stock, quantity, price));
-
     }
 
-    private boolean shouldBuy() {
+    private boolean shouldDoSomething() {
         // Simple probability check
-        return random.nextDouble() < buyProbability;
+        return random.nextDouble() < doSomethingProbability;
     }
 
     private Instrument pickRandomStock(StockSim model) {
@@ -76,4 +107,17 @@ public class RandomStrategy implements BotStrategy {
         int bound = maxQuantity - minQuantity + 1;
         return minQuantity + random.nextInt(bound);
     }
+
+    private Action randomAction() {
+        double x = random.nextDouble();
+        if (!shouldDoSomething()) {
+            return Action.NONE;
+        }
+        if (x < buyProbability) {
+            return Action.BUY;
+        } else {
+            return Action.SELL;
+        }
+    }
+
 }
