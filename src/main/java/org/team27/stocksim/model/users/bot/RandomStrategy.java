@@ -1,13 +1,11 @@
 package org.team27.stocksim.model.users.bot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import org.team27.stocksim.model.market.Instrument;
-import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.market.StockSim;
 import org.team27.stocksim.model.users.Bot;
 
