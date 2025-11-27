@@ -44,9 +44,11 @@ public class RandomStrategy implements BotStrategy {
         int quantity = 1 + (int) (Math.random() * 10); //
 
         // Put together order
-        Order buyOrder = Order.createBuyOrder(bot, selectedStock, quantity, selectedStock.getCurrentPrice());
+        // Order buyOrder = Order.createBuyOrder(bot, selectedStock, quantity,
+        // selectedStock.getCurrentPrice());
 
-        return Collections.singletonList(buyOrder);
+        // return Collections.singletonList(buyOrder);
+        return Collections.emptyList(); // Placeholder until Order creation is implemented
 
     }
 
