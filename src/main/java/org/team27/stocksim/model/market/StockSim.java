@@ -3,6 +3,7 @@ package org.team27.stocksim.model.market;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.BotFactory;
 import org.team27.stocksim.model.users.Trader;
 import org.team27.stocksim.model.users.TraderFactory;
@@ -89,6 +90,26 @@ public class StockSim {
             Trader bot = botFactory.createTrader(highId);
             traders.put(highId, bot);
         }
+    }
+
+    // Getters
+    public HashMap<String, Instrument> getStocks() {
+        return stocks;
+    }
+
+    public HashMap<String, Trader> getTraders() {
+        return traders;
+    }
+
+    public HashMap<String, Trader> getBots() {
+        HashMap<String, Trader> bots = new HashMap<>();
+        for (String id : traders.keySet()) {
+            Trader trader = traders.get(id);
+            if (trader instanceof Bot) {
+                bots.put(id, trader);
+            }
+        }
+        return bots;
     }
 
 }
