@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.team27.stocksim.model.market.StockSim;
 
-public class Controller {
+public class Controller implements ModelAware {
 
     private StockSim model;
 
@@ -29,6 +29,7 @@ public class Controller {
     private void handleSampleAction(ActionEvent event) {
         model.testFetch();
     }
+
     @FXML
     private TextField inputSymbol;
     @FXML
@@ -49,10 +50,16 @@ public class Controller {
         String lotSize = inputLotSize.getText();
         model.createStock(symbol, stockName, tickSize, lotSize);
     }
+
     @FXML
-    public void onMainView(ActionEvent event){
-        
+    public void onMainView(ActionEvent event) {
+
         ViewSwitcher.switchTo(View.MAINVIEW);
 
+    }
+
+    @FXML
+    public void onGraphView(ActionEvent event) {
+        ViewSwitcher.switchTo(View.STOCKVIEW);
     }
 }

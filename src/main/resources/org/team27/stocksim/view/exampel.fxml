@@ -7,36 +7,33 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.team27.stocksim.controller.Controller"
-            prefHeight="400.0" prefWidth="600.0"
-            stylesheets="@../css/main.css"
-            >
+        xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.controller.Controller" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/main.css">
 
-    <children>
+        <children>
 
-        <Label layoutX="14.0" layoutY="14.0" text="Stocksim" />
+                <Label layoutX="14.0" layoutY="14.0" text="Stocksim" />
 
-        <Button layoutX="14.0" layoutY="50.0" text="Call model" onAction="#handleSampleAction" />
+                <Button layoutX="14.0" layoutY="50.0" text="Call model" onAction="#handleSampleAction" />
 
-        <Label fx:id="outputLabel" layoutX="14.0" layoutY="90.0" text="" />
+                <Label fx:id="outputLabel" layoutX="14.0" layoutY="90.0" text="" />
 
-        <!-- Create new Stock -->
-        <TextField fx:id="inputSymbol" layoutX="14.0" layoutY="130.0" prefWidth="200.0" />
-        <TextField fx:id="inputStockName" layoutX="14.0" layoutY="160.0" prefWidth="200.0" />
-        <TextField fx:id="inputTickSize" layoutX="14.0" layoutY="190.0" prefWidth="30.0" />
-        <TextField fx:id="inputLotSize" layoutX="14.0" layoutY="220.0" prefWidth="30.0" />
+                <!-- Create new Stock -->
+                <TextField fx:id="inputSymbol" layoutX="14.0" layoutY="130.0" prefWidth="200.0" />
+                <TextField fx:id="inputStockName" layoutX="14.0" layoutY="160.0" prefWidth="200.0" />
+                <TextField fx:id="inputTickSize" layoutX="14.0" layoutY="190.0" prefWidth="30.0" />
+                <TextField fx:id="inputLotSize" layoutX="14.0" layoutY="220.0" prefWidth="30.0" />
 
-        <!-- Submit Button -->
-        <Button layoutX="220.0" layoutY="160.0" text="Submit"
-                onAction="#createStock" />
+                <!-- Submit Button -->
+                <Button layoutX="220.0" layoutY="160.0" text="Submit" onAction="#createStock" />
 
-        <!-- Label to show submitted stock-values -->
-        <Label fx:id="createdStockLabel" layoutX="50.0" layoutY="210.0" text="" />
-         <!-- Button to navigate to main_view -->
-        <Button layoutX="500.0" layoutY="14.0" text="Main View" 
-                onAction="#onMainView"/>
+                <!-- Label to show submitted stock-values -->
+                <Label fx:id="createdStockLabel" layoutX="50.0" layoutY="210.0" text="" />
+                <!-- Button to navigate to main_view -->
+                <Button layoutX="500.0" layoutY="14.0" text="Main View" onAction="#onMainView"/>
 
-    </children>
+                <!-- Button to navigate to graph_view -->
+                <Button layoutX="420.0" layoutY="14.0" text="Stock View" onAction="#onGraphView"/>
+
+        </children>
 
 </AnchorPane>

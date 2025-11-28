@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.controller.StockViewController" prefHeight="800.0" prefWidth="1400.0" stylesheets="@../css/main.css">
+
+    <!-- Header (same as main_view) -->
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="header-bar, spacing-large">
+            <Label text="StonkSim" styleClass="logo"/>
+            <Button text="Home" styleClass="btn-ghost" onAction="#onExample"/>
+            <Button text="Portfolio" styleClass="btn-ghost"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER_RIGHT" styleClass="spacing-small">
+                <Label text="Available Balance" styleClass="text-small, text-muted"/>
+            </VBox>
+        </HBox>
+    </top>
+
+    <!-- Blank center content for Stock View -->
+    <center>
+        <VBox alignment="TOP_LEFT" spacing="6">
+            <padding>
+                <Insets top="20" left="20"/>
+            </padding>
+
+            <Label text="APPL" styleClass="title-large"/>
+
+            <!-- Mindre undertext -->
+            <Label text="Apple · Inc. · Listed on Stock Exchange" styleClass="text-muted" style="-fx-font-size: 14px;"/>
+        </VBox>
+    </center>
+
+</BorderPane>
