@@ -1,17 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter');
+
 
 /* Root container */
 .root-container {
+    
     -fx-background-color: white;
 }
 
-/* 
-    FONTS Etc.
-    */
+/* FONTS Etc */
+
+@font-face {
+    font-family: Inter;
+    src: url(src/main/resources/fonts/Inter-VariableFont_opsz,wght.ttf);
+}
 
 .title-large {
     -fx-font-size: 36px;
-    -fx-font-weight: bold;
+    -fx-font-weight: 600;
     -fx-font-family: 'Inter', sans-serif;
 }
 
@@ -82,7 +86,7 @@
    ============================================ */
 
 /* Primary button (blue) */
-.btn-primary {
+.btn-highlighted {
     -fx-background-color: #2563eb;
     -fx-text-fill: white;
     -fx-background-radius: 15;
@@ -90,7 +94,7 @@
     -fx-font-family:"Inter", sans-serif;
 }
 
-.btn-primary:hover {
+.btn-highlighted:hover {
     -fx-background-color: #1d4ed8;
 }
 
@@ -220,28 +224,6 @@
 .clickable {
     -fx-cursor: hand;
 }
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
-    cursor: pointer;
-}
-
-.tooltiptext {
-    visibility: hidden;
-    width: 130px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-  }
-
-  .tooltip:hover .tooltiptext {
-  visibility: visible;
-}
 
 .icon-large {
     -fx-font-size: 18px;
@@ -277,7 +259,8 @@
 
 .logo {
     -fx-font-size: 24px;
-    -fx-font-weight: bold;
+    -fx-font-weight: 1200;
+    -fx-font-family:"Inter", sans-serif;
 }
 
 .stock-symbol {

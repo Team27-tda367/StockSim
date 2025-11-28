@@ -40,7 +40,7 @@
         
         <!-- Filter Buttons -->
         <HBox alignment="CENTER_LEFT" styleClass="spacing-medium">
-            <Button text="All" styleClass="btn-primary"/>
+            <Button text="All" styleClass="btn-highlighted"/>
             <Button text="Technology" styleClass="btn-secondary"/>
             <Button text="Finance" styleClass="btn-secondary"/>
             <Button text="Consumer" styleClass="btn-secondary"/>
@@ -54,13 +54,13 @@
         <!-- Stock List Header -->
         <HBox styleClass="list-header, spacing-medium">
             <Label text="Name" prefWidth="180" styleClass="text-bold"/>
-            <Label text="Today" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
-            <Label text="1 day" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
-            <Label text="1 week" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
-            <Label text="1 year" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
-            <Label text="Last price" prefWidth="100" alignment="CENTER_RIGHT" styleClass="text-bold"/>
+            <Label text="Today" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
+           
+            <Label text="1 week" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="1 year" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="Last price" prefWidth="190" alignment="CENTER_RIGHT" styleClass="text-bold"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="Watchlist" prefWidth="80" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="Watchlist" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
             <Label text="Trade" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
         </HBox>
         
@@ -74,20 +74,16 @@
                         <Label text="AAPL" styleClass="stock-symbol"/>
                         <Label text="Technology" styleClass="stock-meta"/>
                     </VBox>
-                    <Label text="+1.33%" prefWidth="100" alignment="CENTER" styleClass="text-positive"/>
-                    <Label text="+0.30%" prefWidth="100" alignment="CENTER" styleClass="text-positive"/>
-                    <Label text="-3.00%" prefWidth="100" alignment="CENTER" styleClass="text-negative"/>
-                    <Label text="+28.80%" prefWidth="100" alignment="CENTER" styleClass="text-positive"/>
-                    <Label text="178.45" prefWidth="100" alignment="CENTER_RIGHT" styleClass="text-bold"/>
+                    <Label text="+1.33%" prefWidth="200" alignment="CENTER" styleClass="text-positive"/>
+                    
+                    <Label text="-3.00%" prefWidth="200" alignment="CENTER" styleClass="text-negative"/>
+                    <Label text="+28.80%" prefWidth="200" alignment="CENTER" styleClass="text-positive"/>
+                    <Label text="178.45" prefWidth="180" alignment="CENTER_RIGHT" styleClass="text-bold"/>
                     <Region HBox.hgrow="ALWAYS"/>
                     <Label text="☆" prefWidth="100" alignment="CENTER" styleClass="icon-large, clickable">
-                        <tooltip>
-                            <Tooltip text="Your tooltip text here"/>
-                        </tooltip>
                     </Label>
-                    <Button text="Trade" prefWidth="100" styleClass="btn-primary, clickable"/>
+                    <Button text="Trade" prefWidth="100" styleClass="btn-highlighted, clickable"/>
                 </HBox>
-                
             </VBox>
         </ScrollPane>
     </VBox>
