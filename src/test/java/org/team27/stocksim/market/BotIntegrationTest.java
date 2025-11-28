@@ -22,7 +22,7 @@ class BotIntegrationTest {
 
     @Test
     void testCreateBotInStockSim() {
-        stockSim.createBot("BOT1");
+        stockSim.createBot("BOT1", "Bot 1");
 
         HashMap<String, Trader> traders = stockSim.getTraders();
         assertTrue(traders.containsKey("BOT1"), "Bot should be added to traders");
@@ -30,9 +30,9 @@ class BotIntegrationTest {
 
     @Test
     void testCreateMultipleBots() {
-        stockSim.createBot("BOT1");
-        stockSim.createBot("BOT2");
-        stockSim.createBot("BOT3");
+        stockSim.createBot("BOT1", "Bot 1");
+        stockSim.createBot("BOT2", "Bot 2");
+        stockSim.createBot("BOT3", "Bot 3");
 
         HashMap<String, Trader> traders = stockSim.getTraders();
         assertEquals(3, traders.size(), "Should have 3 bots");
@@ -43,9 +43,9 @@ class BotIntegrationTest {
 
     @Test
     void testGetBots() {
-        stockSim.createBot("BOT1");
-        stockSim.createBot("BOT2");
-        stockSim.createUser("USER1");
+        stockSim.createBot("BOT1", "Bot 1");
+        stockSim.createBot("BOT2", "Bot 2");
+        stockSim.createUser("USER1", "User 1");
 
         HashMap<String, Trader> bots = stockSim.getBots();
         assertEquals(2, bots.size(), "Should only return bots, not users");
@@ -56,7 +56,7 @@ class BotIntegrationTest {
 
     @Test
     void testBotIsInstanceOfBot() {
-        stockSim.createBot("BOT1");
+        stockSim.createBot("BOT1", "Bot 1");
 
         Trader trader = stockSim.getTraders().get("BOT1");
         assertTrue(trader instanceof Bot, "Created trader should be a Bot instance");
@@ -64,8 +64,8 @@ class BotIntegrationTest {
 
     @Test
     void testDuplicateBotId() {
-        stockSim.createBot("BOT1");
-        stockSim.createBot("BOT1"); // Try to create duplicate
+        stockSim.createBot("BOT1", "Bot 1");
+        stockSim.createBot("BOT1", "Bot 1 Duplicate"); // Try to create duplicate
 
         HashMap<String, Trader> traders = stockSim.getTraders();
         assertEquals(1, traders.size(), "Duplicate bot ID should not create new bot");
@@ -73,7 +73,7 @@ class BotIntegrationTest {
 
     @Test
     void testBotIdCaseInsensitivity() {
-        stockSim.createBot("bot1");
+        stockSim.createBot("bot1", "Bot 1");
 
         HashMap<String, Trader> traders = stockSim.getTraders();
         assertTrue(traders.containsKey("BOT1"), "Bot ID should be converted to uppercase");
@@ -87,7 +87,7 @@ class BotIntegrationTest {
         stockSim.createStock("GOOGL", "Alphabet Inc.", "0.01", "1");
 
         // Create bot
-        stockSim.createBot("BOT1");
+        stockSim.createBot("BOT1", "Bot 1");
 
         Bot bot = (Bot) stockSim.getTraders().get("BOT1");
         assertNotNull(bot, "Bot should be retrievable from StockSim");
@@ -105,9 +105,9 @@ class BotIntegrationTest {
         stockSim.createStock("MSFT", "Microsoft Corp.", "300.0", "1");
 
         // Create multiple bots
-        stockSim.createBot("BOT1");
-        stockSim.createBot("BOT2");
-        stockSim.createBot("BOT3");
+        stockSim.createBot("BOT1", "Bot 1");
+        stockSim.createBot("BOT2", "Bot 2");
+        stockSim.createBot("BOT3", "Bot 3");
 
         // Get bots
         Bot bot1 = (Bot) stockSim.getTraders().get("BOT1");
@@ -129,10 +129,10 @@ class BotIntegrationTest {
 
     @Test
     void testBotAndUserCoexistence() {
-        stockSim.createBot("BOT1");
-        stockSim.createBot("BOT2");
-        stockSim.createUser("USER1");
-        stockSim.createUser("USER2");
+        stockSim.createBot("BOT1", "Bot 1");
+        stockSim.createBot("BOT2", "Bot 2");
+        stockSim.createUser("USER1", "User 1");
+        stockSim.createUser("USER2", "User 2");
 
         HashMap<String, Trader> allTraders = stockSim.getTraders();
         HashMap<String, Trader> bots = stockSim.getBots();
@@ -143,7 +143,7 @@ class BotIntegrationTest {
 
     @Test
     void testBotStrategyWithEmptyMarket() {
-        stockSim.createBot("BOT1");
+        stockSim.createBot("BOT1", "Bot 1");
         Bot bot = (Bot) stockSim.getTraders().get("BOT1");
 
         RandomStrategy strategy = new RandomStrategy();
@@ -160,8 +160,8 @@ class BotIntegrationTest {
         stockSim.createStock("GOOGL", "Alphabet Inc.", "2800.0", "1");
 
         // Create bots
-        stockSim.createBot("BOT1");
-        stockSim.createBot("BOT2");
+        stockSim.createBot("BOT1", "Bot 1");
+        stockSim.createBot("BOT2", "Bot 2");
 
         Bot bot1 = (Bot) stockSim.getTraders().get("BOT1");
         Bot bot2 = (Bot) stockSim.getTraders().get("BOT2");
@@ -187,7 +187,7 @@ class BotIntegrationTest {
 
         // Create many bots
         for (int i = 0; i < 20; i++) {
-            stockSim.createBot("BOT" + i);
+            stockSim.createBot("BOT" + i, "Bot " + i);
         }
 
         HashMap<String, Trader> bots = stockSim.getBots();
@@ -205,7 +205,7 @@ class BotIntegrationTest {
 
     @Test
     void testBotRetrievalAfterCreation() {
-        stockSim.createBot("TESTBOT");
+        stockSim.createBot("TESTBOT", "Test Bot");
 
         HashMap<String, Trader> traders = stockSim.getTraders();
         Trader retrieved = traders.get("TESTBOT");

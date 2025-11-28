@@ -6,6 +6,7 @@ import org.team27.stocksim.model.market.StockSim;
 import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.bot.BotStrategy;
 import org.team27.stocksim.model.users.bot.RandomStrategy;
+import org.team27.stocksim.model.portfolio.Portfolio;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +18,7 @@ class BotStrategyTest {
     @BeforeEach
     void setUp() {
         stockSim = new StockSim();
-        bot = new Bot("TESTBOT");
+        bot = new Bot("TESTBOT", "Test Bot", new Portfolio(10000));
     }
 
     @Test
@@ -51,8 +52,8 @@ class BotStrategyTest {
     void testStrategyWithDifferentBots() {
         BotStrategy strategy = new RandomStrategy();
 
-        Bot bot1 = new Bot("BOT1");
-        Bot bot2 = new Bot("BOT2");
+        Bot bot1 = new Bot("BOT1", "Bot 1", new Portfolio(10000));
+        Bot bot2 = new Bot("BOT2", "Bot 2", new Portfolio(10000));
 
         stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1");
 
@@ -74,7 +75,7 @@ class BotStrategyTest {
     @Test
     void testStrategyCanBeAssignedToBot() {
         BotStrategy strategy = new RandomStrategy();
-        Bot testBot = new Bot("STRATEGY_BOT");
+        Bot testBot = new Bot("STRATEGY_BOT", "Strategy Bot", new Portfolio(10000));
 
         stockSim.createStock("GOOGL", "Alphabet Inc.", "0.01", "1");
 

@@ -7,6 +7,7 @@ import org.team27.stocksim.model.users.BotFactory;
 import org.team27.stocksim.model.users.Trader;
 import org.team27.stocksim.model.users.bot.BotStrategy;
 import org.team27.stocksim.model.users.bot.RandomStrategy;
+import org.team27.stocksim.model.portfolio.Portfolio;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +18,7 @@ class BotTest {
 
     @BeforeEach
     void setUp() {
-        bot = new Bot("BOT1");
+        bot = new Bot("BOT1", "Bot 1", new Portfolio(10000));
         botFactory = new BotFactory();
     }
 
@@ -33,16 +34,16 @@ class BotTest {
 
     @Test
     void testBotFactory() {
-        Trader createdBot = botFactory.createTrader("BOT2");
+        Trader createdBot = botFactory.createTrader("BOT2", "Bot 2", new Portfolio(10000));
         assertNotNull(createdBot, "BotFactory should create a bot");
         assertTrue(createdBot instanceof Bot, "BotFactory should create a Bot instance");
     }
 
     @Test
     void testMultipleBotCreation() {
-        Bot bot1 = new Bot("BOT1");
-        Bot bot2 = new Bot("BOT2");
-        Bot bot3 = new Bot("BOT3");
+        Bot bot1 = new Bot("BOT1", "Bot 1", new Portfolio(10000));
+        Bot bot2 = new Bot("BOT2", "Bot 2", new Portfolio(10000));
+        Bot bot3 = new Bot("BOT3", "Bot 3", new Portfolio(10000));
 
         assertNotNull(bot1);
         assertNotNull(bot2);
@@ -51,9 +52,9 @@ class BotTest {
 
     @Test
     void testBotWithDifferentIds() {
-        Bot botA = new Bot("ALPHA");
-        Bot botB = new Bot("BETA");
-        Bot botC = new Bot("GAMMA");
+        Bot botA = new Bot("ALPHA", "Alpha Bot", new Portfolio(10000));
+        Bot botB = new Bot("BETA", "Beta Bot", new Portfolio(10000));
+        Bot botC = new Bot("GAMMA", "Gamma Bot", new Portfolio(10000));
 
         assertNotNull(botA);
         assertNotNull(botB);
@@ -62,15 +63,8 @@ class BotTest {
 
     @Test
     void testBotWithDefaultStrategy() {
-        Bot bot = new Bot("BOT_DEFAULT");
+        Bot bot = new Bot("BOT_DEFAULT", "Default Bot", new Portfolio(10000));
         assertEquals(RandomStrategy.class, bot.getStrategy().getClass(), "Bot should have a default strategy");
-    }
-
-    @Test
-    void testBotWithCustomStrategy() {
-        BotStrategy customStrategy = new RandomStrategy();
-        Bot bot = new Bot("BOT_CUSTOM", customStrategy);
-        assertEquals(customStrategy, bot.getStrategy());
     }
 
 }

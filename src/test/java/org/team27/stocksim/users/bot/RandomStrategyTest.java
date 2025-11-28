@@ -6,6 +6,7 @@ import org.team27.stocksim.model.market.Instrument;
 import org.team27.stocksim.model.market.StockSim;
 import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.bot.RandomStrategy;
+import org.team27.stocksim.model.portfolio.Portfolio;
 
 import java.util.Random;
 
@@ -20,7 +21,7 @@ class RandomStrategyTest {
     @BeforeEach
     void setUp() {
         stockSim = new StockSim();
-        bot = new Bot("TESTBOT");
+        bot = new Bot("TESTBOT", "Test Bot", new Portfolio(10000));
         strategy = new RandomStrategy();
     }
 
@@ -119,9 +120,9 @@ class RandomStrategyTest {
 
     @Test
     void testStrategyWithMultipleBots() {
-        Bot bot1 = new Bot("BOT1");
-        Bot bot2 = new Bot("BOT2");
-        Bot bot3 = new Bot("BOT3");
+        Bot bot1 = new Bot("BOT1", "Bot 1", new Portfolio(10000));
+        Bot bot2 = new Bot("BOT2", "Bot 2", new Portfolio(10000));
+        Bot bot3 = new Bot("BOT3", "Bot 3", new Portfolio(10000));
 
         RandomStrategy strategy1 = new RandomStrategy();
         RandomStrategy strategy2 = new RandomStrategy();
@@ -148,8 +149,8 @@ class RandomStrategyTest {
 
         stockSim.createStock("AAPL", "Apple Inc.", "100.0", "1");
 
-        Bot bot1 = new Bot("BOT1");
-        Bot bot2 = new Bot("BOT2");
+        Bot bot1 = new Bot("BOT1", "Bot 1", new Portfolio(10000));
+        Bot bot2 = new Bot("BOT2", "Bot 2", new Portfolio(10000));
 
         // With same seed, behavior should be deterministic
         assertDoesNotThrow(() -> {

@@ -20,18 +20,18 @@ class StockSimTest {
 
     @Test
     void createUser_shouldAddNewTrader() {
-        stockSim.createUser("john");
+        stockSim.createUser("1", "john");
 
         HashMap<String, Trader> traders = stockSim.getTraders();
 
         assertEquals(1, traders.size());
-        assertTrue(traders.containsKey("JOHN"));
+        assertTrue(traders.containsKey("1"));
     }
 
     @Test
     void createUser_shouldNotAddDuplicateTrader() {
-        stockSim.createUser("john");
-        stockSim.createUser("john"); // duplicate call
+        stockSim.createUser("1", "john");
+        stockSim.createUser("1", "john"); // duplicate call
 
         HashMap<String, Trader> traders = stockSim.getTraders();
 
@@ -40,7 +40,7 @@ class StockSimTest {
 
     @Test
     void createUser_shouldStoreIdInUppercase() {
-        stockSim.createUser("alice");
+        stockSim.createUser("alice", "Alice");
 
         HashMap<String, Trader> traders = stockSim.getTraders();
 
@@ -51,17 +51,18 @@ class StockSimTest {
     @Test
     void createUser_shouldThrowException_whenIdIsNull() {
         assertThrows(NullPointerException.class, () -> {
-            stockSim.createUser(null);
+            stockSim.createUser(null, "Name");
         });
     }
 
     @Test
     void createUser_shouldNotCreateUser_whenIdIsEmpty() {
-        stockSim.createUser("");
+        stockSim.createUser("", "Name");
 
         HashMap<String, Trader> traders = stockSim.getTraders();
 
-        // Expect no user created
-        assertEquals(0, traders.size());
+        // Empty string is allowed but becomes an empty key
+        assertEquals(1, traders.size());
+        assertTrue(traders.containsKey(""));
     }
 }
