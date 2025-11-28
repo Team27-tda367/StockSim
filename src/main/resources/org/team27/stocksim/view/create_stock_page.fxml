@@ -8,7 +8,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.team27.stocksim.ui.fx.MainViewController"
+            fx:controller="org.team27.stocksim.ui.fx.viewControllers.CreateStockPageController"
             prefHeight="400.0" prefWidth="600.0"
             stylesheets="@../css/main.css"
             >
@@ -26,6 +26,9 @@
 
         <!-- Label to show submitted stock-values -->
         <Label fx:id="createdStockLabel" layoutX="50.0" layoutY="210.0" text="" />
+         <!-- Button to navigate to main_view -->
+        <Button layoutX="500.0" layoutY="14.0" text="Main View" 
+                onAction="#onMainView"/>
 
     </children>
 
