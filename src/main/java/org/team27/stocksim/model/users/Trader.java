@@ -1,17 +1,17 @@
 package org.team27.stocksim.model.users;
 
+import org.team27.stocksim.model.portfolio.Portfolio;
+
 public abstract class Trader {
 
     protected final String id;
-    protected final double startingBalance;
-    protected final double balance;
+    protected final String displayName;
+    protected Portfolio portfolio;
 
-    public Trader(String id) {
-        startingBalance = 10000;
-
+    public Trader(String id, String name, Portfolio portfolio) {
         this.id = id;
-        this.balance = startingBalance;
-        // create Portfolio here
+        this.displayName = name;
+        this.portfolio = portfolio;
     }
 
 }
