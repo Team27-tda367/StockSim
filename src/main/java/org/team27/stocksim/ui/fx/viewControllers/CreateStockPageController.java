@@ -10,9 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class CreateStockPageController {
-    private final SimController simController;
-    private final MainViewAdapter viewAdapter;
+public class CreateStockPageController extends ViewController {
 
     @FXML
     private TextField inputSymbol;
@@ -30,8 +28,7 @@ public class CreateStockPageController {
     private Label createdStockLabel;
 
     public CreateStockPageController(SimController simController, MainViewAdapter viewAdapter) {
-        this.simController = simController;
-        this.viewAdapter = viewAdapter;
+        super(simController, viewAdapter);
     }
 
     @FXML

@@ -31,6 +31,7 @@ public class MainViewAdapter implements StockSimListener {
         return message;
     }
 
+    // Connect model updates to adapter properties
     @Override
     public void messageChanged(String newMessage) {
         // uppdatera JavaFX-property på FX-tråden

@@ -8,13 +8,10 @@ import org.team27.stocksim.ui.fx.ViewSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-public class MainViewController {
-    private final SimController simController;
-    private final MainViewAdapter viewAdapter;
+public class MainViewController extends ViewController {
 
     public MainViewController(SimController simController, MainViewAdapter viewAdapter) {
-        this.simController = simController;
-        this.viewAdapter = viewAdapter;
+        super(simController, viewAdapter);
     }
 
     @FXML
