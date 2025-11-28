@@ -2,6 +2,7 @@ package org.team27.stocksim.model.market;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.BotFactory;
 import org.team27.stocksim.model.users.Trader;
 import org.team27.stocksim.model.users.TraderFactory;
@@ -61,24 +62,32 @@ public class StockSim {
     }
 
     // Trader logic
-    public void createUser(String id) {
+    public void createUser(String id, String name) {
         String highId = id.toUpperCase();
         if (traders.containsKey(highId)) {
             System.out.println("userID already exists");
         } else {
-            Trader user = userFactory.createTrader(highId);
+            Portfolio portfolio = createPortfolio(highId);
+            Trader user = userFactory.createTrader(highId, name, portfolio);
             traders.put(highId, user);
         }
     }
 
-    public void createBot(String id) {
+    public void createBot(String id, String name) {
         String highId = id.toUpperCase();
         if (traders.containsKey(highId)) {
             System.out.println("botID already exists");
         } else {
-            Trader bot = botFactory.createTrader(highId);
+            Portfolio portfolio = createPortfolio(highId);
+            Trader bot = botFactory.createTrader(highId, name, portfolio);
             traders.put(highId, bot);
         }
+    }
+
+    public Portfolio createPortfolio(String id) {
+        // if id in portfolio-db, fetch balance and insert, else -> new User/Bot, insert startingBalance
+        double startingBalance = 10000;
+        return new Portfolio(startingBalance);
     }
 
 }
