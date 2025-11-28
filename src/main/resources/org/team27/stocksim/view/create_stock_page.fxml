@@ -25,7 +25,7 @@
                 <Button layoutX="500.0" layoutY="14.0" text="Main View" onAction="#onMainView"/>
 
                 <!-- Button to navigate to graph_view -->
-                <Button layoutX="420.0" layoutY="14.0" text="Stock View" onAction="#onGraphView"/>
+                <!-- <Button layoutX="420.0" layoutY="14.0" text="Stock View" onAction="#onGraphView"/> -->
 
         </children>
 

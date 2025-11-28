@@ -37,4 +37,10 @@ public class MainViewController extends ViewController {
     public void onMainView(ActionEvent event) {
         ViewSwitcher.switchTo(View.MAINVIEW);
     }
+
+    @FXML
+    public void onStockView(ActionEvent event) {
+        ViewSwitcher.switchTo(View.STOCKVIEW);
+    }
+
 }

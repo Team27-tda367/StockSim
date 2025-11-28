@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
-    xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.controller.StockViewController" prefHeight="800.0" prefWidth="1400.0" stylesheets="@../css/main.css">
+    xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.ui.fx.viewControllers.StockViewController" prefHeight="800.0" prefWidth="1400.0" stylesheets="@../css/main.css">
 
     <!-- Header (same as main_view) -->
     <top>
