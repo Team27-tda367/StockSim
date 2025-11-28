@@ -1,9 +1,8 @@
-package org.team27.stocksim.controller;
+package org.team27.stocksim.ui.fx;
 
 public enum View {
     MAINVIEW("/org/team27/stocksim/view/main_view.fxml"), // Add full path
-    STOCKVIEW("/org/team27/stocksim/view/stock_view.fxml"), // was GRAPHVIEW
-    EXAMPLE("/org/team27/stocksim/view/exampel.fxml"); // Add full path
+    CREATESTOCK("/org/team27/stocksim/view/create_stock_page.fxml"); // Add full path
 
     private String fileName;
 
