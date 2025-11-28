@@ -7,8 +7,15 @@ import org.team27.stocksim.ui.fx.ViewSwitcher;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 public class StockViewController extends ViewController {
+
+    @FXML
+    private Label favoriteIcon;
+
+    private boolean isFavorite = false;
 
     public StockViewController(SimController simController, MainViewAdapter viewAdapter) {
         super(simController, viewAdapter);
@@ -26,6 +33,12 @@ public class StockViewController extends ViewController {
     @FXML
     public void onExample(ActionEvent event) {
         ViewSwitcher.switchTo(View.MAINVIEW);
+    }
+
+    @FXML
+    private void onToggleFavorite() {
+        isFavorite = !isFavorite;
+        favoriteIcon.setText(isFavorite ? "★" : "☆");
     }
 
 }
