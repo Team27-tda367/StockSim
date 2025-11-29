@@ -72,38 +72,59 @@
             <!-- 4 empty boxes on the right -->
             <VBox prefWidth="340" spacing="16">
 
+                <!--  Extra spacing to navbar -->
+                <padding>
+                    <Insets top="20"/>
+                </padding>
+
+                <!-- Header 1 -->
+                <Label text="Top Trending Stocks" style="-fx-font-size: 14px;
+                  -fx-font-weight: 600;
+                  -fx-text-fill: #111827;"/>
+
                 <!-- Box 1 -->
                 <Region style="-fx-background-color: white;
-                               -fx-background-radius: 12px;
-                               -fx-border-radius: 12px;
-                               -fx-border-color: #E5E7EB;
-                               -fx-border-width: 1px;
-                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
+                   -fx-background-radius: 12px;
+                   -fx-border-radius: 12px;
+                   -fx-border-color: #E5E7EB;
+                   -fx-border-width: 1px;
+                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
+
+                <!-- Padding & Header for Related -->
+                <VBox spacing="8">
+                    <padding>
+                        <Insets top="10"/>
+                    </padding>
+                    <Label text="Related Stocks" style="-fx-font-size: 14px;
+                      -fx-font-weight: 600;
+                      -fx-text-fill: #111827;"/>
+                </VBox>
 
                 <!-- Box 2 -->
                 <Region style="-fx-background-color: white;
-                               -fx-background-radius: 12px;
-                               -fx-border-radius: 12px;
-                               -fx-border-color: #E5E7EB;
-                               -fx-border-width: 1px;
-                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
+                   -fx-background-radius: 12px;
+                   -fx-border-radius: 12px;
+                   -fx-border-color: #E5E7EB;
+                   -fx-border-width: 1px;
+                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
 
-                <!-- Box 3 -->
+                <!-- Box 3  -->
                 <Region style="-fx-background-color: white;
-                               -fx-background-radius: 12px;
-                               -fx-border-radius: 12px;
-                               -fx-border-color: #E5E7EB;
-                               -fx-border-width: 1px;
-                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
+                   -fx-background-radius: 12px;
+                   -fx-border-radius: 12px;
+                   -fx-border-color: #E5E7EB;
+                   -fx-border-width: 1px;
+                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
 
-                <!-- Box 4 -->
+                <!-- Box 4  -->
                 <Region style="-fx-background-color: white;
-                               -fx-background-radius: 12px;
-                               -fx-border-radius: 12px;
-                               -fx-border-color: #E5E7EB;
-                               -fx-border-width: 1px;
-                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
+                   -fx-background-radius: 12px;
+                   -fx-border-radius: 12px;
+                   -fx-border-color: #E5E7EB;
+                   -fx-border-width: 1px;
+                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
             </VBox>
+
 
         </HBox>
     </center>
