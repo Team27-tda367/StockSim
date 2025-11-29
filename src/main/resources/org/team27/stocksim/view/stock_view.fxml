@@ -18,6 +18,7 @@
             <Label text="StonkSim" styleClass="logo"/>
             <Button text="Home" styleClass="btn-ghost" onAction="#onExample"/>
             <Button text="Portfolio" styleClass="btn-ghost"/>
+            <Button text="Create Stock" styleClass="btn-ghost" onAction="#onExample"/>
             <Region HBox.hgrow="ALWAYS"/>
             <VBox alignment="CENTER_RIGHT" styleClass="spacing-small">
                 <Label text="Available Balance" styleClass="text-small, text-muted"/>
@@ -31,7 +32,7 @@
                 <Insets top="30" left="30" bottom="30" right="30"/>
             </padding>
 
-            <!-- Din stora stock-info box (oförändrad) -->
+            <!-- StockInfo -->
             <BorderPane HBox.hgrow="ALWAYS" prefWidth="980" style="-fx-background-color: #F9FAFB;
                                -fx-padding: 24px;
                                -fx-background-radius: 12px;
@@ -77,36 +78,48 @@
                     <Insets top="20"/>
                 </padding>
 
-                <!-- Header 1 -->
-                <Label text="Top Trending Stocks" style="-fx-font-size: 14px;
-                  -fx-font-weight: 600;
-                  -fx-text-fill: #111827;"/>
-
-                <!-- Box 1 -->
-                <Region style="-fx-background-color: white;
-                   -fx-background-radius: 12px;
-                   -fx-border-radius: 12px;
-                   -fx-border-color: #E5E7EB;
-                   -fx-border-width: 1px;
-                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
-
-                <!-- Padding & Header for Related -->
-                <VBox spacing="8">
-                    <padding>
-                        <Insets top="10"/>
-                    </padding>
-                    <Label text="Related Stocks" style="-fx-font-size: 14px;
+                <!-- 🔹 TOP TRENDING PANEL -->
+                <VBox>
+                    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #F3F4F6;
+                 -fx-background-radius: 12 12 0 0;
+                 -fx-padding: 10 14;">
+                        <Label text="Top Trending Stocks" style="-fx-font-size: 15px;
                       -fx-font-weight: 600;
+                      -fx-font-family: 'Inter', 'Arial';
                       -fx-text-fill: #111827;"/>
+                    </HBox>
+                    <VBox style="-fx-background-color: white;
+                 -fx-background-radius: 0 0 12 12;
+                 -fx-border-radius: 0 0 12 12;
+                 -fx-border-color: #E5E7EB;
+                 -fx-border-width: 1px;
+                 -fx-padding: 14;
+                 -fx-spacing: 10;">
+                        <Region style="-fx-background-color: transparent;" minHeight="140"/>
+                    </VBox>
                 </VBox>
 
-                <!-- Box 2 -->
-                <Region style="-fx-background-color: white;
-                   -fx-background-radius: 12px;
-                   -fx-border-radius: 12px;
-                   -fx-border-color: #E5E7EB;
-                   -fx-border-width: 1px;
-                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.2, 0, 2);" minHeight="140"/>
+                <!-- 🔹 RELATED STOCKS PANEL -->
+                <VBox>
+                    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #F3F4F6;
+                 -fx-background-radius: 12 12 0 0;
+                 -fx-padding: 10 14;">
+                        <Label text="Related Stocks" style="-fx-font-size: 15px;
+                      -fx-font-weight: 600;
+                      -fx-font-family: 'Inter', 'Arial';
+                      -fx-text-fill: #111827;"/>
+                    </HBox>
+                    <VBox style="-fx-background-color: white;
+                 -fx-background-radius: 0 0 12 12;
+                 -fx-border-radius: 0 0 12 12;
+                 -fx-border-color: #E5E7EB;
+                 -fx-border-width: 1px;
+                 -fx-padding: 14;
+                 -fx-spacing: 10;">
+                        <Region style="-fx-background-color: transparent;" minHeight="140"/>
+                    </VBox>
+                </VBox>
+
 
                 <!-- Box 3  -->
                 <Region style="-fx-background-color: white;
