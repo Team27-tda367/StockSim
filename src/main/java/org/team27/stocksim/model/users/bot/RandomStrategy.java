@@ -1,12 +1,12 @@
 package org.team27.stocksim.model.users.bot;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import org.team27.stocksim.model.market.Instrument;
-import org.team27.stocksim.model.market.Stock;
 import org.team27.stocksim.model.market.StockSim;
 import org.team27.stocksim.model.users.Bot;
 
@@ -79,7 +79,7 @@ public class RandomStrategy implements BotStrategy {
 
         int quantity = randomQuantity();
 
-        double price = stock.getCurrentPrice();
+        BigDecimal price = stock.getCurrentPrice();
 
         // Create order
         // model.placeOrder(Order.createBuyOrder(bot, stock, quantity, price));

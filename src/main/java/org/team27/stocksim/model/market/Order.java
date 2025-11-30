@@ -2,41 +2,37 @@ package org.team27.stocksim.model.market;
 
 import org.team27.stocksim.model.users.Trader;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 public class Order {
-    public enum Side { BUY, SELL }
     private final Side side;
-
-    public enum Status { NEW, PARTIALLY_FILLED, FILLED, CANCELLED }
-    private Status status = Status.NEW;
-
-
-
     private final int orderId;
-    private final double price;
+    private final BigDecimal price;
     private final int totalQuantity;
-    private int remainingQuantity;
     private final Instant timeStamp;
-    private final Instrument instrument;
-    private final Trader owner;
+    private final String instrumentSymbol;
+    private final String traderId;
+    private Status status = Status.NEW;
+    private int remainingQuantity;
 
-
-    public Order(Side side, Instrument instrument, int orderId, double price, int quantity, Trader owner) {
+    public Order(Side side, String instrumentSymbol, int orderId, BigDecimal price, int quantity, String traderId) {
         this.side = side;
-        this.instrument = instrument;
+        this.instrumentSymbol = instrumentSymbol;
         this.orderId = orderId;
         this.price = price;
         this.totalQuantity = quantity;
-        this.owner = owner;
+        this.remainingQuantity = quantity;
+        this.traderId = traderId;
 
         this.timeStamp = Instant.now(); //Using java.time before deciding on our time implementation
     }
+
     public int getOrderId() {
         return orderId;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -44,13 +40,62 @@ public class Order {
         return remainingQuantity;
     }
 
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
     public Instant getTimeStamp() {
         return timeStamp;
     }
 
-    public void cancel() {
+    public String getSymbol() {
+        return instrumentSymbol;
+    }
+
+
+    public Side getSide() {
+        return side;
+    }
+
+    public Status getStatus() {
+        updateStatus();
+        return status;
+    }
+
+    public String getTraderId() {
+        return traderId;
+    }
+
+    public void cancel() {//TODO
         status = Status.CANCELLED;
     }
+
+    public void fill(int quantity) {
+        remainingQuantity = remainingQuantity - quantity;
+        updateStatus();
+    }
+
+    public boolean isBuyOrder() {
+        return side == Side.BUY;
+    }
+
+    public boolean isFilled() {
+        updateStatus();
+        return status == Status.FILLED;
+    }
+
+    private void updateStatus() {
+        if (remainingQuantity == 0) {
+            status = Status.FILLED;
+        } else if (remainingQuantity < totalQuantity) {
+            status = Status.PARTIALLY_FILLED;
+        }
+    }
+
+    public enum Side {BUY, SELL}
+
+
+    public enum Status {NEW, PARTIALLY_FILLED, FILLED, CANCELLED}
 
 
 }

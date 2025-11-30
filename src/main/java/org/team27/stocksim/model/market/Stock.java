@@ -1,15 +1,17 @@
 package org.team27.stocksim.model.market;
 
 
-public class Stock extends Instrument {
-    private double price;
+import java.math.BigDecimal;
 
-    public Stock(String symbol, String name, double tickSize, int lotSize) {
+public class Stock extends Instrument {
+    private BigDecimal price;
+
+    public Stock(String symbol, String name, BigDecimal tickSize, int lotSize) {
         super(symbol, name, tickSize, lotSize);
     }
 
     @Override
-    public double getCurrentPrice() {
+    public BigDecimal getCurrentPrice() {
         return price;
     }
 
