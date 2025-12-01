@@ -15,6 +15,7 @@ import org.team27.stocksim.model.market.StockSim;
 import org.team27.stocksim.ui.fx.ViewSwitcher;
 import org.team27.stocksim.ui.fx.viewControllers.CreateStockPageController;
 import org.team27.stocksim.ui.fx.viewControllers.MainViewController;
+import org.team27.stocksim.ui.fx.viewControllers.StockViewController;
 import org.team27.stocksim.ui.fx.MainViewAdapter;
 
 public class Main extends Application {
@@ -45,6 +46,9 @@ public class Main extends Application {
             }
             if (type == CreateStockPageController.class) {
                 return new CreateStockPageController(simController, viewAdapter);
+            }
+            if (type == StockViewController.class) {
+                return new StockViewController(simController, viewAdapter);
             }
             try {
                 return type.getDeclaredConstructor().newInstance();
