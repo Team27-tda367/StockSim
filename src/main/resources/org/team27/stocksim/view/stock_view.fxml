@@ -102,7 +102,7 @@
 
             </BorderPane>
 
-            <!-- 4 empty boxes on the right -->
+            <!-- 4  boxes on the right -->
             <VBox prefWidth="340" spacing="8">
 
                 <!-- 🔹 TOP TRENDING PANEL -->
@@ -113,9 +113,9 @@
                  -fx-border-color: #E5E7EB;
                  -fx-border-width: 1px;
                  -fx-padding: 14;
-                 -fx-spacing: 5;
-                 -fx-padding: 5 14;">
-                        <Label text="Top Trending Stocks" style="-fx-font-size: 15px;
+                 -fx-spacing: 3;
+                 -fx-padding: 3 14;">
+                        <Label text="Top Trending Stocks" style="-fx-font-size: 13px;
                       -fx-font-weight: 600;
                       -fx-font-family: 'Inter', 'Arial';
                       -fx-text-fill: #111827;"/>
@@ -139,9 +139,9 @@
                  -fx-border-color: #E5E7EB;
                  -fx-border-width: 1px;
                  -fx-padding: 14;
-                 -fx-spacing: 5;
-                 -fx-padding: 5 14;">
-                        <Label text="Related Stocks" style="-fx-font-size: 15px;
+                 -fx-spacing: 3;
+                 -fx-padding: 3 14;">
+                        <Label text="Related Stocks" style="-fx-font-size: 13px;
                       -fx-font-weight: 600;
                       -fx-font-family: 'Inter', 'Arial';
                       -fx-text-fill: #111827;"/>
@@ -193,10 +193,11 @@
                         </HBox>
                     </VBox>
 
-                    <HBox spacing="6">
-                        <Button text="Buy" prefHeight="26" maxWidth="Infinity" styleClass="buy-btn"/>
-                        <Button text="Sell" prefHeight="26" maxWidth="Infinity" styleClass="sell-btn"/>
+                    <HBox alignment="CENTER" spacing="12" prefWidth="340">
+                        <Button text="Buy" prefHeight="34" prefWidth="140" styleClass="buy-btn"/>
+                        <Button text="Sell" prefHeight="34" prefWidth="140" styleClass="sell-btn"/>
                     </HBox>
+
 
                 </VBox>
 
