@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox xmlns="http://javafx.com/javafx"
-    xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.ui.fx.viewControllers.MainViewController" prefHeight="800.0" prefWidth="1400.0" styleClass="root-container" stylesheets="@../css/main.css">
+    xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.ui.fx.viewControllers.MainViewController" prefHeight="700.0" prefWidth="800" styleClass="root-container" stylesheets="@../css/main.css">
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" styleClass="header-bar, spacing-large">

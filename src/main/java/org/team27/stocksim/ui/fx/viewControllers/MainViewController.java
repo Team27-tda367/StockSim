@@ -1,18 +1,12 @@
 package org.team27.stocksim.ui.fx.viewControllers;
 
-import org.team27.stocksim.controller.SimController;
-import org.team27.stocksim.ui.fx.MainViewAdapter;
-import org.team27.stocksim.ui.fx.View;
+import org.team27.stocksim.ui.fx.EView;
 import org.team27.stocksim.ui.fx.ViewSwitcher;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-public class MainViewController extends ViewController {
-
-    public MainViewController(SimController simController, MainViewAdapter viewAdapter) {
-        super(simController, viewAdapter);
-    }
+public class MainViewController {
 
     @FXML
     private void initialize() {
@@ -24,7 +18,7 @@ public class MainViewController extends ViewController {
 
     @FXML
     public void onExample(ActionEvent event) {
-        ViewSwitcher.switchTo(View.CREATESTOCK);
+        ViewSwitcher.switchTo(EView.CREATESTOCK);
     }
 
     // Funktion för att koppla sorteringen i stockTags
@@ -35,12 +29,12 @@ public class MainViewController extends ViewController {
 
     @FXML
     public void onMainView(ActionEvent event) {
-        ViewSwitcher.switchTo(View.MAINVIEW);
+        ViewSwitcher.switchTo(EView.MAINVIEW);
     }
 
     @FXML
     public void onStockView(ActionEvent event) {
-        ViewSwitcher.switchTo(View.STOCKVIEW);
+        ViewSwitcher.switchTo(EView.STOCKVIEW);
     }
 
 }

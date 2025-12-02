@@ -2,8 +2,7 @@ package org.team27.stocksim.users.bot;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.team27.stocksim.model.market.Instrument;
-import org.team27.stocksim.model.market.StockSim;
+import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.bot.RandomStrategy;
 import org.team27.stocksim.model.portfolio.Portfolio;

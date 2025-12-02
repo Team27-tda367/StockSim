@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.team27.stocksim.model.market.Instrument;
-import org.team27.stocksim.model.market.StockSim;
+import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.users.Bot;
 
 public class RandomStrategy implements BotStrategy {

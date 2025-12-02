@@ -2,6 +2,7 @@ package org.team27.stocksim.model.market;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.portfolio.Portfolio;
 
 import java.math.BigDecimal;

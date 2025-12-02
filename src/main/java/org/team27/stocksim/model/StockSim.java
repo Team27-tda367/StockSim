@@ -1,7 +1,10 @@
-package org.team27.stocksim.model.market;
+package org.team27.stocksim.model;
 
+import org.team27.stocksim.model.market.*;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.*;
+import org.team27.stocksim.observer.ModelObserver;
+import org.team27.stocksim.observer.ModelSubject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,9 +13,9 @@ import java.util.List;
 
 import static org.team27.stocksim.model.util.MoneyUtils.money;
 
-public class StockSim {
+public class StockSim implements ModelSubject {
     /* Listeners */
-    private final List<StockSimListener> listeners = new ArrayList<>();
+    private final List<ModelObserver> observers = new ArrayList<>();
     MarketState state;
     HashMap<String, Instrument> stocks;
     InstrumentFactory stockFactory;
@@ -38,24 +41,6 @@ public class StockSim {
         orderIdToTraderId = new HashMap<>();
 
         System.out.println("Succesfully created Sim-model");
-    }
-
-    public String messageCreatedStock() {
-        return createdStockMsg;
-    }
-
-    public void addListener(StockSimListener l) {
-        listeners.add(l);
-    }
-
-    public void removeListener(StockSimListener l) {
-        listeners.remove(l);
-    }
-
-    private void notifyListeners(String newMessage) {
-        for (StockSimListener l : List.copyOf(listeners)) {
-            l.messageChanged(newMessage);
-        }
     }
 
     // OrderBook logic and Matching Engine
@@ -139,8 +124,6 @@ public class StockSim {
             String createdStock = highSymbol + " " + stockName + " " + tickSize + " " + lotSize;
             createdStockMsg = createdStock;
         }
-
-        notifyListeners(createdStockMsg);
     }
 
     // Trader logic
@@ -193,4 +176,19 @@ public class StockSim {
         return new Portfolio(startingBalance);
     }
 
+    private void notifyObservers() {
+        for(ModelObserver obs : observers) {
+            obs.newStockCreated(stocks);
+        }
+    }
+
+    @Override
+    public void addObserver(ModelObserver obs) {
+        observers.add(obs);
+    }
+
+    @Override
+    public void removeObserver(ModelObserver obs) {
+        observers.remove(obs);
+    }
 }
