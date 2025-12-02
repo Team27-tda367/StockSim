@@ -1,6 +1,7 @@
 package org.team27.stocksim.controller;
 
 import org.team27.stocksim.model.StockSim;
+import org.team27.stocksim.model.market.Stock;
 import org.team27.stocksim.ui.fx.IView;
 
 public class SimController {
@@ -8,8 +9,8 @@ public class SimController {
     private StockSim model;
     private IView view;
 
-    public SimController(IView view) {
-        this.model = new StockSim();
+    public SimController(IView view, StockSim model) {
+        this.model = model;
         this.view = view;
 
         model.addObserver(view);
