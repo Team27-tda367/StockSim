@@ -22,7 +22,7 @@ public class ViewSwitcher {
         return controllerFactory;
     }
 
-    public static void switchTo(View view) {
+    public static void switchTo(EView view) {
         if (scene == null) {
             System.out.println("No scene was set");
             return;

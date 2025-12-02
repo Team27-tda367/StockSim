@@ -14,4 +14,12 @@ public abstract class Trader {
         this.portfolio = portfolio;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
 }

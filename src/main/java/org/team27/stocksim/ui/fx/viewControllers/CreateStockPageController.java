@@ -1,8 +1,6 @@
 package org.team27.stocksim.ui.fx.viewControllers;
 
-import org.team27.stocksim.controller.SimController;
-import org.team27.stocksim.ui.fx.MainViewAdapter;
-import org.team27.stocksim.ui.fx.View;
+import org.team27.stocksim.ui.fx.EView;
 import org.team27.stocksim.ui.fx.ViewSwitcher;
 
 import javafx.event.ActionEvent;
@@ -10,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class CreateStockPageController extends ViewController {
+public class CreateStockPageController {
 
     @FXML
     private TextField inputSymbol;
@@ -27,14 +25,9 @@ public class CreateStockPageController extends ViewController {
     @FXML
     private Label createdStockLabel;
 
-    public CreateStockPageController(SimController simController, MainViewAdapter viewAdapter) {
-        super(simController, viewAdapter);
-    }
-
     @FXML
     private void initialize() {
-        // Bind the label to the adapter's message property
-        createdStockLabel.textProperty().bind(viewAdapter.messageProperty());
+
     }
 
     @FXML
@@ -44,16 +37,13 @@ public class CreateStockPageController extends ViewController {
         String tickSize = inputTickSize.getText();
         String lotSize = inputLotSize.getText();
 
-        // Delegate to controller
-        simController.createStock(symbol, stockName, tickSize, lotSize);
-
         // Clear input fields after creation
         clearFields();
     }
 
     @FXML
     private void onMainView(ActionEvent event) {
-        ViewSwitcher.switchTo(View.MAINVIEW);
+        ViewSwitcher.switchTo(EView.MAINVIEW);
     }
 
     private void clearFields() {
