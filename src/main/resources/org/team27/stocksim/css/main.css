@@ -1,8 +1,7 @@
-
-
 /* Root container */
 .root-container {
-    
+
+
     -fx-background-color: white;
 }
 
@@ -91,7 +90,7 @@
     -fx-text-fill: white;
     -fx-background-radius: 15;
     -fx-cursor: hand;
-    -fx-font-family:"Inter", sans-serif;
+    -fx-font-family: "Inter", sans-serif;
 }
 
 .btn-highlighted:hover {
@@ -103,7 +102,7 @@
     -fx-background-color: #f3f4f6;
     -fx-background-radius: 15;
     -fx-cursor: hand;
-    -fx-font-family:"Inter", sans-serif;
+    -fx-font-family: "Inter", sans-serif;
 }
 
 .btn-secondary:hover {
@@ -260,7 +259,7 @@
 .logo {
     -fx-font-size: 24px;
     -fx-font-weight: 1200;
-    -fx-font-family:"Inter", sans-serif;
+    -fx-font-family: "Inter", sans-serif;
 }
 
 .stock-symbol {
@@ -271,4 +270,65 @@
 .stock-meta {
     -fx-text-fill: #666666;
     -fx-font-size: 12px;
+}
+
+.order-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-padding: 8 10 8 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 8, 0.2, 0, 2);
+}
+
+.order-card .info-box {
+    -fx-background-color: #F9FAFB;
+    -fx-background-radius: 8;
+    -fx-padding: 5 8 5 8;
+}
+
+.order-card .label-title {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: bold;
+}
+
+.order-card .info-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #111827;
+}
+
+.order-card .info-header {
+    -fx-font-size: 10px;
+    -fx-text-fill: #6B7280;
+}
+
+.order-card TextField {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #E5E7EB;
+    -fx-padding: 0 6 0 6;
+    -fx-font-size: 12px;
+}
+
+.buy-btn {
+    -fx-background-color: #3B82F6;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999;
+    -fx-padding: 5 0 5 0;
+}
+
+.sell-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #EF4444;
+    -fx-border-color: #EF4444;
+    -fx-border-width: 1;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999;
+    -fx-border-radius: 999;
+    -fx-padding: 5 0 5 0;
 }

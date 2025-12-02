@@ -25,6 +25,11 @@ public class StockViewController {
      */
     @FXML
     public void onExample(ActionEvent event) {
+        ViewSwitcher.switchTo(EView.CREATESTOCK);
+    }
+
+    @FXML
+    public void onMainView(ActionEvent event) {
         ViewSwitcher.switchTo(EView.MAINVIEW);
     }
 
