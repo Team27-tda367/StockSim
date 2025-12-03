@@ -45,12 +45,12 @@
 
                 <left>
                     <VBox spacing="8" alignment="TOP_LEFT">
-                        <Label text="AAPL" style="-fx-font-size: 24px;
-                                                  -fx-font-weight: 600;
-                                                  -fx-font-family: 'Inter', 'Arial';
-                                                  -fx-text-fill: #111827;"/>
+                        <Label fx:id="symbolLabel" text="AAPL" style="-fx-font-size: 24px;
+                                      -fx-font-weight: 600;
+                                      -fx-font-family: 'Inter', 'Arial';
+                                      -fx-text-fill: #111827;"/>
 
-                        <Label text="Apple · Inc. · Listed on Stock Exchange" style="-fx-font-size: 14px;
+                        <Label fx:id="nameLabel" text="Apple · Inc. · Listed on Stock Exchange" style="-fx-font-size: 14px;
                                       -fx-text-fill: #6B7280;
                                       -fx-font-family: 'Inter', 'Arial';"/>
 
@@ -171,7 +171,7 @@
                         <Label text="+1.33% (+2.34)" styleClass="price-change-positive"/>
                     </HBox>
 
-                    <Label text="178.45" styleClass="price-value-large"/>
+                    <Label fx:id="priceLabel" text="178.45" styleClass="price-value-large"/>
 
                     <Label text="Last paid price" styleClass="price-title"/>
 
@@ -189,7 +189,7 @@
                         <HBox>
                             <Label text="Price" styleClass="info-header"/>
                             <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="178.45 SEK" styleClass="info-label"/>
+                            <Label fx:id="orderPriceLabel" text="178.45 SEK" styleClass="info-label"/>
                         </HBox>
 
                         <HBox>
@@ -201,7 +201,7 @@
                         <HBox>
                             <Label text="Total" styleClass="info-header"/>
                             <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="178.45 SEK" styleClass="info-label"/>
+                            <Label fx:id="orderPriceLabel" text="178.45 SEK" styleClass="info-label"/>
                         </HBox>
                     </VBox>
 

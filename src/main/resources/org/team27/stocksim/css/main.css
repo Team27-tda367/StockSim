@@ -68,13 +68,6 @@
     -fx-background-color: #f9fafb;
 }
 
-/* List item */
-.list-item {
-    -fx-padding: 15 20 15 20;
-    -fx-background-color: white;
-    -fx-border-color: #e5e7eb;
-    -fx-border-width: 0 0 1 0;
-}
 
 .list-item:hover {
     -fx-background-color: #f9fafb;
@@ -450,4 +443,109 @@
 .stock-divider {
     -fx-background-color: #E5E7EB;
     -fx-pref-height: 1;
+}
+
+
+/* ============================================
+   LISTVIEW STYLING
+   ============================================ */
+
+/* Custom ListView container */
+.list-view-custom {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    /* Light gray border */
+    -fx-border-width: 1px;
+    /* Thin border */
+    -fx-border-radius: 12px;
+    /* Rounded corners */
+    -fx-background-radius: 12px;
+    /* Rounded corners */
+    -fx-padding: 10;
+    /* Inner padding */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 8, 0.2, 0, 2);
+    /* Subtle shadow */
+}
+
+/* Custom ListCell styling */
+.list-cell {
+    -fx-padding: 14 20;
+    /* Padding inside each cell */
+    -fx-background-color: white;
+    /* Default background color */
+    -fx-border-color: #e5e7eb;
+    /* Light border between cells */
+    -fx-border-width: 0 0 1 0;
+    /* Bottom border only */
+    -fx-font-family: "Inter", sans-serif;
+    /* Use the Inter font */
+    -fx-font-size: 14px;
+    /* Default font size */
+    -fx-text-fill: #111827;
+    /* Dark text color */
+}
+
+/* Hover effect for ListView cells */
+.list-cell:hover {
+    -fx-background-color: #f3f4f6;
+    /* Light gray background on hover */
+}
+
+/* Selected cell styling */
+.list-cell:filled:selected {
+    -fx-background-color: #2563eb;
+    /* Blue background for selected cell */
+    -fx-text-fill: white;
+    /* White text for selected cell */
+}
+
+/* Stock symbol styling inside the ListView */
+.list-cell .stock-symbol {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    /* Dark text color */
+}
+
+/* Stock meta information styling inside the ListView */
+.list-cell .stock-meta {
+    -fx-text-fill: #6b7280;
+    /* Muted gray color for meta information */
+    -fx-font-size: 12px;
+}
+
+/* Add spacing between the stock symbol and meta information */
+.list-cell .stock-info {
+    -fx-spacing: 5;
+    /* Space between symbol and meta */
+}
+
+/* Add spacing between the content and the action button */
+.list-cell .content {
+    -fx-spacing: 10;
+    /* Space between content and button */
+}
+
+/* Style the "Trade" button inside the ListView */
+.list-cell .btn-trade {
+    -fx-background-color: #16a34a;
+    /* Green background for the button */
+    -fx-text-fill: white;
+    /* White text for the button */
+    -fx-background-radius: 5;
+    /* Rounded corners */
+    -fx-padding: 5 10;
+    /* Padding inside the button */
+    -fx-cursor: hand;
+    /* Pointer cursor on hover */
+    -fx-font-family: "Inter", sans-serif;
+    /* Use the Inter font */
+    -fx-font-size: 12px;
+    /* Smaller font size for the button */
+}
+
+/* Hover effect for the "Trade" button */
+.list-cell .btn-trade:hover {
+    -fx-background-color: #15803d;
+    /* Darker green on hover */
 }
