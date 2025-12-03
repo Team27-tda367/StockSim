@@ -26,6 +26,10 @@ public class CreateStockPageController extends ViewControllerBase {
 
     @FXML
     private void initialize() {
+        /*
+         * Initialize all bindings
+         */
+        createdStockLabel.textProperty().bind(parentView.stocksProperty());
 
     }
 

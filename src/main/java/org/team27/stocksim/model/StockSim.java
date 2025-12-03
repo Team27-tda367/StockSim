@@ -22,7 +22,7 @@ public class StockSim implements ModelSubject {
     HashMap<String, Trader> traders;
     TraderFactory userFactory;
     TraderFactory botFactory;
-    private String createdStockMsg = "Initial message";
+    private String createdStockMsg;
     private MatchingEngine matchingEngine;
     private HashMap<String, OrderBook> orderBooks;
     private HashMap<Integer, String> orderIdToTraderId; // maps order ID to trader ID

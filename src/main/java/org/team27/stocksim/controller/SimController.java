@@ -1,7 +1,6 @@
 package org.team27.stocksim.controller;
 
 import org.team27.stocksim.model.StockSim;
-import org.team27.stocksim.ui.fx.IView;
 
 public class SimController implements ISimController {
 
@@ -9,7 +8,6 @@ public class SimController implements ISimController {
 
     public SimController(StockSim model) {
         this.model = model;
-
     }
 
     public void createStock(String symbol, String stockName, String tickSize, String lotSize) {
