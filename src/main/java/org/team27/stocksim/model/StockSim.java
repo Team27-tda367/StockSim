@@ -55,17 +55,17 @@ public class StockSim implements ModelSubject {
     public OrderBook getOrderBook(String symbol) {
         OrderBook book = orderBooks.computeIfAbsent(
                 symbol,
-                OrderBook::new
-        );
+                OrderBook::new);
         return orderBooks.get(symbol);
     }
 
     public void placeOrder(Order order) {
-        //TODO: validation of order (enough balance, enough stocks in portfolio, lot size, tick size, etc)
+        // TODO: validation of order (enough balance, enough stocks in portfolio, lot
+        // size, tick size, etc)
         // Track the order ID to trader ID mapping
         orderIdToTraderId.put(order.getOrderId(), order.getTraderId());
         processOrder(order);
-    } //TODO: seperate order placing logic from processing logic
+    } // TODO: seperate order placing logic from processing logic
 
     private void processOrder(Order order) {
 
@@ -81,22 +81,19 @@ public class StockSim implements ModelSubject {
         String sellerTraderId = orderIdToTraderId.get(trade.getSellOrderId());
 
         if (buyerTraderId == null || sellerTraderId == null) {
-            //TODO: handle error
+            // TODO: handle error
             return;
         }
-
 
         Trader buyer = traders.get(buyerTraderId);
         Trader seller = traders.get(sellerTraderId);
 
         if (buyer == null || seller == null) {
-            //TODO: handle error
+            // TODO: handle error
             return;
         }
 
-
         BigDecimal tradeValue = trade.getPrice().multiply(BigDecimal.valueOf(trade.getQuantity()));
-
 
         Portfolio buyerPortfolio = buyer.getPortfolio();
         Portfolio sellerPortfolio = seller.getPortfolio();
@@ -107,9 +104,8 @@ public class StockSim implements ModelSubject {
             sellerPortfolio.removeStock(trade.getStockSymbol(), trade.getQuantity());
             buyerPortfolio.addStock(trade.getStockSymbol(), trade.getQuantity());
 
-
         } else {
-            //TODO: handle error
+            // TODO: handle error
         }
     }
 
@@ -119,11 +115,14 @@ public class StockSim implements ModelSubject {
         if (stocks.containsKey(highSymbol)) {
             createdStockMsg = "Symbol already exists!";
         } else {
-            Instrument stock = stockFactory.createInstrument(highSymbol, stockName, new BigDecimal(tickSize), Integer.parseInt(lotSize));
+            Instrument stock = stockFactory.createInstrument(highSymbol, stockName, new BigDecimal(tickSize),
+                    Integer.parseInt(lotSize));
             stocks.put(highSymbol, stock);
             String createdStock = highSymbol + " " + stockName + " " + tickSize + " " + lotSize;
             createdStockMsg = createdStock;
         }
+
+        notifyObservers();
     }
 
     // Trader logic
@@ -177,7 +176,7 @@ public class StockSim implements ModelSubject {
     }
 
     private void notifyObservers() {
-        for(ModelObserver obs : observers) {
+        for (ModelObserver obs : observers) {
             obs.newStockCreated(stocks);
         }
     }

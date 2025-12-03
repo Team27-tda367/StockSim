@@ -1,17 +1,14 @@
 package org.team27.stocksim.ui.fx.viewControllers;
 
 import org.team27.stocksim.ui.fx.EView;
-import org.team27.stocksim.ui.fx.ViewSwitcher;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class StockViewController {
+public class StockViewController extends ViewControllerBase {
 
     @FXML
     private Label favoriteIcon;
-
     private boolean isFavorite = false;
 
     @FXML
@@ -25,7 +22,7 @@ public class StockViewController {
      */
     @FXML
     public void onExample(ActionEvent event) {
-        ViewSwitcher.switchTo(EView.MAINVIEW);
+        viewSwitcher.switchTo(EView.MAINVIEW);
     }
 
     @FXML

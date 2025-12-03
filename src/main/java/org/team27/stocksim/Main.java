@@ -10,12 +10,14 @@ import org.team27.stocksim.ui.fx.JavaFXView;
 public class Main {
 
     public static void main(String[] args) {
-        IView view = new JavaFXView(); // this can be any form of view (modularity)
         StockSim model = new StockSim();
-        SimController controller = new SimController(view, model);
 
-        controller.start();
+        SimController controller = new SimController(model);
+        IView view = new JavaFXView();
+        view.setController(controller);
+        model.addObserver(view);
 
+        view.show();
     }
 
 }

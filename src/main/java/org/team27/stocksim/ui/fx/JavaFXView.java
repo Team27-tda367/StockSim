@@ -1,48 +1,37 @@
 package org.team27.stocksim.ui.fx;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
 
+import org.team27.stocksim.controller.ISimController;
+
 public class JavaFXView extends Application implements IView {
-
-    private static JavaFXView instance;
-
-    private IViewControllerAdapter controllerAdapter = () -> { };
+    private static ISimController staticModelController;
 
     @Override
     public void newStockCreated(HashMap stocks) {
-
+        // Implementation for updating the view when a new stock is created
+        System.out.println("New stock created: " + stocks);
     }
 
     @Override
-    public void setControllerAdapter(IViewControllerAdapter adapter) {
-        this.controllerAdapter = adapter;
+    public void setController(ISimController controller) {
+        staticModelController = controller;
     }
 
-    @Override
     public void show() {
         new Thread(() -> Application.launch(JavaFXView.class)).start();
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // Get the controller from the static field
 
-        // Create FXML loader for initial view
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/team27/stocksim/view/main_view.fxml"));
-        loader.setControllerFactory(ViewSwitcher.getControllerFactory());
+        ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage, staticModelController);
+        viewSwitcher.switchTo(EView.MAINVIEW);
 
-        // Load FXML. The controller is created by the factory
-        Parent root = loader.load();
-
-        Scene scene = new Scene(root);
-        ViewSwitcher.setScene(scene);
-
-        primaryStage.setScene(scene);
         primaryStage.setTitle("Stocksim");
         primaryStage.show();
 

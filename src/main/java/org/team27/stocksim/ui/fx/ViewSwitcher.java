@@ -1,12 +1,18 @@
 package org.team27.stocksim.ui.fx;
 
 import java.io.IOException;
+
+import javax.swing.text.View;
+
+import org.team27.stocksim.controller.ISimController;
+import org.team27.stocksim.ui.fx.viewControllers.ViewControllerBase;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.util.Callback;
 
-public class ViewSwitcher {
+/* public class ViewSwitcher {
     private static Scene scene;
     private static Callback<Class<?>, Object> controllerFactory;
 
@@ -42,4 +48,46 @@ public class ViewSwitcher {
             e.printStackTrace();
         }
     }
+}
+
+ */
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class ViewSwitcher {
+
+    private final Stage stage;
+    private final ISimController modelController;
+
+    public ViewSwitcher(Stage primaryStage, ISimController simController) {
+        this.stage = primaryStage;
+        this.modelController = simController;
+
+    }
+
+    public void switchTo(EView view) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(view.getFileName()));
+            Parent root = loader.load();
+
+            // Hämta controller och injicera domain + switcher
+            Object controller = loader.getController();
+            if (controller instanceof ViewControllerBase baseController) {
+                baseController.init(modelController, this);
+            }
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace(); // i riktig kod: logga snyggare
+        }
+    }
+
 }
