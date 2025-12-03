@@ -1,9 +1,10 @@
 package org.team27.stocksim.ui.fx.viewControllers;
 
 import org.team27.stocksim.controller.ISimController;
+import org.team27.stocksim.observer.ModelObserver;
 import org.team27.stocksim.ui.fx.ViewSwitcher;
 
-public abstract class ViewControllerBase {
+public abstract class ViewControllerBase implements ModelObserver {
 
     protected ISimController modelController;
     protected ViewSwitcher viewSwitcher;
@@ -15,6 +16,5 @@ public abstract class ViewControllerBase {
     }
 
     // Hook-metod som barnklasser kan överskugga
-    protected void onInit() {
-    }
+    protected abstract void onInit();
 }

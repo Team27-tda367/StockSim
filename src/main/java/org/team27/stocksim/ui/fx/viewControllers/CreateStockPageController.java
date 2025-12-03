@@ -2,10 +2,8 @@ package org.team27.stocksim.ui.fx.viewControllers;
 
 import java.util.HashMap;
 
-import javax.sound.midi.Instrument;
-
+import org.team27.stocksim.model.market.Instrument;
 import org.team27.stocksim.observer.ModelEvent;
-import org.team27.stocksim.observer.ModelObserver;
 import org.team27.stocksim.ui.fx.EView;
 
 import javafx.event.ActionEvent;
@@ -13,7 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class CreateStockPageController extends ViewControllerBase implements ModelObserver {
+public class CreateStockPageController extends ViewControllerBase {
 
     @FXML
     private TextField inputSymbol;
@@ -32,7 +30,7 @@ public class CreateStockPageController extends ViewControllerBase implements Mod
 
     @Override
     protected void onInit() {
-        modelController.addObserver(this);
+        modelController.getModel().addObserver(this);
     }
 
     @FXML

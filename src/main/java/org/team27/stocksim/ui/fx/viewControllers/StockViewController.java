@@ -1,5 +1,6 @@
 package org.team27.stocksim.ui.fx.viewControllers;
 
+import org.team27.stocksim.observer.ModelEvent;
 import org.team27.stocksim.ui.fx.EView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,11 +11,6 @@ public class StockViewController extends ViewControllerBase {
     @FXML
     private Label favoriteIcon;
     private boolean isFavorite = false;
-
-    @FXML
-    private void initialize() {
-        // Initialize bindings or UI setup here if needed.
-    }
 
     /**
      * Handler for the header "Home" button (FXML references `onExample`).
@@ -29,6 +25,16 @@ public class StockViewController extends ViewControllerBase {
     private void onToggleFavorite() {
         isFavorite = !isFavorite;
         favoriteIcon.setText(isFavorite ? "★" : "☆");
+    }
+
+    @Override
+    public void modelChanged(ModelEvent event) {
+        System.out.println("Stockview changed");
+    }
+
+    @Override
+    protected void onInit() {
+        modelController.getModel().addObserver(this);
     }
 
 }

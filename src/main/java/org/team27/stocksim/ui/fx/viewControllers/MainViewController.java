@@ -1,5 +1,6 @@
 package org.team27.stocksim.ui.fx.viewControllers;
 
+import org.team27.stocksim.observer.ModelEvent;
 import org.team27.stocksim.ui.fx.EView;
 
 import javafx.event.ActionEvent;
@@ -7,12 +8,9 @@ import javafx.fxml.FXML;
 
 public class MainViewController extends ViewControllerBase {
 
-    @FXML
-    private void initialize() {
-        /*
-         * Initialize all bindings
-         */
-        // TODO: Add bindings when needed to the viewAdapter
+    @Override
+    protected void onInit() {
+        modelController.getModel().addObserver(this);
     }
 
     @FXML
@@ -34,5 +32,10 @@ public class MainViewController extends ViewControllerBase {
     @FXML
     public void onStockView(ActionEvent event) {
         viewSwitcher.switchTo(EView.STOCKVIEW);
+    }
+
+    @Override
+    public void modelChanged(ModelEvent event) {
+        System.out.println("Model changed in MainViewController");
     }
 }
