@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.collections.FXCollections?>
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+
 
 <VBox xmlns="http://javafx.com/javafx"
     xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.ui.fx.viewControllers.MainViewController" prefHeight="700.0" prefWidth="800" styleClass="root-container" stylesheets="@../css/main.css">
@@ -60,27 +62,12 @@
         </HBox>
 
         <!-- Stock List Items -->
-        <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="scroll-pane">
-            <VBox styleClass="spacing-small, clickable">
-
-                <!-- Structure of a stock in the list view -->
-                <HBox styleClass="list-item, spacing-medium">
-                    <VBox prefWidth="180" styleClass="spacing-small">
-                        <Label text="AAPL" styleClass="stock-symbol"/>
-                        <Label text="Technology" styleClass="stock-meta"/>
-                    </VBox>
-                    <Label text="+1.33%" prefWidth="200" alignment="CENTER" styleClass="text-positive"/>
-
-                    <Label text="-3.00%" prefWidth="200" alignment="CENTER" styleClass="text-negative"/>
-                    <Label text="+28.80%" prefWidth="200" alignment="CENTER" styleClass="text-positive"/>
-                    <Label text="178.45" prefWidth="180" alignment="CENTER_RIGHT" styleClass="text-bold"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Label text="☆" prefWidth="100" alignment="CENTER" styleClass="icon-large, clickable">
-                    </Label>
-                    <Button text="Trade" prefWidth="100" styleClass="btn-highlighted, clickable" onAction="#onStockView"/>
-                </HBox>
-            </VBox>
-        </ScrollPane>
+        <ListView fx:id="stockListView" VBox.vgrow="ALWAYS" styleClass="list-view">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                </FXCollections>
+            </items>
+        </ListView>
     </VBox>
 
 </VBox>
