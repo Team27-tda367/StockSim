@@ -10,7 +10,7 @@ public class MainViewController extends ViewControllerBase {
 
     @Override
     protected void onInit() {
-        modelController.getModel().addObserver(this);
+        modelController.addObserver(this);
     }
 
     @FXML

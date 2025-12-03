@@ -34,7 +34,7 @@ public class StockViewController extends ViewControllerBase {
 
     @Override
     protected void onInit() {
-        modelController.getModel().addObserver(this);
+        modelController.addObserver(this);
     }
 
 }

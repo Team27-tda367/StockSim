@@ -30,7 +30,7 @@ public class CreateStockPageController extends ViewControllerBase {
 
     @Override
     protected void onInit() {
-        modelController.getModel().addObserver(this);
+        modelController.addObserver(this);
     }
 
     @FXML
@@ -59,11 +59,13 @@ public class CreateStockPageController extends ViewControllerBase {
 
     @Override
     public void modelChanged(ModelEvent event) {
-        System.out.println("Model changed");
-        if (event.getType() == ModelEvent.Type.STOCK_CREATED) {
-
-            createdStockLabel.setText(event.getPayload().toString());
-            // uppdatera UI / view-modell
+        switch (event.getType()) {
+            case STOCK_CREATED -> updateCreatedStock(event);
         }
     }
+
+    private void updateCreatedStock(ModelEvent event) {
+        createdStockLabel.setText((String) event.getPayload());
+    }
+
 }
