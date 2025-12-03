@@ -332,3 +332,122 @@
     -fx-border-radius: 999;
     -fx-padding: 5 0 5 0;
 }
+
+.stock-price-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-padding: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 8, 0.2, 0, 2);
+}
+
+.price-title {
+    -fx-font-size: 13;
+    -fx-text-fill: #6B7280;
+}
+
+.price-value-large {
+    -fx-font-size: 28;
+    -fx-font-weight: 500;
+    -fx-text-fill: #111827;
+}
+
+.price-value-small {
+    -fx-font-size: 18;
+    -fx-font-weight: 500;
+    -fx-text-fill: #4B5563;
+}
+
+.price-change-positive {
+    -fx-font-size: 14;
+    -fx-font-weight: 600;
+    -fx-text-fill: #16a34a;
+}
+
+.price-icon {
+    -fx-font-size: 16;
+    -fx-background-color: #DBEAFE;
+    -fx-text-fill: #2563eb;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+}
+
+/* ====== SIDE STOCK LIST CARD ====== */
+.stock-list-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-padding: 10 12 10 12;
+    -fx-spacing: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 8, 0.2, 0, 2);
+    -fx-pref-width: 340;
+}
+
+/* Header */
+.stock-list-header {
+    -fx-background-color: #F3F4F6;
+    -fx-padding: 6 12;
+    -fx-background-radius: 12 12 0 0;
+    -fx-border-radius: 12 12 0 0;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+    -fx-font-family: "Inter", "Arial";
+    -fx-text-fill: #111827;
+}
+
+/* List item rows */
+.stock-row {
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+}
+
+/* Symbol text */
+.stock-symbol {
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+}
+
+/* Company name */
+.stock-company {
+    -fx-font-size: 11;
+    -fx-text-fill: #6B7280;
+}
+
+/* Price box (right side) */
+.stock-price-box {
+    -fx-alignment: center-right;
+    -fx-spacing: 2;
+}
+
+/* Large price */
+.stock-price {
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+}
+
+/* Change percent row */
+.stock-change {
+    -fx-spacing: 4;
+    -fx-alignment: center-right;
+}
+
+/* Colors for stock change */
+.stock-up {
+    -fx-text-fill: #16A34A;
+}
+
+.stock-down {
+    -fx-text-fill: #DC2626;
+}
+
+/* Divider line */
+.stock-divider {
+    -fx-background-color: #E5E7EB;
+    -fx-pref-height: 1;
+}
