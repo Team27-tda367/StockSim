@@ -1,7 +1,9 @@
 package org.team27.stocksim.ui.terminal;
 
 import org.team27.stocksim.controller.ISimController;
-import org.team27.stocksim.ui.IView;
+import org.team27.stocksim.model.market.Instrument;
+import org.team27.stocksim.observer.ModelObserver;
+import org.team27.stocksim.ui.IViewInit;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -10,7 +12,7 @@ import java.util.Scanner;
  * Terminal-based view implementation for the StockSim application.
  * Provides a command-line interface for interacting with the stock simulation.
  */
-public class TerminalView implements IView {
+public class TerminalView implements IViewInit {
     private ISimController controller;
     private Scanner scanner;
     private volatile boolean running;
@@ -32,13 +34,6 @@ public class TerminalView implements IView {
         running = true;
         displayWelcome();
         runMainLoop();
-    }
-
-    @Override
-    public void newStockCreated(HashMap stocks) {
-        this.stocks = stocks;
-        System.out.println("\n✓ New stock created successfully!");
-        System.out.println("Total stocks in system: " + stocks.size());
     }
 
     private void displayWelcome() {

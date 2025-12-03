@@ -3,6 +3,7 @@ package org.team27.stocksim.model;
 import org.team27.stocksim.model.market.*;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.*;
+import org.team27.stocksim.observer.ModelEvent;
 import org.team27.stocksim.observer.ModelObserver;
 import org.team27.stocksim.observer.ModelSubject;
 
@@ -121,8 +122,10 @@ public class StockSim implements ModelSubject {
             String createdStock = highSymbol + " " + stockName + " " + tickSize + " " + lotSize;
             createdStockMsg = createdStock;
         }
+        System.out.println("Creating stock");
 
-        notifyObservers();
+        notifyObservers(new ModelEvent(ModelEvent.Type.STOCKS_CHANGED, stocks));
+
     }
 
     // Trader logic
@@ -175,9 +178,9 @@ public class StockSim implements ModelSubject {
         return new Portfolio(startingBalance);
     }
 
-    private void notifyObservers() {
-        for (ModelObserver obs : observers) {
-            obs.newStockCreated(stocks);
+    private void notifyObservers(ModelEvent event) {
+        for (ModelObserver o : observers) {
+            o.modelChanged(event);
         }
     }
 

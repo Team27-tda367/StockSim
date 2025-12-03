@@ -96,3 +96,10 @@ nb-configuration.xml
 *.db
 *.sqlite
 *.sqlite3
+
+
+##############################
+## PlantUML
+##############################
+output/
+*.puml

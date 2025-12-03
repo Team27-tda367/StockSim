@@ -1,26 +1,17 @@
 package org.team27.stocksim.ui.fx;
 
 import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
 import javafx.stage.Stage;
-
 import java.util.HashMap;
 
 import org.team27.stocksim.controller.ISimController;
 import org.team27.stocksim.model.market.Instrument;
-import org.team27.stocksim.ui.IView;
+import org.team27.stocksim.ui.IViewInit;
 
-public class JavaFXView extends Application implements IView {
+public class JavaFXView extends Application implements IViewInit {
     private static ISimController staticModelController;
     protected HashMap<String, Instrument> stocks;
 
-    // All the other methods from IView can be implemented here as needed
-    @Override
-    public void newStockCreated(HashMap<String, Instrument> stocks) {
-        this.stocks = stocks;
-    }
-
-    @Override
     public void setController(ISimController controller) {
         staticModelController = controller;
     }
@@ -33,7 +24,7 @@ public class JavaFXView extends Application implements IView {
     public void start(Stage primaryStage) throws Exception {
         // Get the controller from the static field
 
-        ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage, staticModelController, this);
+        ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage, staticModelController);
         viewSwitcher.switchTo(EView.MAINVIEW);
 
         primaryStage.setTitle("Stocksim");

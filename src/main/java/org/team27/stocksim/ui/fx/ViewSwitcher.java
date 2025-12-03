@@ -6,19 +6,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import org.team27.stocksim.controller.ISimController;
-import org.team27.stocksim.ui.IView;
 import org.team27.stocksim.ui.fx.viewControllers.ViewControllerBase;
 
 public class ViewSwitcher {
 
     private final Stage stage;
     private final ISimController modelController;
-    private final IView parentView;
 
-    public ViewSwitcher(Stage primaryStage, ISimController simController, IView parentView) {
+    public ViewSwitcher(Stage primaryStage, ISimController simController) {
         this.stage = primaryStage;
         this.modelController = simController;
-        this.parentView = parentView;
     }
 
     public void switchTo(EView view) {
@@ -29,7 +26,7 @@ public class ViewSwitcher {
             // Hämta controller och injicera domain + switcher
             Object controller = loader.getController();
             if (controller instanceof ViewControllerBase baseController) {
-                baseController.init(modelController, this, parentView);
+                baseController.init(modelController, this);
             }
 
             Scene scene = new Scene(root);

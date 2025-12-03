@@ -1,5 +1,11 @@
 package org.team27.stocksim.ui.fx.viewControllers;
 
+import java.util.HashMap;
+
+import javax.sound.midi.Instrument;
+
+import org.team27.stocksim.observer.ModelEvent;
+import org.team27.stocksim.observer.ModelObserver;
 import org.team27.stocksim.ui.fx.EView;
 
 import javafx.event.ActionEvent;
@@ -7,7 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class CreateStockPageController extends ViewControllerBase {
+public class CreateStockPageController extends ViewControllerBase implements ModelObserver {
 
     @FXML
     private TextField inputSymbol;
@@ -24,13 +30,9 @@ public class CreateStockPageController extends ViewControllerBase {
     @FXML
     private Label createdStockLabel;
 
-    @FXML
-    private void initialize() {
-        /*
-         * Initialize all bindings
-         */
-        createdStockLabel.textProperty().bind(parentView.stocksProperty());
-
+    @Override
+    protected void onInit() {
+        modelController.addObserver(this);
     }
 
     @FXML
@@ -55,5 +57,15 @@ public class CreateStockPageController extends ViewControllerBase {
         inputStockName.clear();
         inputTickSize.clear();
         inputLotSize.clear();
+    }
+
+    @Override
+    public void modelChanged(ModelEvent event) {
+        System.out.println("Model changed");
+        if (event.getType() == ModelEvent.Type.STOCKS_CHANGED) {
+            HashMap<String, Instrument> stocks = (HashMap<String, Instrument>) event.getPayload();
+            createdStockLabel.setText("Stock created: " + stocks.toString());
+            // uppdatera UI / view-modell
+        }
     }
 }

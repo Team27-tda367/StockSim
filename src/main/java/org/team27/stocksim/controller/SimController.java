@@ -1,6 +1,7 @@
 package org.team27.stocksim.controller;
 
 import org.team27.stocksim.model.StockSim;
+import org.team27.stocksim.observer.ModelObserver;
 
 public class SimController implements ISimController {
 
@@ -12,6 +13,10 @@ public class SimController implements ISimController {
 
     public void createStock(String symbol, String stockName, String tickSize, String lotSize) {
         model.createStock(symbol, stockName, tickSize, lotSize);
+    }
+
+    public void addObserver(ModelObserver observer) {
+        model.addObserver(observer);
     }
 
 }
