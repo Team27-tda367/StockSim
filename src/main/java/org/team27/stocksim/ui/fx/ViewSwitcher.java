@@ -23,18 +23,17 @@ public class ViewSwitcher {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(view.getFileName()));
             Parent root = loader.load();
 
-            // Hämta controller och injicera domain + switcher
-            Object controller = loader.getController();
-            if (controller instanceof ViewControllerBase baseController) {
-                baseController.init(modelController, this);
-            }
+            // Get the viewcontroller and inject dependencies (modelController and this
+            // ViewSwitcher)
+            ViewControllerBase controller = loader.getController();
+            controller.init(modelController, this);
 
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
 
         } catch (Exception e) {
-            e.printStackTrace(); // i riktig kod: logga snyggare
+            e.printStackTrace(); // TODO: Proper error handling
         }
     }
 

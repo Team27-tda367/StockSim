@@ -120,11 +120,10 @@ public class StockSim implements ModelSubject {
                     Integer.parseInt(lotSize));
             stocks.put(highSymbol, stock);
             String createdStock = highSymbol + " " + stockName + " " + tickSize + " " + lotSize;
-            createdStockMsg = createdStock;
+            createdStockMsg = "Created stock: " + createdStock;
         }
-        System.out.println("Creating stock");
 
-        notifyObservers(new ModelEvent(ModelEvent.Type.STOCKS_CHANGED, stocks));
+        notifyObservers(new ModelEvent(ModelEvent.Type.STOCK_CREATED, createdStockMsg));
 
     }
 

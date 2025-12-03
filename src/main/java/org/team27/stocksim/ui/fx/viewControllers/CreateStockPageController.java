@@ -60,9 +60,9 @@ public class CreateStockPageController extends ViewControllerBase {
     @Override
     public void modelChanged(ModelEvent event) {
         System.out.println("Model changed");
-        if (event.getType() == ModelEvent.Type.STOCKS_CHANGED) {
-            HashMap<String, Instrument> stocks = (HashMap<String, Instrument>) event.getPayload();
-            createdStockLabel.setText("Stock created: " + stocks.toString());
+        if (event.getType() == ModelEvent.Type.STOCK_CREATED) {
+
+            createdStockLabel.setText(event.getPayload().toString());
             // uppdatera UI / view-modell
         }
     }
