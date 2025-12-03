@@ -5,11 +5,14 @@ import org.team27.stocksim.ui.fx.EView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+
+import org.team27.stocksim.model.market.Instrument;
 import org.team27.stocksim.model.market.Stock;
 
 import org.team27.stocksim.ui.fx.SelectedStockService;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 public class StockViewController extends ViewControllerBase {
 
@@ -29,7 +32,7 @@ public class StockViewController extends ViewControllerBase {
     private Label orderPriceLabel; // om du lade till fx:id
 
     private boolean isFavorite = false;
-    private Stock stock;
+    private Instrument stock;
 
     /**
      * Handler for the header "Home" button (FXML references `onExample`).
@@ -78,7 +81,7 @@ public class StockViewController extends ViewControllerBase {
 
     @Override
     public void modelChanged(ModelEvent event) {
-        System.out.println("Stockview changed");
+
     }
 
     @Override

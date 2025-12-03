@@ -1,6 +1,8 @@
 package org.team27.stocksim.ui.fx.viewControllers;
 
 import org.team27.stocksim.observer.ModelEvent;
+
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,39 +17,32 @@ import javafx.scene.layout.Region;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import org.team27.stocksim.ui.fx.SelectedStockService;
-
+import org.team27.stocksim.model.market.Instrument;
 import org.team27.stocksim.model.market.Stock;
 import org.team27.stocksim.ui.fx.EView;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 public class MainViewController extends ViewControllerBase {
 
     @Override
     protected void onInit() {
         modelController.addObserver(this);
-    }
-
-    @FXML
-    private ListView<Stock> stockListView;
-
-    private ObservableList<Stock> stockList;
-
-    @FXML
-    private void initialize() {
-        // Initialize the stock list
-        stockList = FXCollections.observableArrayList();
         stockListView.setItems(stockList);
 
         // Set a custom cell factory to display stock items
         stockListView.setCellFactory(listView -> new StockListCell());
 
-        // Example stocks
-        stockList.add(new Stock("AAPL", "Apple Inc.", BigDecimal.valueOf(0.01), 100));
-        stockList.add(new Stock("GOOGL", "Alphabet Inc.", BigDecimal.valueOf(0.01), 100));
-        stockList.add(new Stock("MSFT", "Microsoft Corp.", BigDecimal.valueOf(0.01), 100));
-
+        // Get all stocks from the model
+        HashMap<String, Instrument> stocks = modelController.getAllStocks();
+        stockList.addAll(stocks.values());
     }
+
+    @FXML
+    private ListView<Instrument> stockListView;
+
+    private ObservableList<Instrument> stockList = FXCollections.observableArrayList();
 
     @FXML
     public void onExample(ActionEvent event) {
@@ -71,11 +66,24 @@ public class MainViewController extends ViewControllerBase {
 
     @Override
     public void modelChanged(ModelEvent event) {
-        System.out.println("Model changed in MainViewController");
+        switch (event.getType()) {
+            case STOCKS_CHANGED -> updateCreatedStock(event);
+        }
+    }
+
+    private void updateCreatedStock(ModelEvent event) {
+        HashMap<String, Stock> stocks = (HashMap<String, Stock>) event.getPayload();
+
+        Platform.runLater(() -> {
+            stockList.setAll(stocks.values());
+        });
+
+        System.out.println("Stock list updated in MainViewController.");
+        System.out.println(stocks);
     }
 
     // ListCell object for displaying Stock items
-    class StockListCell extends ListCell<Stock> {
+    class StockListCell extends ListCell<Instrument> {
         private final HBox content;
         private final Label symbol;
         private final Label meta;
@@ -98,9 +106,9 @@ public class MainViewController extends ViewControllerBase {
             actionButton = new Button("Trade");
             actionButton.getStyleClass().add("btn-highlighted");
             actionButton.setOnAction(event -> {
-                Stock stock = getItem();
-                if (stock != null) {
-                    handleButtonClick(stock);
+                Instrument instrument = getItem();
+                if (instrument != null) {
+                    handleButtonClick(instrument);
                 }
             });
 
@@ -110,7 +118,7 @@ public class MainViewController extends ViewControllerBase {
         }
 
         @Override
-        protected void updateItem(Stock stock, boolean empty) {
+        protected void updateItem(Instrument stock, boolean empty) {
             super.updateItem(stock, empty);
             if (empty || stock == null) {
                 setText(null);
@@ -123,12 +131,11 @@ public class MainViewController extends ViewControllerBase {
         }
 
         // Trade button handler
-        private void handleButtonClick(Stock stock) {
-            System.out.println(stock.getSymbol());
+        private void handleButtonClick(Instrument instrument) {
+            System.out.println(instrument.getSymbol());
 
             // 1. Spara vald aktie
-            SelectedStockService.setSelectedStock(stock);
-
+            SelectedStockService.setSelectedStock(instrument);
             // 2. Byt till stock view
             viewSwitcher.switchTo(EView.STOCKVIEW);
         }

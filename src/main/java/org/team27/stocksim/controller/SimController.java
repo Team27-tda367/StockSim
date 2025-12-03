@@ -1,6 +1,10 @@
 package org.team27.stocksim.controller;
 
+import java.util.HashMap;
+
 import org.team27.stocksim.model.StockSim;
+import org.team27.stocksim.model.market.Instrument;
+import org.team27.stocksim.model.market.Stock;
 import org.team27.stocksim.observer.ModelObserver;
 
 public class SimController implements ISimController {
@@ -9,6 +13,16 @@ public class SimController implements ISimController {
 
     public SimController(StockSim model) {
         this.model = model;
+
+        init();
+    }
+
+    private void init() {
+        // Create some default stocks
+        model.createStock("AAPL", "Apple Inc.", "0.01", "100");
+        model.createStock("GOOGL", "Alphabet Inc.", "0.01", "100");
+        model.createStock("MSFT", "Microsoft Corp.", "0.01", "100");
+
     }
 
     public void createStock(String symbol, String stockName, String tickSize, String lotSize) {
@@ -21,6 +35,11 @@ public class SimController implements ISimController {
 
     public void removeObserver(ModelObserver obs) {
         model.removeObserver(obs);
+    }
+
+    @Override
+    public HashMap<String, Instrument> getAllStocks() {
+        return model.getStocks();
     }
 
 }

@@ -1,16 +1,17 @@
 package org.team27.stocksim.ui.fx;
 
+import org.team27.stocksim.model.market.Instrument;
 import org.team27.stocksim.model.market.Stock;
 
 public class SelectedStockService {
 
-    private static Stock selectedStock;
+    private static Instrument selectedStock;
 
-    public static void setSelectedStock(Stock stock) {
+    public static void setSelectedStock(Instrument stock) {
         selectedStock = stock;
     }
 
-    public static Stock getSelectedStock() {
+    public static Instrument getSelectedStock() {
         return selectedStock;
     }
 }

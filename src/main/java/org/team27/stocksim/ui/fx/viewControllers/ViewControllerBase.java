@@ -17,4 +17,5 @@ public abstract class ViewControllerBase implements ModelObserver {
 
     // Hook-metod som barnklasser kan överskugga
     protected abstract void onInit();
+
 }

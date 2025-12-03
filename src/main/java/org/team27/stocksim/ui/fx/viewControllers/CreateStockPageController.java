@@ -30,7 +30,6 @@ public class CreateStockPageController extends ViewControllerBase {
 
     @Override
     protected void onInit() {
-        modelController.addObserver(this);
     }
 
     @FXML

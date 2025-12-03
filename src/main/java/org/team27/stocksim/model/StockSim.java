@@ -124,6 +124,7 @@ public class StockSim implements ModelSubject {
         }
 
         notifyObservers(new ModelEvent(ModelEvent.Type.STOCK_CREATED, createdStockMsg));
+        notifyObservers(new ModelEvent(ModelEvent.Type.STOCKS_CHANGED, stocks));
 
     }
 
