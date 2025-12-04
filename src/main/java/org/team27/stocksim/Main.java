@@ -1,8 +1,9 @@
 package org.team27.stocksim;
 
+import org.team27.stocksim.controller.ISimController;
 import org.team27.stocksim.controller.SimController;
 import org.team27.stocksim.model.StockSim;
-import org.team27.stocksim.view.fx.StockSimApp;
+import org.team27.stocksim.view.fx.FXStockSimApp;
 
 import javafx.application.Application;
 
@@ -15,13 +16,13 @@ public class Main {
     public static void main(String[] args) {
         // Initialize the model and controller
         StockSim model = new StockSim();
-        SimController controller = new SimController(model);
+        ISimController controller = new SimController(model);
 
         controller.setUpSimulation();
 
         // Pass to JavaFX application and launch
-        StockSimApp.setModelAndController(model, controller);
-        Application.launch(StockSimApp.class, args);
+        FXStockSimApp.setModelAndController(model, controller);
+        Application.launch(FXStockSimApp.class, args);
     }
 
 }

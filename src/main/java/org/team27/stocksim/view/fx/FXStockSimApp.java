@@ -1,6 +1,6 @@
 package org.team27.stocksim.view.fx;
 
-import org.team27.stocksim.controller.SimController;
+import org.team27.stocksim.controller.ISimController;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.view.ViewAdapter;
 
@@ -11,16 +11,16 @@ import javafx.stage.Stage;
  * JavaFX Application entry point for StockSim.
  * Handles the initialization and wiring of the view components.
  */
-public class StockSimApp extends Application {
+public class FXStockSimApp extends Application {
 
     private static StockSim model;
-    private static SimController controller;
+    private static ISimController controller;
 
     /**
      * Set the model and controller before launching the application.
      * This must be called before Application.launch().
      */
-    public static void setModelAndController(StockSim stockSim, SimController simController) {
+    public static void setModelAndController(StockSim stockSim, ISimController simController) {
         model = stockSim;
         controller = simController;
     }
