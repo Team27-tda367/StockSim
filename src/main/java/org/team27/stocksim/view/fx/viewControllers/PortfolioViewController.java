@@ -2,7 +2,6 @@ package org.team27.stocksim.view.fx.viewControllers;
 
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.User;
-import org.team27.stocksim.observer.ModelEvent;
 import org.team27.stocksim.view.fx.EView;
 
 import javafx.event.ActionEvent;
@@ -19,10 +18,7 @@ public class PortfolioViewController extends ViewControllerBase {
 
     }
 
-    @Override
-    public void modelChanged(ModelEvent event) {
-
-    }
+    // No event handlers needed - using defaults from ModelObserver
 
     @FXML
     public void onMainView(ActionEvent event) {

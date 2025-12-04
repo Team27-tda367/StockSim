@@ -1,6 +1,6 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.observer.ModelEvent;
+import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.SelectedStockService;
 
@@ -18,9 +18,11 @@ import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.User;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
-public class StockViewController extends ViewControllerBase {
+public class StockViewController extends ViewControllerBase 
+        implements ViewAdapter.PriceUpdateListener, ViewAdapter.TradeSettledListener {
 
     @FXML
     private Label favoriteIcon;
@@ -174,38 +176,35 @@ public class StockViewController extends ViewControllerBase {
     }
 
     @Override
-    public void modelChanged(ModelEvent event) {
-        // Hantera modelländringar här vid behov
-        switch (event.getType()) {
-            case PRICE_UPDATE -> {
-                // Uppdatera priset om det har ändrats
-                if (stock != null) {
-                    BigDecimal newPrice = stock.getCurrentPrice();
-                    PriceHistory history = stock.getPriceHistory();
-                    Platform.runLater(() -> {
-                        priceLabel.setText(newPrice.toString());
-                        orderPriceLabel.setText(newPrice + " SEK");
-                        // Update the chart with new price data
-                        updateChartData();
-                    });
-                }
-            }
-            case TRADE_SETTLED -> {
-                User user = modelController.getUser();
-                Portfolio portfolio = user.getPortfolio();
-                BigDecimal balance = portfolio.getBalance();
-                Platform.runLater(() -> {
-                    availableBalanceLabel.setText("Balance: $" + balance.toString());
-                });
-            }
-
+    public void onPriceUpdate(HashMap<String, ? extends Instrument> stocks) {
+        // Uppdatera priset om det har ändrats
+        if (stock != null) {
+            BigDecimal newPrice = stock.getCurrentPrice();
+            PriceHistory history = stock.getPriceHistory();
+            Platform.runLater(() -> {
+                priceLabel.setText(newPrice.toString());
+                orderPriceLabel.setText(newPrice + " SEK");
+                // Update the chart with new price data
+                updateChartData();
+            });
         }
+    }
 
+    @Override
+    public void onTradeSettled() {
+        User user = modelController.getUser();
+        Portfolio portfolio = user.getPortfolio();
+        BigDecimal balance = portfolio.getBalance();
+        Platform.runLater(() -> {
+            availableBalanceLabel.setText("Balance: $" + balance.toString());
+        });
     }
 
     @Override
     protected void onInit() {
-        modelController.addObserver(this);
+        // Register for events we care about
+        viewAdapter.addPriceUpdateListener(this);
+        viewAdapter.addTradeSettledListener(this);
 
         User user = modelController.getUser();
         Portfolio portfolio = user.getPortfolio();

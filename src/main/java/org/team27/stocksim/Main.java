@@ -1,36 +1,27 @@
-
 package org.team27.stocksim;
 
 import org.team27.stocksim.controller.SimController;
 import org.team27.stocksim.model.StockSim;
-import org.team27.stocksim.view.fx.EView;
-import org.team27.stocksim.view.fx.ViewSwitcher;
+import org.team27.stocksim.view.fx.StockSimApp;
 
 import javafx.application.Application;
-import javafx.stage.Stage;
 
-public class Main extends Application {
+/**
+ * Main entry point for the StockSim application.
+ * Initializes the model and controller, then launches the JavaFX application.
+ */
+public class Main {
 
     public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
         // Initialize the model and controller
         StockSim model = new StockSim();
-
-        SimController controller = new SimController(model); // Dependency Injection
+        SimController controller = new SimController(model);
 
         controller.setUpSimulation();
 
-        // Initialize and launch the JavaFX view, set main view
-        ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage, controller); // Dependency Injection
-        viewSwitcher.switchTo(EView.MAINVIEW);
-
-        primaryStage.setTitle("Stocksim");
-        primaryStage.show();
-
+        // Pass to JavaFX application and launch
+        StockSimApp.setModelAndController(model, controller);
+        Application.launch(StockSimApp.class, args);
     }
 
 }

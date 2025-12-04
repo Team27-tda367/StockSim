@@ -4,13 +4,15 @@ import org.team27.stocksim.model.clock.GameClock;
 import org.team27.stocksim.model.clock.GameTicker;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.instruments.InstrumentFactory;
+import org.team27.stocksim.model.instruments.Stock;
 import org.team27.stocksim.model.instruments.StockFactory;
 import org.team27.stocksim.model.market.*;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.*;
-import org.team27.stocksim.observer.ModelEvent;
 import org.team27.stocksim.observer.ModelObserver;
 import org.team27.stocksim.observer.ModelSubject;
+
+import com.j256.ormlite.stmt.query.In;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -94,7 +96,7 @@ public class StockSim implements ModelSubject {
 
         // Only notify observers if a price actually changed
         if (priceChanged) {
-            notifyObservers(new ModelEvent(ModelEvent.Type.PRICE_UPDATE, stocks));
+            notifyPriceUpdate(stocks);
         }
     }
 
@@ -126,7 +128,7 @@ public class StockSim implements ModelSubject {
             sellerPortfolio.removeStock(trade.getStockSymbol(), trade.getQuantity());
             buyerPortfolio.addStock(trade.getStockSymbol(), trade.getQuantity());
 
-            notifyObservers(new ModelEvent(ModelEvent.Type.TRADE_SETTLED, null));
+            notifyTradeSettled();
 
             // Set stock price to last trade price
             Instrument stock = stocks.get(trade.getStockSymbol());
@@ -224,9 +226,21 @@ public class StockSim implements ModelSubject {
         return new Portfolio(startingBalance);
     }
 
-    private void notifyObservers(ModelEvent event) {
+    private void notifyPriceUpdate(HashMap<String, Instrument> stocks) {
         for (ModelObserver o : observers) {
-            o.modelChanged(event);
+            o.onPriceUpdate(stocks);
+        }
+    }
+
+    private void notifyTradeSettled() {
+        for (ModelObserver o : observers) {
+            o.onTradeSettled();
+        }
+    }
+
+    private void notifyStocksChanged(Object payload) {
+        for (ModelObserver o : observers) {
+            o.onStocksChanged(payload);
         }
     }
 
@@ -264,8 +278,8 @@ public class StockSim implements ModelSubject {
             }
         }).start();
 
-        // notifyObservers(new ModelEvent(ModelEvent.Type.MARKET_STARTED, "Market
-        // simulation started."));
+        // TODO: Add market started notification if needed
+        // notifyMarketStarted();
 
     }
 
@@ -289,8 +303,8 @@ public class StockSim implements ModelSubject {
         System.out.println("Simulation stopped after 10 seconds");
         System.out.println("Total trades executed: " + completedTrades.size());
         System.out.println("========================================\n");
-        // notifyObservers(new ModelEvent(ModelEvent.Type.MARKET_STOPPED, "Market
-        // simulation stopped."));
+        // TODO: Add market stopped notification if needed
+        // notifyMarketStopped();
     }
 
 }

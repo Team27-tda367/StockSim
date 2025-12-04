@@ -1,6 +1,5 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.observer.ModelEvent;
 import org.team27.stocksim.view.fx.EView;
 
 import javafx.event.ActionEvent;
@@ -53,17 +52,11 @@ public class CreateStockPageController extends ViewControllerBase {
         inputLotSize.clear();
     }
 
-    @Override
-    public void modelChanged(ModelEvent event) {
-        /*
-         * switch (event.getType()) {
-         * case STOCK_CREATED -> updateCreatedStock(event);
-         * }
-         */
-    }
-
-    private void updateCreatedStock(ModelEvent event) {
-        createdStockLabel.setText((String) event.getPayload());
-    }
+    // Event handlers can be added here if needed
+    // Example:
+    // @Override
+    // public void onStocksChanged(Object payload) {
+    //     createdStockLabel.setText((String) payload);
+    // }
 
 }

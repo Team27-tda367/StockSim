@@ -1,8 +1,11 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.observer.ModelEvent;
+import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.SelectedStockService;
+
+import java.util.HashMap;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -27,11 +30,12 @@ import org.team27.stocksim.model.users.User;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-public class MainViewController extends ViewControllerBase {
+public class MainViewController extends ViewControllerBase 
+        implements ViewAdapter.PriceUpdateListener {
 
     @Override
     protected void onInit() {
-        modelController.addObserver(this);
+        viewAdapter.addPriceUpdateListener(this);
         stockListView.setItems(stockList);
 
         // Set a custom cell factory to display stock items
@@ -83,20 +87,13 @@ public class MainViewController extends ViewControllerBase {
     }
 
     @Override
-    public void modelChanged(ModelEvent event) {
-        switch (event.getType()) {
-            case PRICE_UPDATE -> updatePrice(event);
-        }
-    }
-
-    private void updatePrice(ModelEvent event) {
-        HashMap<String, Stock> stocks = (HashMap<String, Stock>) event.getPayload();
+    public void onPriceUpdate(HashMap<String, ? extends Instrument> stocks) {
 
         Platform.runLater(() -> {
             // Update the existing list items to trigger UI refresh
             for (int i = 0; i < stockList.size(); i++) {
                 Instrument existing = stockList.get(i);
-                Stock updated = stocks.get(existing.getSymbol());
+                Instrument updated = stocks.get(existing.getSymbol());
                 if (updated != null) {
                     stockList.set(i, updated);
                 }
