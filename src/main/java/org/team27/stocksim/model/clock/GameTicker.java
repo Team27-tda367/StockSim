@@ -12,7 +12,7 @@ public class GameTicker {
     private final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 
     private long lastSecond;
-    private final Consumer<Instant> onSecondHandler;
+    private Consumer<Instant> onSecondHandler;
 
     public GameTicker(GameClock clock, Consumer<Instant> onSecondHandler) {
         this.clock = clock;
@@ -36,7 +36,7 @@ public class GameTicker {
 
     private void onSimulatedSecond(Instant simSecond) {
         // Call-backen – här händer magin:
-        onSecondHandler.accept(simSecond);
+        this.onSecondHandler.accept(simSecond);
     }
 
     public void stop() {
@@ -49,5 +49,10 @@ public class GameTicker {
             exec.shutdownNow();
             Thread.currentThread().interrupt();
         }
+    }
+
+    public void setCallback(Consumer<Instant> onSecondHandler) {
+        this.onSecondHandler = onSecondHandler;
+
     }
 }

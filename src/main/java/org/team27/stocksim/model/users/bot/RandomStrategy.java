@@ -53,50 +53,39 @@ public class RandomStrategy implements BotStrategy {
     }
 
     private void sell(StockSim model, Bot bot) {
+        // Check if the bot owns any stocks
+        if (bot.getPortfolio().isEmpty()) {
+            return;
+        }
 
-        /*
-         * if (bot.getPortfolio().isEmpty()) {
-         * return;
-         * }
-         */
+        // Get the stocks the bot owns
+        HashMap<String, Integer> holdings = new HashMap<>(bot.getPortfolio().getStockHoldings());
+        if (holdings.isEmpty()) {
+            return;
+        }
 
-        /*
-         * List<Instrument> stocks = bot.getPortfolio().getInstruments();
-         * if (stocks == null || stocks.isEmpty()) {
-         * return;
-         * }
-         * int index = random.nextInt(stocks.size());
-         * Instrument stock = stocks.get(index);
-         * 
-         * int maxAvailableQuantity =
-         * bot.getPortfolio().getStockQuantity(stock.getSymbol());
-         * if (maxAvailableQuantity <= 0) {
-         * return;
-         * }
-         */
+        // Pick a random stock from the bot's holdings
+        List<String> ownedSymbols = new ArrayList<>(holdings.keySet());
+        String symbol = ownedSymbols.get(random.nextInt(ownedSymbols.size()));
 
-        Instrument stock = pickRandomStock(model);
+        // Get the instrument from the market
+        Instrument stock = model.getStocks().get(symbol);
         if (stock == null) {
             return;
         }
 
-        int quantity = randomQuantity();
+        // Get the maximum quantity the bot can sell
+        int maxAvailableQuantity = holdings.get(symbol);
+        if (maxAvailableQuantity <= 0) {
+            return;
+        }
 
+        // Determine quantity to sell (can't sell more than owned)
+        int quantity = Math.min(randomQuantity(), maxAvailableQuantity);
         BigDecimal price = randomPrice(stock.getCurrentPrice());
-
-        /*
-         * Instrument stock = pickRandomStock(model);
-         * if (stock == null) {
-         * return;
-         * }
-         * 
-         * int quantity = Math.min(randomQuantity(), maxAvailableQuantity);
-         * BigDecimal price = randomPrice(stock.getCurrentPrice());
-         */
 
         Order sellOrder = new Order(Order.Side.SELL, stock.getSymbol(), quantity, price, quantity, bot.getId());
         model.placeOrder(sellOrder);
-
     }
 
     private void buy(StockSim model, Bot bot) {
@@ -124,7 +113,7 @@ public class RandomStrategy implements BotStrategy {
         if (newPrice.compareTo(BigDecimal.ONE) < 0) {
             newPrice = BigDecimal.ONE;
         }
-        return newPrice.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return newPrice.setScale(2, java.math.RoundingMode.HALF_UP);
     }
 
     private boolean shouldDoSomething() {

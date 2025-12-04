@@ -68,7 +68,25 @@ public class MainViewController extends ViewControllerBase {
     public void modelChanged(ModelEvent event) {
         switch (event.getType()) {
             case STOCKS_CHANGED -> updateCreatedStock(event);
+            case PRICE_UPDATE -> updatePrice(event);
         }
+    }
+
+    private void updatePrice(ModelEvent event) {
+        HashMap<String, Stock> stocks = (HashMap<String, Stock>) event.getPayload();
+
+        Platform.runLater(() -> {
+            // Update the existing list items to trigger UI refresh
+            for (int i = 0; i < stockList.size(); i++) {
+                Instrument existing = stockList.get(i);
+                Stock updated = stocks.get(existing.getSymbol());
+                if (updated != null) {
+                    stockList.set(i, updated);
+                }
+            }
+        });
+
+        System.out.println("Stock prices updated in MainViewController.");
     }
 
     private void updateCreatedStock(ModelEvent event) {
@@ -87,6 +105,7 @@ public class MainViewController extends ViewControllerBase {
         private final HBox content;
         private final Label symbol;
         private final Label meta;
+        private final Label price;
         private final Button actionButton;
 
         public StockListCell() {
@@ -94,11 +113,13 @@ public class MainViewController extends ViewControllerBase {
             symbol.getStyleClass().add("stock-symbol");
             meta = new Label();
             meta.getStyleClass().add("stock-meta");
+            price = new Label();
+            price.getStyleClass().add("stock-price");
 
             VBox stockInfo = new VBox(symbol, meta);
             stockInfo.getStyleClass().add("stock-info");
 
-            // Create a spacer region to push the button to the right
+            // Create a spacer region to push the price and button to the right
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
@@ -112,7 +133,7 @@ public class MainViewController extends ViewControllerBase {
                 }
             });
 
-            content = new HBox(stockInfo, spacer, actionButton);
+            content = new HBox(stockInfo, spacer, price, actionButton);
             content.setAlignment(Pos.CENTER_LEFT);
             content.getStyleClass().add("content");
         }
@@ -126,6 +147,7 @@ public class MainViewController extends ViewControllerBase {
             } else {
                 symbol.setText(stock.getSymbol());
                 meta.setText("Technology");
+                price.setText(String.format("$%.2f", stock.getCurrentPrice()));
                 setGraphic(content);
             }
         }

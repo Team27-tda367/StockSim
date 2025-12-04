@@ -2,6 +2,7 @@ package org.team27.stocksim.model;
 
 import java.math.BigDecimal;
 
+import org.team27.stocksim.model.market.Instrument;
 import org.team27.stocksim.model.market.Order;
 
 public class SimSetup {
@@ -14,19 +15,27 @@ public class SimSetup {
     public void start() {
         // Create some default stocks
         createDefaultStocks();
-        createBots(10000);
+        createBots(100);
         // Create user
         model.createUser("user1", "Default User");
-        createSellOrders();
+        createSellOrders(100, BigDecimal.valueOf(100.00));
         model.startMarketSimulation(); // Start the simulation if needed
 
     }
 
-    private void createSellOrders() {
-        // Example: Create some sell orders for the default stocks
-        for (var i = 0; i < 50; i++) {
-            Order sellOrder = new Order(Order.Side.SELL, "AAPL", 100, BigDecimal.valueOf(100.00), 10, "bot" + i);
-            model.placeOrder(sellOrder);
+    private void createSellOrders(int numberOfOrders, BigDecimal startingPrice) {
+
+        for (Instrument stock : model.getStocks().values()) {
+            String symbol = stock.getSymbol();
+            // You can customize the starting price based on the stock if needed
+            for (var i = 0; i < numberOfOrders / 10; i++) {
+                for (var quantity = 1; quantity <= 10; quantity++) {
+
+                    BigDecimal randomPrice = startingPrice.add(BigDecimal.valueOf(i));
+                    Order sellOrder = new Order(Order.Side.SELL, symbol, quantity, randomPrice, 10, "bot" + i);
+                    model.placeOrder(sellOrder);
+                }
+            }
         }
     }
 

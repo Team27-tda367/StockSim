@@ -223,22 +223,26 @@ public class StockSim implements ModelSubject {
         GameClock clock = new GameClock(
                 ZoneId.of("Europe/Stockholm"),
                 Instant.now(),
-                1.0);
+                3600);
 
         ticker = new GameTicker(clock, simInstant -> {
             tick();
         });
         ticker.start();
 
-        clock.setSpeed(100000);
-
-        // Schedule simulation stop after 10 seconds
         new Thread(() -> {
             try {
-                Thread.sleep(1000); // 1 second
-                stopMarketSimulation();
-                // Write stock prices to JSON file
-                writeStockPricesToJson();
+                Thread.sleep(10000); // 10 seconds
+                clock.setSpeed(1);
+                Thread.sleep(1000); // 0.1 seconds
+
+                notifyObservers(new ModelEvent(ModelEvent.Type.PRICE_UPDATE, stocks));
+                ticker.setCallback(simInstant -> {
+                    tick();
+                    notifyObservers(new ModelEvent(ModelEvent.Type.PRICE_UPDATE, stocks));
+
+                });
+
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -254,65 +258,6 @@ public class StockSim implements ModelSubject {
         for (Trader bot : getBots().values()) {
             ((Bot) bot).decide(this);
         }
-
-    }
-
-    private void writeStockPricesToJson() {
-        for (Instrument stock : stocks.values()) {
-            String symbol = stock.getSymbol();
-            System.out.println("Current price: " + stock.getCurrentPrice().toString());
-
-            // Get price history from the Stock object itself
-            if (stock instanceof Stock) {
-                Stock stockObj = (Stock) stock;
-                List<PricePoint> history = stockObj.getPriceHistory().getPoints();
-                System.out.println("Price history for " + symbol + ":");
-                if (!history.isEmpty()) {
-                    System.out.println(history.size() + " points recorded.");
-                } else {
-                    System.out.println("  No price history available");
-                }
-            }
-            System.out.println();
-        }
-
-        /*
-         * try {
-         * Map<String, Map<String, Object>> stockData = new HashMap<>();
-         * 
-         * for (Instrument stock : stocks.values()) {
-         * // Record current price in history
-         * String symbol = stock.getSymbol();
-         * priceHistory.putIfAbsent(symbol, new ArrayList<>());
-         * 
-         * Map<String, Object> priceSnapshot = new HashMap<>();
-         * priceSnapshot.put("timestamp", System.currentTimeMillis());
-         * priceSnapshot.put("price", stock.getCurrentPrice().toString());
-         * priceHistory.get(symbol).add(priceSnapshot);
-         * 
-         * // Build stock info with history
-         * Map<String, Object> stockInfo = new HashMap<>();
-         * stockInfo.put("symbol", stock.getSymbol());
-         * stockInfo.put("name", stock.getName());
-         * stockInfo.put("currentPrice", stock.getCurrentPrice().toString());
-         * stockInfo.put("tickSize", stock.getTickSize().toString());
-         * stockInfo.put("lotSize", stock.getLotSize());
-         * stockInfo.put("priceHistory", priceHistory.get(symbol));
-         * 
-         * stockData.put(stock.getSymbol(), stockInfo);
-         * }
-         * 
-         * Gson gson = new GsonBuilder().setPrettyPrinting().create();
-         * String json = gson.toJson(stockData);
-         * 
-         * try (FileWriter writer = new FileWriter("stock_prices.json")) {
-         * writer.write(json);
-         * }
-         * 
-         * } catch (IOException e) {
-         * System.err.println("Error writing stock prices to JSON: " + e.getMessage());
-         * }
-         */
     }
 
     public void pauseMarketSimulation() {
