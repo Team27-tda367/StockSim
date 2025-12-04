@@ -16,7 +16,6 @@ public class Portfolio {
     public Portfolio(BigDecimal traderBalance) {
         this.balance = traderBalance;
         this.stockHoldings = new HashMap<>();
-        System.out.println("new Portfolio created");
     }
 
     public BigDecimal getBalance() {

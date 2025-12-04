@@ -24,7 +24,7 @@ public class SimController implements ISimController {
     private void init() {
         // Create some default stocks
         createDefaultStocks();
-        createBots(100);
+        createBots(10000);
         // Create user
         model.createUser("user1", "Default User");
         createSellOrders();

@@ -21,7 +21,7 @@ public class RandomStrategy implements BotStrategy {
 
     // Configuration parameters
     private final double doSomethingProbability; // probability of buying or selling
-    private final double buyProbability = 0.5; // Buy vs Sell probability
+    private final double buyProbability = 0.51; // Buy vs Sell probability
     private final int minQuantity; // minimum quantity to buy
     private final int maxQuantity; // maximum quantity to buy
 

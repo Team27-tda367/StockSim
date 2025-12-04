@@ -91,7 +91,6 @@ public class StockSim implements ModelSubject {
         for (Trade trade : trades) {
             settleTrade(trade);
             completedTrades.add(trade);
-            System.out.println("Trade settled");
         }
     }
 
@@ -238,9 +237,8 @@ public class StockSim implements ModelSubject {
         // Schedule simulation stop after 10 seconds
         new Thread(() -> {
             try {
-                Thread.sleep(100); // 10 seconds
+                Thread.sleep(1000); // 10 seconds
                 stopMarketSimulation();
-                clock.setSpeed(0.001);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -257,63 +255,68 @@ public class StockSim implements ModelSubject {
             ((Bot) bot).decide(this);
         }
 
-        System.out.println("Tick");
-
-        // Print all existing stocks and their prices
-        System.out.println("\n=== Current Stock Prices ===");
-        for (Instrument stock : stocks.values()) {
-            System.out.println(String.format("%s (%s): %s",
-                    stock.getSymbol(),
-                    stock.getName(),
-                    stock.getCurrentPrice()));
-        }
-        System.out.println("===========================\n");
-
-        // Print all buy and sell orders for each stock
-        System.out.println("=== Order Books ===");
-        for (String symbol : orderBooks.keySet()) {
-            OrderBook book = orderBooks.get(symbol);
-            System.out.println("\nStock: " + symbol);
-
-            Order bestBid = book.getBestBid();
-            Order bestAsk = book.getBestAsk();
-
-            System.out.println("  Best Bid: "
-                    + (bestBid != null ? bestBid.getPrice() + " x " + bestBid.getRemainingQuantity() : "None"));
-            System.out.println("  Best Ask: "
-                    + (bestAsk != null ? bestAsk.getPrice() + " x " + bestAsk.getRemainingQuantity() : "None"));
-
-            ArrayList<Order> allOrders = book.getOrders();
-            int buyCount = 0, sellCount = 0;
-            for (Order order : allOrders) {
-                if (order.isBuyOrder()) {
-                    buyCount++;
-                } else {
-                    sellCount++;
-                }
-            }
-            System.out.println("  Total Buy Orders: " + buyCount);
-            System.out.println("  Total Sell Orders: " + sellCount);
-        }
-        System.out.println("===================\n");
-
-        // Print all completed trades
-        System.out.println("=== Completed Trades ===");
-        System.out.println("Total trades executed: " + completedTrades.size());
-        if (!completedTrades.isEmpty()) {
-            int displayCount = Math.min(10, completedTrades.size());
-            System.out.println("\nLast " + displayCount + " trades:");
-            for (int i = completedTrades.size() - displayCount; i < completedTrades.size(); i++) {
-                Trade trade = completedTrades.get(i);
-                System.out.println(String.format("  %s: %d @ %s (Buy #%d, Sell #%d)",
-                        trade.getStockSymbol(),
-                        trade.getQuantity(),
-                        trade.getPrice(),
-                        trade.getBuyOrderId(),
-                        trade.getSellOrderId()));
-            }
-        }
-        System.out.println("========================\n");
+        /*
+         * System.out.println("Tick");
+         * 
+         * // Print all existing stocks and their prices
+         * System.out.println("\n=== Current Stock Prices ===");
+         * for (Instrument stock : stocks.values()) {
+         * System.out.println(String.format("%s (%s): %s",
+         * stock.getSymbol(),
+         * stock.getName(),
+         * stock.getCurrentPrice()));
+         * }
+         * System.out.println("===========================\n");
+         * 
+         * // Print all buy and sell orders for each stock
+         * System.out.println("=== Order Books ===");
+         * for (String symbol : orderBooks.keySet()) {
+         * OrderBook book = orderBooks.get(symbol);
+         * System.out.println("\nStock: " + symbol);
+         * 
+         * Order bestBid = book.getBestBid();
+         * Order bestAsk = book.getBestAsk();
+         * 
+         * System.out.println("  Best Bid: "
+         * + (bestBid != null ? bestBid.getPrice() + " x " +
+         * bestBid.getRemainingQuantity() : "None"));
+         * System.out.println("  Best Ask: "
+         * + (bestAsk != null ? bestAsk.getPrice() + " x " +
+         * bestAsk.getRemainingQuantity() : "None"));
+         * 
+         * ArrayList<Order> allOrders = book.getOrders();
+         * int buyCount = 0, sellCount = 0;
+         * for (Order order : allOrders) {
+         * if (order.isBuyOrder()) {
+         * buyCount++;
+         * } else {
+         * sellCount++;
+         * }
+         * }
+         * System.out.println("  Total Buy Orders: " + buyCount);
+         * System.out.println("  Total Sell Orders: " + sellCount);
+         * }
+         * System.out.println("===================\n");
+         * 
+         * // Print all completed trades
+         * System.out.println("=== Completed Trades ===");
+         * System.out.println("Total trades executed: " + completedTrades.size());
+         * if (!completedTrades.isEmpty()) {
+         * int displayCount = Math.min(10, completedTrades.size());
+         * System.out.println("\nLast " + displayCount + " trades:");
+         * for (int i = completedTrades.size() - displayCount; i <
+         * completedTrades.size(); i++) {
+         * Trade trade = completedTrades.get(i);
+         * System.out.println(String.format("  %s: %d @ %s (Buy #%d, Sell #%d)",
+         * trade.getStockSymbol(),
+         * trade.getQuantity(),
+         * trade.getPrice(),
+         * trade.getBuyOrderId(),
+         * trade.getSellOrderId()));
+         * }
+         * }
+         * System.out.println("========================\n");
+         */
 
         // Write stock prices to JSON file
         writeStockPricesToJson();
