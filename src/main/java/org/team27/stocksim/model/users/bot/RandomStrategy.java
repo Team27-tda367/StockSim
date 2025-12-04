@@ -54,24 +54,46 @@ public class RandomStrategy implements BotStrategy {
 
     private void sell(StockSim model, Bot bot) {
 
-        if (bot.getPortfolio().isEmpty()) {
+        /*
+         * if (bot.getPortfolio().isEmpty()) {
+         * return;
+         * }
+         */
+
+        /*
+         * List<Instrument> stocks = bot.getPortfolio().getInstruments();
+         * if (stocks == null || stocks.isEmpty()) {
+         * return;
+         * }
+         * int index = random.nextInt(stocks.size());
+         * Instrument stock = stocks.get(index);
+         * 
+         * int maxAvailableQuantity =
+         * bot.getPortfolio().getStockQuantity(stock.getSymbol());
+         * if (maxAvailableQuantity <= 0) {
+         * return;
+         * }
+         */
+
+        Instrument stock = pickRandomStock(model);
+        if (stock == null) {
             return;
         }
 
-        List<Instrument> stocks = bot.getPortfolio().getInstruments();
-        if (stocks == null || stocks.isEmpty()) {
-            return;
-        }
-        int index = random.nextInt(stocks.size());
-        Instrument stock = stocks.get(index);
+        int quantity = randomQuantity();
 
-        int maxAvailableQuantity = bot.getPortfolio().getStockQuantity(stock.getSymbol());
-        if (maxAvailableQuantity <= 0) {
-            return;
-        }
+        BigDecimal price = randomPrice(stock.getCurrentPrice());
 
-        int quantity = Math.min(randomQuantity(), maxAvailableQuantity);
-        BigDecimal price = stock.getCurrentPrice();
+        /*
+         * Instrument stock = pickRandomStock(model);
+         * if (stock == null) {
+         * return;
+         * }
+         * 
+         * int quantity = Math.min(randomQuantity(), maxAvailableQuantity);
+         * BigDecimal price = randomPrice(stock.getCurrentPrice());
+         */
+
         Order sellOrder = new Order(Order.Side.SELL, stock.getSymbol(), quantity, price, quantity, bot.getId());
         model.placeOrder(sellOrder);
 
@@ -86,10 +108,23 @@ public class RandomStrategy implements BotStrategy {
 
         int quantity = randomQuantity();
 
-        BigDecimal price = stock.getCurrentPrice();
+        BigDecimal price = randomPrice(stock.getCurrentPrice());
 
         Order buyOrder = new Order(Order.Side.BUY, stock.getSymbol(), quantity, price, quantity, bot.getId());
         model.placeOrder(buyOrder);
+    }
+
+    private BigDecimal randomPrice(BigDecimal basePrice) {
+        // Create a variation of ±5% from the base price
+        double variationPercent = (random.nextDouble() - 0.5) * 0.1; // -5% to +5%
+        BigDecimal variation = basePrice.multiply(BigDecimal.valueOf(variationPercent));
+        BigDecimal newPrice = basePrice.add(variation);
+
+        // Ensure price is positive and round to 2 decimal places
+        if (newPrice.compareTo(BigDecimal.ONE) < 0) {
+            newPrice = BigDecimal.ONE;
+        }
+        return newPrice.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     private boolean shouldDoSomething() {

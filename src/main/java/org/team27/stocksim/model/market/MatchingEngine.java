@@ -2,7 +2,6 @@ package org.team27.stocksim.model.market;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MatchingEngine {

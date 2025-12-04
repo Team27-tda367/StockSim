@@ -1,0 +1,341 @@
+{
+  "MSFT": {
+    "symbol": "MSFT",
+    "lotSize": 100,
+    "name": "Microsoft Corp.",
+    "currentPrice": "96.38",
+    "priceHistory": [
+      {
+        "price": "100",
+        "timestamp": 1764855709346
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709383
+      },
+      {
+        "price": "98.89",
+        "timestamp": 1764855709389
+      },
+      {
+        "price": "98.89",
+        "timestamp": 1764855709392
+      },
+      {
+        "price": "98.89",
+        "timestamp": 1764855709397
+      },
+      {
+        "price": "98.89",
+        "timestamp": 1764855709400
+      },
+      {
+        "price": "98.89",
+        "timestamp": 1764855709406
+      },
+      {
+        "price": "98.89",
+        "timestamp": 1764855709420
+      },
+      {
+        "price": "98.89",
+        "timestamp": 1764855709427
+      },
+      {
+        "price": "98.89",
+        "timestamp": 1764855709432
+      },
+      {
+        "price": "96.72",
+        "timestamp": 1764855709437
+      },
+      {
+        "price": "96.72",
+        "timestamp": 1764855709441
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709447
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709452
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709458
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709464
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709468
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709472
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709477
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709483
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709488
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709493
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709498
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709503
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709509
+      },
+      {
+        "price": "96.38",
+        "timestamp": 1764855709514
+      }
+    ],
+    "tickSize": "0.01"
+  },
+  "GOOGL": {
+    "symbol": "GOOGL",
+    "lotSize": 100,
+    "name": "Alphabet Inc.",
+    "currentPrice": "96.15",
+    "priceHistory": [
+      {
+        "price": "100",
+        "timestamp": 1764855709346
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709383
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709389
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709392
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709397
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709400
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709406
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709420
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709427
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709432
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709437
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709441
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709447
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709452
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709458
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709464
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709468
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709472
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709477
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709483
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709488
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709493
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709498
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709503
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709509
+      },
+      {
+        "price": "96.15",
+        "timestamp": 1764855709514
+      }
+    ],
+    "tickSize": "0.01"
+  },
+  "AAPL": {
+    "symbol": "AAPL",
+    "lotSize": 100,
+    "name": "Apple Inc.",
+    "currentPrice": "97.37",
+    "priceHistory": [
+      {
+        "price": "100",
+        "timestamp": 1764855709346
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709383
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709389
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709392
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709397
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709400
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709406
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709420
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709427
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709432
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709437
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709441
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709447
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709452
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709458
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709464
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709468
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709472
+      },
+      {
+        "price": "100",
+        "timestamp": 1764855709477
+      },
+      {
+        "price": "97.37",
+        "timestamp": 1764855709483
+      },
+      {
+        "price": "97.37",
+        "timestamp": 1764855709488
+      },
+      {
+        "price": "97.37",
+        "timestamp": 1764855709493
+      },
+      {
+        "price": "97.37",
+        "timestamp": 1764855709498
+      },
+      {
+        "price": "97.37",
+        "timestamp": 1764855709503
+      },
+      {
+        "price": "97.37",
+        "timestamp": 1764855709509
+      },
+      {
+        "price": "97.37",
+        "timestamp": 1764855709514
+      }
+    ],
+    "tickSize": "0.01"
+  }
+}

@@ -38,4 +38,16 @@ public class GameTicker {
         // Call-backen – här händer magin:
         onSecondHandler.accept(simSecond);
     }
+
+    public void stop() {
+        exec.shutdown();
+        try {
+            if (!exec.awaitTermination(1, TimeUnit.SECONDS)) {
+                exec.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            exec.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
 }

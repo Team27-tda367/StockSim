@@ -1,8 +1,5 @@
 package org.team27.stocksim.ui.fx.viewControllers;
 
-import java.util.HashMap;
-
-import org.team27.stocksim.model.market.Instrument;
 import org.team27.stocksim.observer.ModelEvent;
 import org.team27.stocksim.ui.fx.EView;
 
