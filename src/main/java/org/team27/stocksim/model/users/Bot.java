@@ -2,6 +2,8 @@ package org.team27.stocksim.model.users;
 
 import org.team27.stocksim.model.users.bot.BotStrategy;
 import org.team27.stocksim.model.users.bot.RandomStrategy;
+import org.team27.stocksim.model.StockSim;
+
 import org.team27.stocksim.model.portfolio.Portfolio;
 
 import java.math.BigDecimal;
@@ -13,12 +15,17 @@ public class Bot extends Trader {
         super(id, name, portfolio);
         this.strategy = new RandomStrategy();
     }
-    public Bot(){
+
+    public Bot() {
         super("bot_default_id", "Bot Default", new Portfolio(BigDecimal.ONE));
         this.strategy = new RandomStrategy();
     }
 
     public BotStrategy getStrategy() {
         return strategy;
+    }
+
+    public void decide(StockSim model) {
+        strategy.decide(model, this);
     }
 }

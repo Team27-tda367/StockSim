@@ -7,12 +7,12 @@ import java.util.List;
 
 public class MatchingEngine {
 
-
     public MatchingEngine() {
 
     }
 
-    private static void executeTrade(Order incomingOrder, Order matchingOrder, OrderBook orderBook, List<Trade> trades) {
+    private static void executeTrade(Order incomingOrder, Order matchingOrder, OrderBook orderBook,
+            List<Trade> trades) {
 
         int tradeQuantity = Math.min(incomingOrder.getRemainingQuantity(), matchingOrder.getRemainingQuantity());
 
@@ -29,11 +29,10 @@ public class MatchingEngine {
         trades.add(trade);
     }
 
-
-
     public List<Trade> match(Order incomingOrder, OrderBook orderBook) {
         List<Trade> trades = new ArrayList<>();
-        if (incomingOrder.isBuyOrder()) { //TODO Maybe refactor to use enum method. isBuy() and separate to matchBuy and matchSell
+        if (incomingOrder.isBuyOrder()) { // TODO Maybe refactor to use enum method. isBuy() and separate to matchBuy
+                                          // and matchSell
             while (!incomingOrder.isFilled()) {
                 Order bestAsk = orderBook.getBestAsk();
                 if (bestAsk != null && incomingOrder.getPrice().compareTo(bestAsk.getPrice()) >= 0) {
@@ -54,7 +53,7 @@ public class MatchingEngine {
         }
         if (incomingOrder.getRemainingQuantity() > 0) {
             if (incomingOrder.isBuyOrder()) {
-                orderBook.add(incomingOrder); //TODO refactor addBid and addAsk to addOrder based on side
+                orderBook.add(incomingOrder); // TODO refactor addBid and addAsk to addOrder based on side
             } else {
                 orderBook.add(incomingOrder);
             }

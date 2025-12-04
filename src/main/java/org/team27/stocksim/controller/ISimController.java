@@ -14,4 +14,5 @@ public interface ISimController {
 
     HashMap<String, Instrument> getAllStocks();
 
+    void setUpSimulation();
 }

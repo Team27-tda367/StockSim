@@ -1,4 +1,6 @@
 package org.team27.stocksim.model.market;
 
-public interface MarketState {
+public enum MarketState {
+    RUNNING,
+    PAUSED;
 }

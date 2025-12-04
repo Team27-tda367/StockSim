@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.team27.stocksim.model.market.Instrument;
+import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.users.Bot;
 
@@ -44,33 +45,39 @@ public class RandomStrategy implements BotStrategy {
             return;
         }
         if (action == Action.SELL) {
-            sell(model);
+            sell(model, bot);
         } else if (action == Action.BUY) {
-            buy(model);
+            buy(model, bot);
         }
 
     }
 
-    private void sell(StockSim model) {
-        // If portfolio is empty, cannot sell
-        /*
-         * if (bot.getPortfolio().isEmpty()) {
-         * return;
-         * }
-         */
-        // 1. Choose a random instrument in portfolio
+    private void sell(StockSim model, Bot bot) {
 
-        // 2. pickRandomQuantity from holding
+        if (bot.getPortfolio().isEmpty()) {
+            return;
+        }
 
-        // 3. get current price
-        // double price = stock.getCurrentPrice();
+        List<Instrument> stocks = bot.getPortfolio().getInstruments();
+        if (stocks == null || stocks.isEmpty()) {
+            return;
+        }
+        int index = random.nextInt(stocks.size());
+        Instrument stock = stocks.get(index);
 
-        // Create the order
-        // model.placeOrder(Order.createSellOrder(bot, stock, quantity, price));
+        int maxAvailableQuantity = bot.getPortfolio().getStockQuantity(stock.getSymbol());
+        if (maxAvailableQuantity <= 0) {
+            return;
+        }
+
+        int quantity = Math.min(randomQuantity(), maxAvailableQuantity);
+        BigDecimal price = stock.getCurrentPrice();
+        Order sellOrder = new Order(Order.Side.SELL, stock.getSymbol(), quantity, price, quantity, bot.getId());
+        model.placeOrder(sellOrder);
 
     }
 
-    private void buy(StockSim model) {
+    private void buy(StockSim model, Bot bot) {
         // Choose a random instrument in market
         Instrument stock = pickRandomStock(model);
         if (stock == null) {
@@ -81,8 +88,8 @@ public class RandomStrategy implements BotStrategy {
 
         BigDecimal price = stock.getCurrentPrice();
 
-        // Create order
-        // model.placeOrder(Order.createBuyOrder(bot, stock, quantity, price));
+        Order buyOrder = new Order(Order.Side.BUY, stock.getSymbol(), quantity, price, quantity, bot.getId());
+        model.placeOrder(buyOrder);
     }
 
     private boolean shouldDoSomething() {

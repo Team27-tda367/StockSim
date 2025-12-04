@@ -1,5 +1,7 @@
 package org.team27.stocksim.model;
 
+import org.team27.stocksim.model.clock.GameClock;
+import org.team27.stocksim.model.clock.GameTicker;
 import org.team27.stocksim.model.market.*;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.*;
@@ -8,6 +10,8 @@ import org.team27.stocksim.observer.ModelObserver;
 import org.team27.stocksim.observer.ModelSubject;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +68,7 @@ public class StockSim implements ModelSubject {
         // TODO: validation of order (enough balance, enough stocks in portfolio, lot
         // size, tick size, etc)
         // Track the order ID to trader ID mapping
+        System.out.println("Placing order: " + order.getSide());
         orderIdToTraderId.put(order.getOrderId(), order.getTraderId());
         processOrder(order);
     } // TODO: seperate order placing logic from processing logic
@@ -193,4 +198,39 @@ public class StockSim implements ModelSubject {
     public void removeObserver(ModelObserver obs) {
         observers.remove(obs);
     }
+
+    public void startMarketSimulation() {
+        state = MarketState.RUNNING;
+        // start the clock/timer for market simulation
+        GameClock clock = new GameClock(
+                ZoneId.of("Europe/Stockholm"),
+                Instant.now(),
+                1.0);
+
+        GameTicker ticker = new GameTicker(clock, simInstant -> {
+            tick();
+        });
+        ticker.start();
+
+        clock.setSpeed(100);
+
+        // notifyObservers(new ModelEvent(ModelEvent.Type.MARKET_STARTED, "Market
+        // simulation started."));
+
+    }
+
+    private void tick() {
+        // loop through bots and have them place orders
+        for (Trader bot : getBots().values()) {
+            ((Bot) bot).decide(this);
+        }
+    }
+
+    public void pauseMarketSimulation() {
+        state = MarketState.PAUSED;
+        // pause the clock/timer for market simulation
+        // notifyObservers(new ModelEvent(ModelEvent.Type.MARKET_PAUSED, "Market
+        // simulation paused."));
+    }
+
 }

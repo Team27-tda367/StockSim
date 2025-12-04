@@ -61,4 +61,12 @@ public class Portfolio {
     public Map<String, Integer> getStockHoldings() {
         return new HashMap<>(stockHoldings);
     }
+
+    public boolean isEmpty() {
+        return stockHoldings.isEmpty();
+    }
+
+    public List<Instrument> getInstruments() {
+        return instruments;
+    }
 }

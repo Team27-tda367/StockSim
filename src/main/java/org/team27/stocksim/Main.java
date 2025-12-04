@@ -21,6 +21,8 @@ public class Main extends Application {
 
         SimController controller = new SimController(model); // Dependency Injection
 
+        controller.setUpSimulation();
+
         // Initialize and launch the JavaFX view, set main view
         ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage, controller); // Dependency Injection
         viewSwitcher.switchTo(EView.MAINVIEW);
