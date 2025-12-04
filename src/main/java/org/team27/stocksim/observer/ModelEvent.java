@@ -3,7 +3,7 @@ package org.team27.stocksim.observer;
 public class ModelEvent {
     public enum Type {
         STOCKS_CHANGED,
-        STOCK_CREATED, PRICE_UPDATE,
+        PRICE_UPDATE,
         // lägg till nya typer vid behov
     }
 

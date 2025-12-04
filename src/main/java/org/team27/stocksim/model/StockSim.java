@@ -86,19 +86,28 @@ public class StockSim implements ModelSubject {
 
         List<Trade> trades = matchingEngine.match(order, getOrderBook(order.getSymbol()));
 
+        boolean priceChanged = false;
         for (Trade trade : trades) {
             completedTrades.add(trade);
-            settleTrade(trade);
+            boolean tradeSettled = settleTrade(trade);
+            if (tradeSettled) {
+                priceChanged = true;
+            }
+        }
+
+        // Only notify observers if a price actually changed
+        if (priceChanged) {
+            notifyObservers(new ModelEvent(ModelEvent.Type.PRICE_UPDATE, stocks));
         }
     }
 
-    private void settleTrade(Trade trade) {
+    private boolean settleTrade(Trade trade) {
         String buyerTraderId = orderIdToTraderId.get(trade.getBuyOrderId());
         String sellerTraderId = orderIdToTraderId.get(trade.getSellOrderId());
 
         if (buyerTraderId == null || sellerTraderId == null) {
             // TODO: handle error
-            return;
+            return false;
         }
 
         Trader buyer = traders.get(buyerTraderId);
@@ -106,7 +115,7 @@ public class StockSim implements ModelSubject {
 
         if (buyer == null || seller == null) {
             // TODO: handle error
-            return;
+            return false;
         }
 
         BigDecimal tradeValue = trade.getPrice().multiply(BigDecimal.valueOf(trade.getQuantity()));
@@ -126,8 +135,11 @@ public class StockSim implements ModelSubject {
                 stock.setCurrentPrice(trade.getPrice());
             }
 
+            return true; // Price changed
+
         } else {
             // TODO: handle error
+            return false;
         }
     }
 
@@ -144,8 +156,11 @@ public class StockSim implements ModelSubject {
             createdStockMsg = "Created stock: " + createdStock;
         }
 
-        notifyObservers(new ModelEvent(ModelEvent.Type.STOCK_CREATED, createdStockMsg));
-        notifyObservers(new ModelEvent(ModelEvent.Type.STOCKS_CHANGED, stocks));
+        /*
+         * notifyObservers(new ModelEvent(ModelEvent.Type.STOCK_CREATED,
+         * createdStockMsg));
+         * notifyObservers(new ModelEvent(ModelEvent.Type.STOCKS_CHANGED, stocks));
+         */
 
     }
 
@@ -223,7 +238,7 @@ public class StockSim implements ModelSubject {
         GameClock clock = new GameClock(
                 ZoneId.of("Europe/Stockholm"),
                 Instant.now(),
-                3600);
+                10000);
 
         ticker = new GameTicker(clock, simInstant -> {
             tick();
@@ -232,15 +247,13 @@ public class StockSim implements ModelSubject {
 
         new Thread(() -> {
             try {
-                Thread.sleep(10000); // 10 seconds
-                clock.setSpeed(1);
-                Thread.sleep(1000); // 0.1 seconds
+                Thread.sleep(1000); // 1 second
+                clock.setSpeed(100);
+                Thread.sleep(1000); // 1 seconds
 
-                notifyObservers(new ModelEvent(ModelEvent.Type.PRICE_UPDATE, stocks));
                 ticker.setCallback(simInstant -> {
                     tick();
-                    notifyObservers(new ModelEvent(ModelEvent.Type.PRICE_UPDATE, stocks));
-
+                    // Price updates are now notified from processOrder only when trades occur
                 });
 
             } catch (InterruptedException e) {

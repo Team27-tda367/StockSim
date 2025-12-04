@@ -35,4 +35,6 @@ public abstract class Instrument {
 
     public abstract BigDecimal getCurrentPrice();
 
+    public abstract PriceHistory getPriceHistory();
+
 }

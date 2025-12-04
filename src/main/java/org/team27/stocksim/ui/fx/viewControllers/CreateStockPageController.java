@@ -55,9 +55,11 @@ public class CreateStockPageController extends ViewControllerBase {
 
     @Override
     public void modelChanged(ModelEvent event) {
-        switch (event.getType()) {
-            case STOCK_CREATED -> updateCreatedStock(event);
-        }
+        /*
+         * switch (event.getType()) {
+         * case STOCK_CREATED -> updateCreatedStock(event);
+         * }
+         */
     }
 
     private void updateCreatedStock(ModelEvent event) {

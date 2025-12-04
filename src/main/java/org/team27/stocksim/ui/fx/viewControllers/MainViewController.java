@@ -44,10 +44,12 @@ public class MainViewController extends ViewControllerBase {
 
     private ObservableList<Instrument> stockList = FXCollections.observableArrayList();
 
-    @FXML
-    public void onExample(ActionEvent event) {
-        viewSwitcher.switchTo(EView.CREATESTOCK);
-    }
+    /*
+     * @FXML
+     * public void onExample(ActionEvent event) {
+     * viewSwitcher.switchTo(EView.CREATESTOCK);
+     * }
+     */
 
     @FXML
     private void sortByTag(ActionEvent event) {
@@ -67,7 +69,6 @@ public class MainViewController extends ViewControllerBase {
     @Override
     public void modelChanged(ModelEvent event) {
         switch (event.getType()) {
-            case STOCKS_CHANGED -> updateCreatedStock(event);
             case PRICE_UPDATE -> updatePrice(event);
         }
     }
@@ -85,19 +86,6 @@ public class MainViewController extends ViewControllerBase {
                 }
             }
         });
-
-        System.out.println("Stock prices updated in MainViewController.");
-    }
-
-    private void updateCreatedStock(ModelEvent event) {
-        HashMap<String, Stock> stocks = (HashMap<String, Stock>) event.getPayload();
-
-        Platform.runLater(() -> {
-            stockList.setAll(stocks.values());
-        });
-
-        System.out.println("Stock list updated in MainViewController.");
-        System.out.println(stocks);
     }
 
     // ListCell object for displaying Stock items

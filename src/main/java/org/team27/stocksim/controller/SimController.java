@@ -14,7 +14,6 @@ public class SimController implements ISimController {
 
     public SimController(StockSim model) {
         this.model = model;
-
     }
 
     public void setUpSimulation() {
