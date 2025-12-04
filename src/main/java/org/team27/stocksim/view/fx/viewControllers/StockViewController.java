@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
-public class StockViewController extends ViewControllerBase 
+public class StockViewController extends ViewControllerBase
         implements ViewAdapter.PriceUpdateListener, ViewAdapter.TradeSettledListener {
 
     @FXML
@@ -167,6 +167,11 @@ public class StockViewController extends ViewControllerBase
     @FXML
     public void onMainView(ActionEvent event) {
         viewSwitcher.switchTo(EView.MAINVIEW);
+    }
+
+    @FXML
+    public void onPortfolioView(ActionEvent event) {
+        viewSwitcher.switchTo(EView.PORTFOLIOVIEW);
     }
 
     @FXML

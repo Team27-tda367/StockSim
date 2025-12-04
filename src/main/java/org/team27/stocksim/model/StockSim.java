@@ -130,6 +130,11 @@ public class StockSim implements ModelSubject {
 
             notifyTradeSettled();
 
+            // if users are involved, notify portfolio changed
+            if (buyer instanceof User || seller instanceof User) {
+                notifyPortfolioChanged(); // Notify that portfolios have changed
+
+            }
             // Set stock price to last trade price
             Instrument stock = stocks.get(trade.getStockSymbol());
             if (stock != null) {
@@ -241,6 +246,12 @@ public class StockSim implements ModelSubject {
     private void notifyStocksChanged(Object payload) {
         for (ModelObserver o : observers) {
             o.onStocksChanged(payload);
+        }
+    }
+
+    private void notifyPortfolioChanged() {
+        for (ModelObserver o : observers) {
+            o.onPortfolioChanged();
         }
     }
 

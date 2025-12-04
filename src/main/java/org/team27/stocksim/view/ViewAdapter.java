@@ -27,10 +27,15 @@ public class ViewAdapter implements ModelObserver {
         void onTradeSettled();
     }
 
+    public interface PortfolioChangedListener {
+        void onPortfolioChanged();
+    }
+
     // Lists of registered listeners
     private final List<StocksChangedListener> stocksChangedListeners = new ArrayList<>();
     private final List<PriceUpdateListener> priceUpdateListeners = new ArrayList<>();
     private final List<TradeSettledListener> tradeSettledListeners = new ArrayList<>();
+    private final List<PortfolioChangedListener> portfolioChangedListeners = new ArrayList<>();
 
     // Registration methods
     public void addStocksChangedListener(StocksChangedListener listener) {
@@ -57,6 +62,14 @@ public class ViewAdapter implements ModelObserver {
         tradeSettledListeners.remove(listener);
     }
 
+    public void addPortfolioChangedListener(PortfolioChangedListener listener) {
+        portfolioChangedListeners.add(listener);
+    }
+
+    public void removePortfolioChangedListener(PortfolioChangedListener listener) {
+        portfolioChangedListeners.remove(listener);
+    }
+
     // ModelObserver implementation - broadcasts to listeners
     @Override
     public void onStocksChanged(Object payload) {
@@ -76,6 +89,13 @@ public class ViewAdapter implements ModelObserver {
     public void onTradeSettled() {
         for (TradeSettledListener listener : tradeSettledListeners) {
             listener.onTradeSettled();
+        }
+    }
+
+    @Override
+    public void onPortfolioChanged() {
+        for (PortfolioChangedListener listener : portfolioChangedListeners) {
+            listener.onPortfolioChanged();
         }
     }
 }

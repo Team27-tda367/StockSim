@@ -21,7 +21,9 @@
         <HBox alignment="CENTER_LEFT" styleClass="header-bar, spacing-large">
             <Label text="StonkSim" styleClass="logo"/>
             <Button text="Home" styleClass="btn-ghost" onAction="#onMainView"/>
-            <!-- <Button text="Portfolio" styleClass="btn-ghost"/>
+
+            <Button text="Portfolio" styleClass="btn-ghost" onAction="#onPortfolioView"/>
+            <!-- 
             <Button text="Create Stock" styleClass="btn-ghost" onAction="#onExample"/> -->
             <Region HBox.hgrow="ALWAYS"/>
             <VBox alignment="CENTER_RIGHT" styleClass="spacing-small">

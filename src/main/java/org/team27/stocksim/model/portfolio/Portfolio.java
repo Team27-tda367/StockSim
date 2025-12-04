@@ -7,6 +7,11 @@ import java.util.Map;
 
 import org.team27.stocksim.model.instruments.Instrument;
 
+/**
+ * Represents a trader's portfolio containing cash balance and stock holdings.
+ * This is a pure domain object - StockSim handles notifications when portfolio
+ * changes.
+ */
 public class Portfolio {
 
     List<Instrument> instruments;
@@ -68,4 +73,5 @@ public class Portfolio {
     public List<Instrument> getInstruments() {
         return instruments;
     }
+
 }

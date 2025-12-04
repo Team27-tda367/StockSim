@@ -25,6 +25,19 @@
         </VBox>
     </HBox>
 
+
+    <VBox VBox.vgrow="ALWAYS" styleClass="content-area, spacing-large">
+
+        <!-- Title -->
+        <Label text="Portfolio" styleClass="title-large"/>
+
+        <!-- Holdings Section -->
+        <Label text="Your Holdings" styleClass="text-medium, text-bold"/>
+        
+        <ListView fx:id="holdingsListView" VBox.vgrow="ALWAYS" styleClass="list-view">
+        </ListView>
+
+    </VBox>
    
 
 </VBox>

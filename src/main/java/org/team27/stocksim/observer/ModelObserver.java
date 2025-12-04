@@ -11,4 +11,6 @@ public interface ModelObserver {
     void onPriceUpdate(HashMap<String, ? extends Instrument> stocks);
 
     void onTradeSettled();
+
+    void onPortfolioChanged();
 }
