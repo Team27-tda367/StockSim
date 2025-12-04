@@ -2,7 +2,7 @@ package org.team27.stocksim.controller;
 
 import java.util.HashMap;
 
-import org.team27.stocksim.model.market.Instrument;
+import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.observer.ModelObserver;
 

@@ -1,6 +1,6 @@
-package org.team27.stocksim.ui.fx;
+package org.team27.stocksim.view.fx;
 
-import org.team27.stocksim.model.market.Instrument;
+import org.team27.stocksim.model.instruments.Instrument;
 
 public class SelectedStockService {
 

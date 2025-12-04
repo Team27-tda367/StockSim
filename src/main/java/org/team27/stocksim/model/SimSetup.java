@@ -2,7 +2,7 @@ package org.team27.stocksim.model;
 
 import java.math.BigDecimal;
 
-import org.team27.stocksim.model.market.Instrument;
+import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.market.Order;
 
 public class SimSetup {
@@ -18,6 +18,7 @@ public class SimSetup {
         createBots(100);
         // Create user
         model.createUser("user1", "Default User");
+        model.setCurrentUser("user1");
         createSellOrders(100, BigDecimal.valueOf(100.00));
         model.startMarketSimulation(); // Start the simulation if needed
 

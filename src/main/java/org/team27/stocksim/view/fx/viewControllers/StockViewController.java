@@ -1,7 +1,9 @@
-package org.team27.stocksim.ui.fx.viewControllers;
+package org.team27.stocksim.view.fx.viewControllers;
 
 import org.team27.stocksim.observer.ModelEvent;
-import org.team27.stocksim.ui.fx.EView;
+import org.team27.stocksim.view.fx.EView;
+import org.team27.stocksim.view.fx.SelectedStockService;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,12 +11,11 @@ import javafx.scene.control.Label;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
-import org.team27.stocksim.model.market.Instrument;
-import org.team27.stocksim.model.market.PriceHistory;
-import org.team27.stocksim.model.market.PricePoint;
+import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.portfolio.Portfolio;
+import org.team27.stocksim.model.portfolio.PriceHistory;
+import org.team27.stocksim.model.portfolio.PricePoint;
 import org.team27.stocksim.model.users.User;
-import org.team27.stocksim.ui.fx.SelectedStockService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -188,6 +189,14 @@ public class StockViewController extends ViewControllerBase {
                         updateChartData();
                     });
                 }
+            }
+            case TRADE_SETTLED -> {
+                User user = modelController.getUser();
+                Portfolio portfolio = user.getPortfolio();
+                BigDecimal balance = portfolio.getBalance();
+                Platform.runLater(() -> {
+                    availableBalanceLabel.setText("Balance: $" + balance.toString());
+                });
             }
 
         }

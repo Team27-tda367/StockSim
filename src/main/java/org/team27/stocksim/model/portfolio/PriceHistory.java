@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.market;
+package org.team27.stocksim.model.portfolio;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

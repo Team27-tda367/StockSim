@@ -2,6 +2,7 @@ package org.team27.stocksim.model.portfolio;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.team27.stocksim.model.portfolio.Portfolio;
 
 import java.math.BigDecimal;
 
@@ -275,4 +276,3 @@ class PortfolioTest {
         assertEquals(70, portfolio.getStockQuantity("AAPL"));
     }
 }
-

@@ -3,8 +3,9 @@ package org.team27.stocksim;
 
 import org.team27.stocksim.controller.SimController;
 import org.team27.stocksim.model.StockSim;
-import org.team27.stocksim.ui.fx.EView;
-import org.team27.stocksim.ui.fx.ViewSwitcher;
+import org.team27.stocksim.view.fx.EView;
+import org.team27.stocksim.view.fx.ViewSwitcher;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 

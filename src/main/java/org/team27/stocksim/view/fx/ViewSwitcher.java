@@ -1,4 +1,4 @@
-package org.team27.stocksim.ui.fx;
+package org.team27.stocksim.view.fx;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import org.team27.stocksim.controller.ISimController;
-import org.team27.stocksim.ui.fx.viewControllers.ViewControllerBase;
+import org.team27.stocksim.view.fx.viewControllers.ViewControllerBase;
 
 public class ViewSwitcher {
 

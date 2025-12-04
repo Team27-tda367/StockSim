@@ -2,6 +2,7 @@ package org.team27.stocksim.model.market;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.team27.stocksim.model.instruments.Stock;
 
 import java.util.List;
 

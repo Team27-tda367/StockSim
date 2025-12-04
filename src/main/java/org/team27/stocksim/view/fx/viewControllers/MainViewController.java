@@ -1,6 +1,8 @@
-package org.team27.stocksim.ui.fx.viewControllers;
+package org.team27.stocksim.view.fx.viewControllers;
 
 import org.team27.stocksim.observer.ModelEvent;
+import org.team27.stocksim.view.fx.EView;
+import org.team27.stocksim.view.fx.SelectedStockService;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -16,12 +18,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
-import org.team27.stocksim.ui.fx.SelectedStockService;
-import org.team27.stocksim.model.market.Instrument;
-import org.team27.stocksim.model.market.Stock;
+
+import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.instruments.Stock;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.User;
-import org.team27.stocksim.ui.fx.EView;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -74,6 +75,11 @@ public class MainViewController extends ViewControllerBase {
     @FXML
     public void onStockView(ActionEvent event) {
         viewSwitcher.switchTo(EView.STOCKVIEW);
+    }
+
+    @FXML
+    public void onPortfolioView(ActionEvent event) {
+        viewSwitcher.switchTo(EView.PORTFOLIOVIEW);
     }
 
     @Override

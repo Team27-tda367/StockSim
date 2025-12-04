@@ -6,7 +6,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 
 public class MoneyUtils {
-    public static BigDecimal money(String amount){
+    public static BigDecimal money(String amount) {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setGroupingSeparator(',');
         symbols.setDecimalSeparator('.');
@@ -19,7 +19,6 @@ public class MoneyUtils {
         } catch (ParseException e) {
             throw new RuntimeException("Failed to parse money amount: " + amount, e);
         }
-
 
     }
 }

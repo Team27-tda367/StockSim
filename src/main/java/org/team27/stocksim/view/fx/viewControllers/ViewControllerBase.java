@@ -1,8 +1,8 @@
-package org.team27.stocksim.ui.fx.viewControllers;
+package org.team27.stocksim.view.fx.viewControllers;
 
 import org.team27.stocksim.controller.ISimController;
 import org.team27.stocksim.observer.ModelObserver;
-import org.team27.stocksim.ui.fx.ViewSwitcher;
+import org.team27.stocksim.view.fx.ViewSwitcher;
 
 public abstract class ViewControllerBase implements ModelObserver {
 

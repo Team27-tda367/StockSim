@@ -1,7 +1,5 @@
 package org.team27.stocksim.model.market;
 
-import org.team27.stocksim.model.users.Trader;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -25,7 +23,7 @@ public class Order {
         this.remainingQuantity = quantity;
         this.traderId = traderId;
 
-        this.timeStamp = Instant.now(); //Using java.time before deciding on our time implementation
+        this.timeStamp = Instant.now(); // Using java.time before deciding on our time implementation
     }
 
     public int getOrderId() {
@@ -52,7 +50,6 @@ public class Order {
         return instrumentSymbol;
     }
 
-
     public Side getSide() {
         return side;
     }
@@ -66,7 +63,7 @@ public class Order {
         return traderId;
     }
 
-    public void cancel() {//TODO
+    public void cancel() {// TODO
         status = Status.CANCELLED;
     }
 
@@ -92,10 +89,12 @@ public class Order {
         }
     }
 
-    public enum Side {BUY, SELL}
+    public enum Side {
+        BUY, SELL
+    }
 
-
-    public enum Status {NEW, PARTIALLY_FILLED, FILLED, CANCELLED}
-
+    public enum Status {
+        NEW, PARTIALLY_FILLED, FILLED, CANCELLED
+    }
 
 }

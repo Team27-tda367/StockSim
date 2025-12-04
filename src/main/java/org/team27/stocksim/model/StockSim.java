@@ -2,6 +2,9 @@ package org.team27.stocksim.model;
 
 import org.team27.stocksim.model.clock.GameClock;
 import org.team27.stocksim.model.clock.GameTicker;
+import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.instruments.InstrumentFactory;
+import org.team27.stocksim.model.instruments.StockFactory;
 import org.team27.stocksim.model.market.*;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.*;
@@ -9,11 +12,6 @@ import org.team27.stocksim.observer.ModelEvent;
 import org.team27.stocksim.observer.ModelObserver;
 import org.team27.stocksim.observer.ModelSubject;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -33,13 +31,12 @@ public class StockSim implements ModelSubject {
     HashMap<String, Trader> traders;
     TraderFactory userFactory;
     TraderFactory botFactory;
-    private String createdStockMsg;
     private MatchingEngine matchingEngine;
     private HashMap<String, OrderBook> orderBooks;
     private HashMap<Integer, String> orderIdToTraderId; // maps order ID to trader ID
     private List<Trade> completedTrades; // tracks all completed trades
     private GameTicker ticker; // reference to ticker for stopping simulation
-    private long simulationStartTime; // tracks when simulation started
+    private static User currentUser;
 
     public StockSim() {
         // Stock related inits
@@ -129,6 +126,8 @@ public class StockSim implements ModelSubject {
             sellerPortfolio.removeStock(trade.getStockSymbol(), trade.getQuantity());
             buyerPortfolio.addStock(trade.getStockSymbol(), trade.getQuantity());
 
+            notifyObservers(new ModelEvent(ModelEvent.Type.TRADE_SETTLED, null));
+
             // Set stock price to last trade price
             Instrument stock = stocks.get(trade.getStockSymbol());
             if (stock != null) {
@@ -147,20 +146,12 @@ public class StockSim implements ModelSubject {
         // checking if symbol already exists (if yes -> error)
         String highSymbol = symbol.toUpperCase();
         if (stocks.containsKey(highSymbol)) {
-            createdStockMsg = "Symbol already exists!";
+            System.out.println("Stock symbol already exists");
         } else {
             Instrument stock = stockFactory.createInstrument(highSymbol, stockName, new BigDecimal(tickSize),
                     Integer.parseInt(lotSize));
             stocks.put(highSymbol, stock);
-            String createdStock = highSymbol + " " + stockName + " " + tickSize + " " + lotSize;
-            createdStockMsg = "Created stock: " + createdStock;
         }
-
-        /*
-         * notifyObservers(new ModelEvent(ModelEvent.Type.STOCK_CREATED,
-         * createdStockMsg));
-         * notifyObservers(new ModelEvent(ModelEvent.Type.STOCKS_CHANGED, stocks));
-         */
 
     }
 
@@ -192,16 +183,6 @@ public class StockSim implements ModelSubject {
         return stocks;
     }
 
-    // Gets the first User found in traders
-    public User getUser() {
-        for (Map.Entry<String, Trader> entry : traders.entrySet()) {
-            if (entry.getValue() instanceof User) {
-                return (User) entry.getValue();
-            }
-        }
-        return null; // or throw an exception if no user is found
-    }
-
     public HashMap<String, Trader> getTraders() {
         return traders;
     }
@@ -215,6 +196,25 @@ public class StockSim implements ModelSubject {
             }
         }
         return bots;
+    }
+
+    public HashMap<String, User> getUsers() {
+        HashMap<String, User> users = new HashMap<>();
+
+        for (Map.Entry<String, Trader> entry : traders.entrySet()) {
+            if (entry.getValue() instanceof User) {
+                users.put(entry.getKey(), (User) entry.getValue());
+            }
+        }
+        return users;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(String userId) {
+        currentUser = (User) getUsers().get(userId.toUpperCase());
     }
 
     public Portfolio createPortfolio(String id) {
@@ -242,7 +242,6 @@ public class StockSim implements ModelSubject {
 
     public void startMarketSimulation() {
         state = MarketState.RUNNING;
-        simulationStartTime = System.currentTimeMillis();
 
         // start the clock/timer for market simulation
         GameClock clock = new GameClock(
@@ -259,12 +258,6 @@ public class StockSim implements ModelSubject {
             try {
                 Thread.sleep(1000); // 1 second
                 clock.setSpeed(100);
-                Thread.sleep(1000); // 1 seconds
-
-                ticker.setCallback(simInstant -> {
-                    tick();
-                    // Price updates are now notified from processOrder only when trades occur
-                });
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

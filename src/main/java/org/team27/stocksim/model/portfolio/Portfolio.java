@@ -1,11 +1,11 @@
 package org.team27.stocksim.model.portfolio;
 
-import org.team27.stocksim.model.market.Instrument;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.team27.stocksim.model.instruments.Instrument;
 
 public class Portfolio {
 

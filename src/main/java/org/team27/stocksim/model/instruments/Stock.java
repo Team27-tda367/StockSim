@@ -1,6 +1,8 @@
-package org.team27.stocksim.model.market;
+package org.team27.stocksim.model.instruments;
 
 import java.math.BigDecimal;
+
+import org.team27.stocksim.model.portfolio.PriceHistory;
 
 public class Stock extends Instrument {
     private BigDecimal price;

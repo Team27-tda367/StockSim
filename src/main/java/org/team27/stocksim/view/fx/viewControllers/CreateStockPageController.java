@@ -1,7 +1,7 @@
-package org.team27.stocksim.ui.fx.viewControllers;
+package org.team27.stocksim.view.fx.viewControllers;
 
 import org.team27.stocksim.observer.ModelEvent;
-import org.team27.stocksim.ui.fx.EView;
+import org.team27.stocksim.view.fx.EView;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

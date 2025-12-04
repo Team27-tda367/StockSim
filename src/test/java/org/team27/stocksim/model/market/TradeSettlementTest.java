@@ -223,7 +223,7 @@ class TradeSettlementTest {
 
         // Total money in system should be conserved
         assertEquals(0, buyerInitial.add(sellerInitial).compareTo(
-                     buyerPortfolio.getBalance().add(sellerPortfolio.getBalance())));
+                buyerPortfolio.getBalance().add(sellerPortfolio.getBalance())));
     }
 
     @Test
@@ -301,4 +301,3 @@ class TradeSettlementTest {
         assertEquals(980, sellerPortfolio.getStockQuantity(stockSymbol));
     }
 }
-

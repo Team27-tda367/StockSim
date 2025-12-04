@@ -8,7 +8,7 @@
 
 
 <VBox xmlns="http://javafx.com/javafx"
-    xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.ui.fx.viewControllers.MainViewController" prefHeight="700.0" prefWidth="800" styleClass="root-container" stylesheets="@../css/main.css">
+    xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.view.fx.viewControllers.MainViewController" prefHeight="700.0" prefWidth="800" styleClass="root-container" stylesheets="@../css/main.css">
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" styleClass="header-bar, spacing-large">
@@ -16,7 +16,8 @@
         <Label text="StonkSim" styleClass="logo"/>
 
         <Button text="Home" styleClass="btn-ghost" onAction="#onMainView"/>
-        <!-- <Button text="Portfolio" styleClass="btn-ghost" />
+        <Button text="Portfolio" styleClass="btn-ghost" onAction="#onPortfolioView"/>
+        <!-- 
         <Button text="Create Stock" styleClass="btn-ghost" onAction="#onExample"/> -->
 
         <Region HBox.hgrow="ALWAYS"/>

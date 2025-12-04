@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.collections.FXCollections?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.view.fx.viewControllers.PortfolioViewController" prefHeight="700.0" prefWidth="800" styleClass="root-container" stylesheets="@../css/main.css">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" styleClass="header-bar, spacing-large">
+
+        <Label text="StonkSim" styleClass="logo"/>
+
+        <Button text="Home" styleClass="btn-ghost" onAction="#onMainView"/>
+        <Button text="Portfolio" styleClass="btn-ghost"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <VBox alignment="CENTER_RIGHT" styleClass="spacing-small">
+            <Label fx:id="availableBalanceLabel" styleClass="text-medium, text-bold"/>
+        </VBox>
+    </HBox>
+
+   
+
+</VBox>

@@ -2,12 +2,12 @@ package org.team27.stocksim.users;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.BotFactory;
 import org.team27.stocksim.model.users.Trader;
 import org.team27.stocksim.model.users.bot.BotStrategy;
 import org.team27.stocksim.model.users.bot.RandomStrategy;
-import org.team27.stocksim.model.portfolio.Portfolio;
 
 import java.math.BigDecimal;
 
