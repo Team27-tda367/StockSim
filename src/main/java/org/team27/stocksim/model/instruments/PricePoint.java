@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.portfolio;
+package org.team27.stocksim.model.instruments;
 
 import java.math.BigDecimal;
 

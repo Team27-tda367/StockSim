@@ -2,8 +2,6 @@ package org.team27.stocksim.model.instruments;
 
 import java.math.BigDecimal;
 
-import org.team27.stocksim.model.portfolio.PriceHistory;
-
 public abstract class Instrument {
     protected final String symbol;
     protected final String name;

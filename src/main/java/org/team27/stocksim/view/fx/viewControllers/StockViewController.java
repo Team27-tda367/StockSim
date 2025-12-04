@@ -12,9 +12,9 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
 import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.instruments.PriceHistory;
+import org.team27.stocksim.model.instruments.PricePoint;
 import org.team27.stocksim.model.portfolio.Portfolio;
-import org.team27.stocksim.model.portfolio.PriceHistory;
-import org.team27.stocksim.model.portfolio.PricePoint;
 import org.team27.stocksim.model.users.User;
 
 import java.math.BigDecimal;
