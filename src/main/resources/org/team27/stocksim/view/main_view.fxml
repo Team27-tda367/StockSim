@@ -22,7 +22,7 @@
         <Region HBox.hgrow="ALWAYS"/>
 
         <VBox alignment="CENTER_RIGHT" styleClass="spacing-small">
-            <Label text="Available Balance" styleClass="text-small, text-muted"/>
+            <Label fx:id="availableBalanceLabel" styleClass="text-medium, text-bold"/>
         </VBox>
     </HBox>
 

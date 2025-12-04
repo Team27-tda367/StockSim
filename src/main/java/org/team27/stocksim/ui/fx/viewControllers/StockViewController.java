@@ -12,6 +12,8 @@ import javafx.scene.chart.XYChart;
 import org.team27.stocksim.model.market.Instrument;
 import org.team27.stocksim.model.market.PriceHistory;
 import org.team27.stocksim.model.market.PricePoint;
+import org.team27.stocksim.model.portfolio.Portfolio;
+import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.ui.fx.SelectedStockService;
 
 import java.math.BigDecimal;
@@ -33,6 +35,24 @@ public class StockViewController extends ViewControllerBase {
     private Label priceLabel; // om du lade till fx:id
     @FXML
     private Label orderPriceLabel; // om du lade till fx:id
+
+    @FXML
+    private Label availableBalanceLabel;
+
+    @FXML
+    private void handleBuy(ActionEvent event) {
+        // Hantera köp-logik här
+        int quantity = 1; // Exempel: köp 1 aktie - annars hämta från fält
+        modelController.buyStock(stock.getSymbol(), quantity);
+    }
+
+    @FXML
+    private void handleSell(ActionEvent event) {
+        // Hantera sälj-logik här
+        System.out.println("Sell button clicked for stock: " + stock.getSymbol());
+        // Du kan lägga till sälj-logik som att öppna en sälj-dialog eller direkt
+        // genomföra försäljningen
+    }
 
     @FXML
     private LineChart<Number, Number> priceChart;
@@ -177,6 +197,11 @@ public class StockViewController extends ViewControllerBase {
     @Override
     protected void onInit() {
         modelController.addObserver(this);
+
+        User user = modelController.getUser();
+        Portfolio portfolio = user.getPortfolio();
+        BigDecimal balance = portfolio.getBalance();
+        availableBalanceLabel.setText("Balance: $" + balance.toString());
     }
 
 }

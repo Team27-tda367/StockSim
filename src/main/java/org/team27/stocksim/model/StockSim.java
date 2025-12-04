@@ -192,6 +192,16 @@ public class StockSim implements ModelSubject {
         return stocks;
     }
 
+    // Gets the first User found in traders
+    public User getUser() {
+        for (Map.Entry<String, Trader> entry : traders.entrySet()) {
+            if (entry.getValue() instanceof User) {
+                return (User) entry.getValue();
+            }
+        }
+        return null; // or throw an exception if no user is found
+    }
+
     public HashMap<String, Trader> getTraders() {
         return traders;
     }

@@ -19,6 +19,8 @@ import javafx.geometry.Pos;
 import org.team27.stocksim.ui.fx.SelectedStockService;
 import org.team27.stocksim.model.market.Instrument;
 import org.team27.stocksim.model.market.Stock;
+import org.team27.stocksim.model.portfolio.Portfolio;
+import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.ui.fx.EView;
 
 import java.math.BigDecimal;
@@ -37,12 +39,20 @@ public class MainViewController extends ViewControllerBase {
         // Get all stocks from the model
         HashMap<String, Instrument> stocks = modelController.getAllStocks();
         stockList.addAll(stocks.values());
+
+        User user = modelController.getUser();
+        Portfolio portfolio = user.getPortfolio();
+        BigDecimal balance = portfolio.getBalance();
+        availableBalanceLabel.setText("Balance: $" + balance.toString());
     }
 
     @FXML
     private ListView<Instrument> stockListView;
 
     private ObservableList<Instrument> stockList = FXCollections.observableArrayList();
+
+    @FXML
+    private Label availableBalanceLabel;
 
     /*
      * @FXML

@@ -3,6 +3,7 @@ package org.team27.stocksim.controller;
 import java.util.HashMap;
 
 import org.team27.stocksim.model.market.Instrument;
+import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.observer.ModelObserver;
 
 public interface ISimController {
@@ -15,4 +16,8 @@ public interface ISimController {
     HashMap<String, Instrument> getAllStocks();
 
     void setUpSimulation();
+
+    User getUser();
+
+    void buyStock(String stockSymbol, int quantity);
 }

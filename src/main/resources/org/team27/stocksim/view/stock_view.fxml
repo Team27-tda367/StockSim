@@ -25,7 +25,7 @@
             <Button text="Create Stock" styleClass="btn-ghost" onAction="#onExample"/> -->
             <Region HBox.hgrow="ALWAYS"/>
             <VBox alignment="CENTER_RIGHT" styleClass="spacing-small">
-                <Label text="Available Balance" styleClass="text-small, text-muted"/>
+                <Label fx:id="availableBalanceLabel" text="Available Balance" styleClass="text-small, text-muted"/>
             </VBox>
         </HBox>
     </top>
@@ -235,8 +235,8 @@
                     </VBox>
 
                     <HBox alignment="CENTER" spacing="12" prefWidth="300">
-                        <Button text="Buy" prefHeight="34" prefWidth="140" styleClass="buy-btn, clickable"/>
-                        <Button text="Sell" prefHeight="34" prefWidth="140" styleClass="sell-btn, clickable"/>
+                        <Button text="Buy" prefHeight="34" prefWidth="140" styleClass="buy-btn, clickable" onAction="#handleBuy"/>
+                        <Button text="Sell" prefHeight="34" prefWidth="140" styleClass="sell-btn, clickable" onAction="#handleSell"/>
                     </HBox>
 
 

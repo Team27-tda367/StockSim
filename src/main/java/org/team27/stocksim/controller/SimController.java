@@ -6,6 +6,8 @@ import java.util.HashMap;
 import org.team27.stocksim.model.SimSetup;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.market.Instrument;
+import org.team27.stocksim.model.market.Order;
+import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.observer.ModelObserver;
 
 public class SimController implements ISimController {
@@ -36,6 +38,19 @@ public class SimController implements ISimController {
     @Override
     public HashMap<String, Instrument> getAllStocks() {
         return model.getStocks();
+    }
+
+    @Override
+    public User getUser() {
+        return model.getUser();
+    }
+
+    @Override
+    public void buyStock(String stockSymbol, int quantity) {
+
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, quantity, BigDecimal.ZERO, quantity,
+                model.getUser().getId());
+        model.placeOrder(buyOrder);
     }
 
 }
