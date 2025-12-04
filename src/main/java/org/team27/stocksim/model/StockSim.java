@@ -38,7 +38,6 @@ public class StockSim implements ModelSubject {
     private HashMap<String, OrderBook> orderBooks;
     private HashMap<Integer, String> orderIdToTraderId; // maps order ID to trader ID
     private List<Trade> completedTrades; // tracks all completed trades
-    private HashMap<String, List<Map<String, Object>>> priceHistory; // tracks price history for each stock
     private GameTicker ticker; // reference to ticker for stopping simulation
     private long simulationStartTime; // tracks when simulation started
 
@@ -55,7 +54,6 @@ public class StockSim implements ModelSubject {
         matchingEngine = new MatchingEngine();
         orderIdToTraderId = new HashMap<>();
         completedTrades = new ArrayList<>();
-        priceHistory = new HashMap<>();
 
         System.out.println("Succesfully created Sim-model");
     }
@@ -89,8 +87,8 @@ public class StockSim implements ModelSubject {
         List<Trade> trades = matchingEngine.match(order, getOrderBook(order.getSymbol()));
 
         for (Trade trade : trades) {
-            settleTrade(trade);
             completedTrades.add(trade);
+            settleTrade(trade);
         }
     }
 
@@ -237,8 +235,10 @@ public class StockSim implements ModelSubject {
         // Schedule simulation stop after 10 seconds
         new Thread(() -> {
             try {
-                Thread.sleep(1000); // 10 seconds
+                Thread.sleep(1000); // 1 second
                 stopMarketSimulation();
+                // Write stock prices to JSON file
+                writeStockPricesToJson();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -255,47 +255,64 @@ public class StockSim implements ModelSubject {
             ((Bot) bot).decide(this);
         }
 
-        // Write stock prices to JSON file
-        writeStockPricesToJson();
-
     }
 
     private void writeStockPricesToJson() {
-        try {
-            Map<String, Map<String, Object>> stockData = new HashMap<>();
+        for (Instrument stock : stocks.values()) {
+            String symbol = stock.getSymbol();
+            System.out.println("Current price: " + stock.getCurrentPrice().toString());
 
-            for (Instrument stock : stocks.values()) {
-                // Record current price in history
-                String symbol = stock.getSymbol();
-                priceHistory.putIfAbsent(symbol, new ArrayList<>());
-
-                Map<String, Object> priceSnapshot = new HashMap<>();
-                priceSnapshot.put("timestamp", System.currentTimeMillis());
-                priceSnapshot.put("price", stock.getCurrentPrice().toString());
-                priceHistory.get(symbol).add(priceSnapshot);
-
-                // Build stock info with history
-                Map<String, Object> stockInfo = new HashMap<>();
-                stockInfo.put("symbol", stock.getSymbol());
-                stockInfo.put("name", stock.getName());
-                stockInfo.put("currentPrice", stock.getCurrentPrice().toString());
-                stockInfo.put("tickSize", stock.getTickSize().toString());
-                stockInfo.put("lotSize", stock.getLotSize());
-                stockInfo.put("priceHistory", priceHistory.get(symbol));
-
-                stockData.put(stock.getSymbol(), stockInfo);
+            // Get price history from the Stock object itself
+            if (stock instanceof Stock) {
+                Stock stockObj = (Stock) stock;
+                List<PricePoint> history = stockObj.getPriceHistory().getPoints();
+                System.out.println("Price history for " + symbol + ":");
+                if (!history.isEmpty()) {
+                    System.out.println(history.size() + " points recorded.");
+                } else {
+                    System.out.println("  No price history available");
+                }
             }
-
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String json = gson.toJson(stockData);
-
-            try (FileWriter writer = new FileWriter("stock_prices.json")) {
-                writer.write(json);
-            }
-
-        } catch (IOException e) {
-            System.err.println("Error writing stock prices to JSON: " + e.getMessage());
+            System.out.println();
         }
+
+        /*
+         * try {
+         * Map<String, Map<String, Object>> stockData = new HashMap<>();
+         * 
+         * for (Instrument stock : stocks.values()) {
+         * // Record current price in history
+         * String symbol = stock.getSymbol();
+         * priceHistory.putIfAbsent(symbol, new ArrayList<>());
+         * 
+         * Map<String, Object> priceSnapshot = new HashMap<>();
+         * priceSnapshot.put("timestamp", System.currentTimeMillis());
+         * priceSnapshot.put("price", stock.getCurrentPrice().toString());
+         * priceHistory.get(symbol).add(priceSnapshot);
+         * 
+         * // Build stock info with history
+         * Map<String, Object> stockInfo = new HashMap<>();
+         * stockInfo.put("symbol", stock.getSymbol());
+         * stockInfo.put("name", stock.getName());
+         * stockInfo.put("currentPrice", stock.getCurrentPrice().toString());
+         * stockInfo.put("tickSize", stock.getTickSize().toString());
+         * stockInfo.put("lotSize", stock.getLotSize());
+         * stockInfo.put("priceHistory", priceHistory.get(symbol));
+         * 
+         * stockData.put(stock.getSymbol(), stockInfo);
+         * }
+         * 
+         * Gson gson = new GsonBuilder().setPrettyPrinting().create();
+         * String json = gson.toJson(stockData);
+         * 
+         * try (FileWriter writer = new FileWriter("stock_prices.json")) {
+         * writer.write(json);
+         * }
+         * 
+         * } catch (IOException e) {
+         * System.err.println("Error writing stock prices to JSON: " + e.getMessage());
+         * }
+         */
     }
 
     public void pauseMarketSimulation() {
