@@ -38,9 +38,10 @@
                 <Insets top="30" left="30" bottom="30" right="30"/>
             </padding>
 
-            <!-- StockInfo -->
-            <VBox HBox.hgrow="ALWAYS" prefWidth="1020" spacing="16">
-                <BorderPane styleClass="panel-card">
+            <!-- StockInfo & Price History Combined -->
+            <VBox HBox.hgrow="ALWAYS" prefWidth="1020" styleClass="panel-card" spacing="20">
+                <!-- Stock Info Header -->
+                <BorderPane>
                     <left>
                         <VBox spacing="8" alignment="TOP_LEFT">
                             <Label fx:id="symbolLabel" text="AAPL" styleClass="stock-title"/>
@@ -61,9 +62,18 @@
                 </BorderPane>
 
                 <!-- Price History Chart -->
-                <VBox styleClass="chart-container">
-                    <Label text="Price History" styleClass="chart-title"/>
-                    <LineChart fx:id="priceChart" prefHeight="300" legendVisible="false" style="-fx-background-color: white;">
+                <VBox spacing="12">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Price History" styleClass="chart-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <HBox spacing="4">
+                            <Button fx:id="btn1D" text="1D" styleClass="time-period-btn" onAction="#onTimePeriodClick"/>
+                            <Button fx:id="btn1W" text="1W" styleClass="time-period-btn" onAction="#onTimePeriodClick"/>
+                            <Button fx:id="btn1M" text="1M" styleClass="time-period-btn" onAction="#onTimePeriodClick"/>
+                            <Button fx:id="btn1Y" text="1Y" styleClass="time-period-btn" onAction="#onTimePeriodClick"/>
+                        </HBox>
+                    </HBox>
+                    <LineChart fx:id="priceChart" prefHeight="300" legendVisible="false" style="-fx-background-color: transparent;">
                         <xAxis>
                             <NumberAxis side="BOTTOM" label="Time" autoRanging="true" tickLabelFill="#6B7280"/>
                         </xAxis>
@@ -124,9 +134,7 @@
 
                     <Label text="Quantity" styleClass="label-title"/>
 
-                    <TextField fx:id="quantityField" text="1" prefHeight="24" 
-                               onKeyTyped="#validateNumberInput" 
-                               promptText="Enter quantity"/>
+                    <TextField fx:id="quantityField" text="1" prefHeight="24" onKeyTyped="#validateNumberInput" promptText="Enter quantity"/>
 
                     <VBox styleClass="info-box">
                         <HBox>

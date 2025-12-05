@@ -7,20 +7,18 @@ import org.team27.stocksim.view.fx.SelectedStockService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
 import org.team27.stocksim.model.instruments.Instrument;
-import org.team27.stocksim.model.instruments.PriceHistory;
-import org.team27.stocksim.model.instruments.PricePoint;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.User;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 
 public class StockViewController extends ViewControllerBase
         implements ViewAdapter.PriceUpdateListener, ViewAdapter.TradeSettledListener {
@@ -76,10 +74,24 @@ public class StockViewController extends ViewControllerBase
     @FXML
     private LineChart<Number, Number> priceChart;
 
+    @FXML
+    private Button btn1D;
+    @FXML
+    private Button btn1W;
+    @FXML
+    private Button btn1M;
+    @FXML
+    private Button btn1Y;
+
     private boolean isFavorite = false;
     private Instrument stock;
     private XYChart.Series<Number, Number> priceSeries;
     private int lastPriceHistorySize = 0;
+    private Button activeTimePeriodButton = null;
+
+    // OOP-based chart management
+    private ChartDataService chartDataService;
+    private ChartTimePeriod currentTimePeriod;
 
     /**
      * Handler for the header "Home" button (FXML references `onExample`).
@@ -116,35 +128,69 @@ public class StockViewController extends ViewControllerBase
                 orderPriceLabel.setText(price + " SEK");
             }
 
+            // Initialize chart data service and default time period
+            chartDataService = new ChartDataService();
+            currentTimePeriod = ChartTimePeriod.ONE_DAY;
+
             // Initialize and populate the price chart
             initializePriceChart();
         }
+
+        // Set default active button (1D)
+        if (btn1D != null) {
+            setActiveTimePeriodButton(btn1D);
+        }
+    }
+
+    @FXML
+    private void onTimePeriodClick(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+        setActiveTimePeriodButton(clickedButton);
+
+        // Update current time period using enum
+        String periodLabel = clickedButton.getText();
+        currentTimePeriod = ChartTimePeriod.fromLabel(periodLabel);
+
+        // Refresh chart with new time period
+        refreshChartForTimePeriod();
+
+        System.out.println("Selected time period: " + currentTimePeriod.getLabel() + " (" + currentTimePeriod.getDays()
+                + " days)");
+    }
+
+    private void setActiveTimePeriodButton(Button button) {
+        // Remove active class from previously active button
+        if (activeTimePeriodButton != null) {
+            activeTimePeriodButton.getStyleClass().remove("time-period-btn-active");
+        }
+
+        // Add active class to new button
+        if (button != null && !button.getStyleClass().contains("time-period-btn-active")) {
+            button.getStyleClass().add("time-period-btn-active");
+        }
+
+        activeTimePeriodButton = button;
     }
 
     private void initializePriceChart() {
-        if (priceChart == null || stock == null) {
+        if (priceChart == null || stock == null || chartDataService == null) {
             return;
         }
 
-        // Create a new data series for the price history
-        priceSeries = new XYChart.Series<>();
+        // Use ChartDataService to prepare initial data
+        priceSeries = chartDataService.prepareChartData(
+                stock.getPriceHistory(),
+                currentTimePeriod);
         priceSeries.setName(stock.getSymbol() + " Price");
 
-        // Reset the counter and populate initial data
-        lastPriceHistorySize = 0;
-        PriceHistory history = stock.getPriceHistory();
-        List<PricePoint> points = history.getPoints();
-
-        // Add all existing price points
-        for (int i = 0; i < points.size(); i++) {
-            PricePoint point = points.get(i);
-            priceSeries.getData().add(new XYChart.Data<>(i, point.getPrice().doubleValue()));
-        }
-        lastPriceHistorySize = points.size();
+        lastPriceHistorySize = stock.getPriceHistory().getPoints().size();
 
         // Add the series to the chart
         priceChart.getData().clear();
         priceChart.getData().add(priceSeries);
+
+        // Update time axis label based on period
+        priceChart.getXAxis().setLabel(chartDataService.getTimeAxisLabel(currentTimePeriod));
 
         // Style the chart
         priceChart.setCreateSymbols(false); // Don't show dots on the line
@@ -152,32 +198,39 @@ public class StockViewController extends ViewControllerBase
     }
 
     private void updateChartData() {
-        if (priceSeries == null || stock == null) {
+        if (priceSeries == null || stock == null || chartDataService == null) {
             return;
         }
 
-        PriceHistory history = stock.getPriceHistory();
-        List<PricePoint> points = history.getPoints();
+        // Use ChartDataService to update chart efficiently
+        lastPriceHistorySize = chartDataService.updateChartData(
+                priceSeries,
+                stock.getPriceHistory(),
+                currentTimePeriod,
+                lastPriceHistorySize);
+    }
 
-        int currentSize = points.size();
-
-        // Only add new points that weren't there before
-        if (currentSize > lastPriceHistorySize) {
-            for (int i = lastPriceHistorySize; i < currentSize; i++) {
-                PricePoint point = points.get(i);
-                priceSeries.getData().add(new XYChart.Data<>(i, point.getPrice().doubleValue()));
-            }
-            lastPriceHistorySize = currentSize;
-        } else if (currentSize < lastPriceHistorySize) {
-            // Price history was reset, redraw everything
-            priceSeries.getData().clear();
-            for (int i = 0; i < currentSize; i++) {
-                PricePoint point = points.get(i);
-                priceSeries.getData().add(new XYChart.Data<>(i, point.getPrice().doubleValue()));
-            }
-            lastPriceHistorySize = currentSize;
+    /**
+     * Refresh the entire chart when time period changes.
+     * This recreates the chart data based on the new time period filter.
+     */
+    private void refreshChartForTimePeriod() {
+        if (priceChart == null || stock == null || chartDataService == null) {
+            return;
         }
-        // If currentSize == lastPriceHistorySize, no new data to add
+
+        // Clear and recreate the series with new time period
+        priceSeries.getData().clear();
+
+        XYChart.Series<Number, Number> newSeries = chartDataService.prepareChartData(
+                stock.getPriceHistory(),
+                currentTimePeriod);
+
+        priceSeries.getData().addAll(newSeries.getData());
+        lastPriceHistorySize = stock.getPriceHistory().getPoints().size();
+
+        // Update time axis label
+        priceChart.getXAxis().setLabel(chartDataService.getTimeAxisLabel(currentTimePeriod));
     }
 
     /*
@@ -208,7 +261,6 @@ public class StockViewController extends ViewControllerBase
         // Uppdatera priset om det har ändrats
         if (stock != null) {
             BigDecimal newPrice = stock.getCurrentPrice();
-            PriceHistory history = stock.getPriceHistory();
             Platform.runLater(() -> {
                 priceLabel.setText(newPrice.toString());
                 orderPriceLabel.setText(newPrice + " SEK");
