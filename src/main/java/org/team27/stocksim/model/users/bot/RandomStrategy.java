@@ -84,7 +84,7 @@ public class RandomStrategy implements BotStrategy {
         int quantity = Math.min(randomQuantity(), maxAvailableQuantity);
         BigDecimal price = randomPrice(stock.getCurrentPrice());
 
-        Order sellOrder = new Order(Order.Side.SELL, stock.getSymbol(), quantity, price, quantity, bot.getId());
+        Order sellOrder = new Order(Order.Side.SELL, stock.getSymbol(), price, quantity, bot.getId());
         model.placeOrder(sellOrder);
     }
 
@@ -99,7 +99,7 @@ public class RandomStrategy implements BotStrategy {
 
         BigDecimal price = randomPrice(stock.getCurrentPrice());
 
-        Order buyOrder = new Order(Order.Side.BUY, stock.getSymbol(), quantity, price, quantity, bot.getId());
+        Order buyOrder = new Order(Order.Side.BUY, stock.getSymbol(), price, quantity, bot.getId());
         model.placeOrder(buyOrder);
     }
 

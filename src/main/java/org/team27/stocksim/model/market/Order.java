@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 public class Order {
+    private static int nextOrderId = 1;
+    
     private final Side side;
     private final int orderId;
     private final BigDecimal price;
@@ -14,16 +16,20 @@ public class Order {
     private Status status = Status.NEW;
     private int remainingQuantity;
 
-    public Order(Side side, String instrumentSymbol, int orderId, BigDecimal price, int quantity, String traderId) {
+    public Order(Side side, String instrumentSymbol, BigDecimal price, int quantity, String traderId) {
         this.side = side;
         this.instrumentSymbol = instrumentSymbol;
-        this.orderId = orderId;
+        this.orderId = generateOrderId();
         this.price = price;
         this.totalQuantity = quantity;
         this.remainingQuantity = quantity;
         this.traderId = traderId;
 
         this.timeStamp = Instant.now(); // Using java.time before deciding on our time implementation
+    }
+    
+    private static synchronized int generateOrderId() {
+        return nextOrderId++;
     }
 
     public int getOrderId() {

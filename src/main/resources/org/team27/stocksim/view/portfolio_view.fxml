@@ -31,10 +31,16 @@
         <!-- Title -->
         <Label text="Portfolio" styleClass="title-large"/>
 
-        <!-- Holdings Section -->
-        <Label text="Your Holdings" styleClass="text-medium, text-bold"/>
+        <!-- Positions Section -->
+        <Label text="Your Positions" styleClass="text-medium, text-bold"/>
         
-        <ListView fx:id="holdingsListView" VBox.vgrow="ALWAYS" styleClass="list-view">
+        <ListView fx:id="positionsListView" prefHeight="300" styleClass="list-view">
+        </ListView>
+
+        <!-- Active Orders Section -->
+        <Label text="Active Orders" styleClass="text-medium, text-bold"/>
+        
+        <ListView fx:id="ordersListView" prefHeight="200" styleClass="list-view">
         </ListView>
 
     </VBox>

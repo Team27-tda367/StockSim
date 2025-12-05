@@ -133,8 +133,13 @@
                 <VBox fx:id="orderCard" prefWidth="340" prefHeight="140" spacing="6" styleClass="order-card">
 
                     <Label text="Quantity" styleClass="label-title"/>
-
                     <TextField fx:id="quantityField" text="1" prefHeight="24" onKeyTyped="#validateNumberInput" promptText="Enter quantity"/>
+
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="Price" styleClass="label-title"/>
+                        <Button text="Market" styleClass="btn-ghost" prefHeight="20" onAction="#handleSetMarketPrice"/>
+                    </HBox>
+                    <TextField fx:id="priceField" prefHeight="24" onKeyTyped="#validatePriceInput" promptText="Enter price"/>
 
                     <VBox styleClass="info-box">
                         <HBox>
@@ -152,7 +157,7 @@
                         <HBox>
                             <Label text="Total" styleClass="info-header"/>
                             <Region HBox.hgrow="ALWAYS"/>
-                            <Label fx:id="orderPriceLabel" text="178.45 SEK" styleClass="info-label"/>
+                            <Label fx:id="orderTotalLabel" text="178.45 SEK" styleClass="info-label"/>
                         </HBox>
                     </VBox>
 

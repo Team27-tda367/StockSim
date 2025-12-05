@@ -65,11 +65,11 @@ class UserIntegrationTest {
         int initialStocks = userPortfolio.getStockQuantity(appleSymbol);
 
         // Bot places sell order first
-        Order botSellOrder = new Order(Order.Side.SELL, appleSymbol, 1, money("150.00"), 50, bot1Id);
+        Order botSellOrder = new Order(Order.Side.SELL, appleSymbol, money("150.00"), 50, bot1Id);
         stockSim.placeOrder(botSellOrder);
 
         // Act: User places buy order
-        Order userBuyOrder = new Order(Order.Side.BUY, appleSymbol, 2, money("150.00"), 50, userId);
+        Order userBuyOrder = new Order(Order.Side.BUY, appleSymbol, money("150.00"), 50, userId);
         stockSim.placeOrder(userBuyOrder);
 
         // Assert: Portfolio changes
@@ -103,11 +103,11 @@ class UserIntegrationTest {
         int initialStocks = userPortfolio.getStockQuantity(appleSymbol);
 
         // Bot places buy order first
-        Order botBuyOrder = new Order(Order.Side.BUY, appleSymbol, 1, money("145.50"), 30, bot1Id);
+        Order botBuyOrder = new Order(Order.Side.BUY, appleSymbol, money("145.50"), 30, bot1Id);
         stockSim.placeOrder(botBuyOrder);
 
         // Act: User places sell order
-        Order userSellOrder = new Order(Order.Side.SELL, appleSymbol, 2, money("145.50"), 30, userId);
+        Order userSellOrder = new Order(Order.Side.SELL, appleSymbol, money("145.50"), 30, userId);
         stockSim.placeOrder(userSellOrder);
 
         // Assert: Portfolio changes
@@ -132,16 +132,16 @@ class UserIntegrationTest {
 
         // Setup & Act: Place orders in sequence (bot sell, then user buy)
         // Trade 1: AAPL at 150.00
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 1, money("150.00"), 25, bot1Id));
-        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, 2, money("150.00"), 25, userId));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("150.00"), 25, bot1Id));
+        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, money("150.00"), 25, userId));
 
         // Trade 2: GOOGL at 280.00
-        stockSim.placeOrder(new Order(Order.Side.SELL, googleSymbol, 3, money("280.00"), 10, bot2Id));
-        stockSim.placeOrder(new Order(Order.Side.BUY, googleSymbol, 4, money("280.00"), 10, userId));
+        stockSim.placeOrder(new Order(Order.Side.SELL, googleSymbol, money("280.00"), 10, bot2Id));
+        stockSim.placeOrder(new Order(Order.Side.BUY, googleSymbol, money("280.00"), 10, userId));
 
         // Trade 3: AAPL at 151.00
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 5, money("151.00"), 15, bot2Id));
-        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, 6, money("151.00"), 15, userId));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("151.00"), 15, bot2Id));
+        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, money("151.00"), 15, userId));
 
         // Assert: Portfolio has correct stocks
         assertEquals(40, userPortfolio.getStockQuantity(appleSymbol),
@@ -174,10 +174,10 @@ class UserIntegrationTest {
         BigDecimal initialBalance = userPortfolio.getBalance();
 
         // Bot places smaller sell order
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 1, money("150.00"), 20, bot1Id));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("150.00"), 20, bot1Id));
 
         // Act: User places larger buy order (only 20 will fill)
-        Order userBuyOrder = new Order(Order.Side.BUY, appleSymbol, 2, money("150.00"), 50, userId);
+        Order userBuyOrder = new Order(Order.Side.BUY, appleSymbol, money("150.00"), 50, userId);
         stockSim.placeOrder(userBuyOrder);
 
         // Assert: Only partial fill occurred
@@ -204,15 +204,15 @@ class UserIntegrationTest {
         BigDecimal initialBalance = userPortfolio.getBalance();
 
         // Step 1: User buys stocks
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 1, money("150.00"), 50, bot1Id));
-        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, 2, money("150.00"), 50, userId));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("150.00"), 50, bot1Id));
+        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, money("150.00"), 50, userId));
 
         BigDecimal balanceAfterBuy = userPortfolio.getBalance();
         int stocksAfterBuy = userPortfolio.getStockQuantity(appleSymbol);
 
         // Step 2: User sells some stocks at higher price
-        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, 3, money("155.00"), 30, bot2Id));
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 4, money("155.00"), 30, userId));
+        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, money("155.00"), 30, bot2Id));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("155.00"), 30, userId));
 
         // Assert: Portfolio changes
         BigDecimal expectedRevenue = money("155.00").multiply(BigDecimal.valueOf(30));
@@ -245,10 +245,10 @@ class UserIntegrationTest {
         int initialStocks = userPortfolio.getStockQuantity(appleSymbol);
 
         // Bot places sell order at higher price
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 1, money("150.00"), 50, bot1Id));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("150.00"), 50, bot1Id));
 
         // Act: User places buy order at lower price (no match)
-        Order userBuyOrder = new Order(Order.Side.BUY, appleSymbol, 2, money("145.00"), 50, userId);
+        Order userBuyOrder = new Order(Order.Side.BUY, appleSymbol, money("145.00"), 50, userId);
         stockSim.placeOrder(userBuyOrder);
 
         // Assert: No trade occurred
@@ -273,14 +273,14 @@ class UserIntegrationTest {
         OrderHistory orderHistory = user.getOrderHistory();
 
         // Multiple bots place small sell orders
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 1, money("150.00"), 15, bot1Id));
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 2, money("150.00"), 20, bot2Id));
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 3, money("150.00"), 15, bot1Id));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("150.00"), 15, bot1Id));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("150.00"), 20, bot2Id));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("150.00"), 15, bot1Id));
 
         BigDecimal initialBalance = userPortfolio.getBalance();
 
         // Act: User places one large buy order that matches all
-        Order userBuyOrder = new Order(Order.Side.BUY, appleSymbol, 4, money("150.00"), 50, userId);
+        Order userBuyOrder = new Order(Order.Side.BUY, appleSymbol, money("150.00"), 50, userId);
         stockSim.placeOrder(userBuyOrder);
 
         // Assert: All trades completed
@@ -307,12 +307,12 @@ class UserIntegrationTest {
         Portfolio userPortfolio = user.getPortfolio();
 
         // Act: Place orders for AAPL
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 1, money("150.00"), 30, bot1Id));
-        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, 2, money("150.00"), 30, userId));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("150.00"), 30, bot1Id));
+        stockSim.placeOrder(new Order(Order.Side.BUY, appleSymbol, money("150.00"), 30, userId));
 
         // Place orders for GOOGL
-        stockSim.placeOrder(new Order(Order.Side.SELL, googleSymbol, 3, money("280.00"), 5, bot2Id));
-        stockSim.placeOrder(new Order(Order.Side.BUY, googleSymbol, 4, money("280.00"), 5, userId));
+        stockSim.placeOrder(new Order(Order.Side.SELL, googleSymbol, money("280.00"), 5, bot2Id));
+        stockSim.placeOrder(new Order(Order.Side.BUY, googleSymbol, money("280.00"), 5, userId));
 
         // Assert: Portfolio contains both stocks
         assertEquals(30, userPortfolio.getStockQuantity(appleSymbol), "Should have 30 AAPL");
@@ -333,13 +333,13 @@ class UserIntegrationTest {
         OrderHistory orderHistory = user.getOrderHistory();
 
         // Setup bot orders
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 1, money("150.00"), 10, bot1Id));
-        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, 2, money("151.00"), 10, bot1Id));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("150.00"), 10, bot1Id));
+        stockSim.placeOrder(new Order(Order.Side.SELL, appleSymbol, money("151.00"), 10, bot1Id));
 
         // Act: User places multiple orders
-        Order order1 = new Order(Order.Side.BUY, appleSymbol, 3, money("150.00"), 10, userId);
-        Order order2 = new Order(Order.Side.BUY, appleSymbol, 4, money("151.00"), 10, userId);
-        Order order3 = new Order(Order.Side.BUY, googleSymbol, 5, money("280.00"), 5, userId); // Won't match
+        Order order1 = new Order(Order.Side.BUY, appleSymbol, money("150.00"), 10, userId);
+        Order order2 = new Order(Order.Side.BUY, appleSymbol, money("151.00"), 10, userId);
+        Order order3 = new Order(Order.Side.BUY, googleSymbol, money("280.00"), 5, userId); // Won't match
 
         stockSim.placeOrder(order1);
         stockSim.placeOrder(order2);
@@ -356,3 +356,4 @@ class UserIntegrationTest {
                 "Only 2 orders matched, so 2 trades");
     }
 }
+
