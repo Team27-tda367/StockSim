@@ -347,6 +347,43 @@
     -fx-text-fill: #111827;
 }
 
+.price-value-medium {
+    -fx-font-size: 22;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+.price-value-main {
+    -fx-font-size: 18;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+.price-value-compact {
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+.price-title-small {
+    -fx-font-size: 10;
+    -fx-text-fill: #6B7280;
+}
+
+.price-change-compact {
+    -fx-font-size: 11;
+    -fx-font-weight: 600;
+    -fx-text-fill: #16a34a;
+}
+
+.price-icon-small {
+    -fx-font-size: 12;
+    -fx-background-color: #DBEAFE;
+    -fx-text-fill: #2563eb;
+    -fx-background-radius: 6;
+    -fx-padding: 2;
+}
+
 .price-value-small {
     -fx-font-size: 18;
     -fx-font-weight: 500;

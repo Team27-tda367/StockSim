@@ -108,23 +108,25 @@
                 </VBox>
 
                 <!-- Box 3  -->
-                <VBox styleClass="stock-price-card" prefWidth="300" minHeight="120" spacing="6">
+                <VBox styleClass="stock-price-card" prefWidth="300" minHeight="120" maxHeight="120" spacing="4">
 
-                    <HBox alignment="CENTER_LEFT">
-                        <Label text="High 187.37" styleClass="price-title"/>
+                    <HBox alignment="CENTER_LEFT" spacing="4">
+                        <Label text="High" styleClass="price-title-small"/>
+                        <Label text="187.37" styleClass="price-value-compact"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Label text="Low 169.53" styleClass="price-title"/>
+                        <Label text="Low" styleClass="price-title-small"/>
+                        <Label text="169.53" styleClass="price-value-compact"/>
                     </HBox>
 
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="📈" styleClass="price-icon"/>
-                        <Label text="+1.33% (+2.34)" styleClass="price-change-positive"/>
+                    <HBox spacing="3" alignment="CENTER_LEFT">
+                        <Label text="📈" styleClass="price-icon-small"/>
+                        <Label text="+1.33% (+2.34)" styleClass="price-change-compact"/>
                     </HBox>
 
-
-                    <Label text="Last paid price" styleClass="price-title"/>
-                    <Label fx:id="priceLabel" text="178.45" styleClass="price-value-large"/>
-
+                    <VBox spacing="0">
+                        <Label fx:id="priceLabel" text="178.45" styleClass="price-value-main" maxWidth="Infinity" wrapText="false"/>
+                        <Label text="Last paid price" styleClass="price-title-small"/>
+                    </VBox>
 
                 </VBox>
 
