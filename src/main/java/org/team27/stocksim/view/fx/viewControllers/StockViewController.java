@@ -105,6 +105,8 @@ public class StockViewController extends ViewControllerBase
             quantityField.textProperty().addListener((observable, oldValue, newValue) -> {
                 orderQuantityLabel.setText(newValue);
             });
+            orderQuantityLabel.setText(quantityField.getText());
+
         }
 
         // Hämta vald aktie från service
