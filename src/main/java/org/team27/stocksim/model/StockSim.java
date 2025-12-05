@@ -306,7 +306,7 @@ public class StockSim implements ModelSubject {
         new Thread(() -> {
             try {
                 Thread.sleep(1000); // 1 second
-                clock.setSpeed(10);
+                clock.setSpeed(5);
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
