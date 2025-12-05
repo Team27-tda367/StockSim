@@ -12,6 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
+import javafx.geometry.Pos;
 
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.portfolio.Portfolio;
@@ -19,6 +23,8 @@ import org.team27.stocksim.model.users.User;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StockViewController extends ViewControllerBase
         implements ViewAdapter.PriceUpdateListener, ViewAdapter.TradeSettledListener {
@@ -83,11 +89,15 @@ public class StockViewController extends ViewControllerBase
     @FXML
     private Button btn1Y;
 
+    @FXML
+    private VBox trendingStocksContainer;
+
     private boolean isFavorite = false;
     private Instrument stock;
     private XYChart.Series<Number, Number> priceSeries;
     private int lastPriceHistorySize = 0;
     private Button activeTimePeriodButton = null;
+    private HashMap<String, Label> trendingStockPriceLabels = new HashMap<>();
 
     // OOP-based chart management
     private ChartDataService chartDataService;
@@ -134,12 +144,90 @@ public class StockViewController extends ViewControllerBase
 
             // Initialize and populate the price chart
             initializePriceChart();
+
+            // Set default active button (1D)
+            if (btn1D != null) {
+                setActiveTimePeriodButton(btn1D);
+            }
+        }
+    }
+
+    /**
+     * Populates the trending stocks panel with the top 5 most valuable stocks.
+     */
+    private void populateTrendingStocks() {
+        if (trendingStocksContainer == null || modelController == null) {
+            return;
         }
 
-        // Set default active button (1D)
-        if (btn1D != null) {
-            setActiveTimePeriodButton(btn1D);
+        try {
+            // Get all stocks and sort by price (most valuable first)
+            HashMap<String, Instrument> allStocks = modelController.getAllStocks();
+            if (allStocks == null || allStocks.isEmpty()) {
+                return;
+            }
+
+            List<Instrument> topStocks = allStocks.values().stream()
+                    .sorted((s1, s2) -> s2.getCurrentPrice().compareTo(s1.getCurrentPrice()))
+                    .limit(3)
+                    .collect(Collectors.toList());
+
+            // Clear existing items
+            trendingStocksContainer.getChildren().clear();
+            trendingStockPriceLabels.clear();
+
+            // Create UI for each trending stock
+            for (Instrument instrument : topStocks) {
+                HBox stockItem = createTrendingStockItem(instrument);
+                trendingStocksContainer.getChildren().add(stockItem);
+            }
+        } catch (Exception e) {
+            System.err.println("Error populating trending stocks: " + e.getMessage());
+            e.printStackTrace();
         }
+    }
+
+    /**
+     * Creates a single trending stock item UI component.
+     */
+    private HBox createTrendingStockItem(Instrument instrument) {
+        HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+        container.getStyleClass().add("trending-stock-item");
+        container.setSpacing(8);
+
+        // Left side: Symbol and Name in VBox
+        VBox infoBox = new VBox();
+        infoBox.setSpacing(1);
+
+        Label symbolLabel = new Label(instrument.getSymbol());
+        symbolLabel.getStyleClass().add("trending-symbol");
+
+        Label nameLabel = new Label(instrument.getName());
+        nameLabel.getStyleClass().add("trending-name");
+
+        infoBox.getChildren().addAll(symbolLabel, nameLabel);
+
+        // Spacer to push price to the right
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+
+        // Right side: Price
+        Label priceLabel = new Label(String.format("%.2f", instrument.getCurrentPrice()));
+        priceLabel.getStyleClass().add("trending-price");
+
+        // Store price label reference for dynamic updates
+        trendingStockPriceLabels.put(instrument.getSymbol(), priceLabel);
+
+        container.getChildren().addAll(infoBox, spacer, priceLabel);
+
+        // Make clickable - navigate to this stock's detail view
+        container.setOnMouseClicked(event -> {
+            SelectedStockService.setSelectedStock(instrument);
+            viewSwitcher.switchTo(EView.STOCKVIEW);
+        });
+
+        return container;
     }
 
     @FXML
@@ -268,6 +356,17 @@ public class StockViewController extends ViewControllerBase
                 updateChartData();
             });
         }
+
+        // Update trending stock prices dynamically
+        Platform.runLater(() -> {
+            for (String symbol : trendingStockPriceLabels.keySet()) {
+                Instrument instrument = stocks.get(symbol);
+                if (instrument != null) {
+                    Label label = trendingStockPriceLabels.get(symbol);
+                    label.setText(String.format("%.2f", instrument.getCurrentPrice()));
+                }
+            }
+        });
     }
 
     @Override
@@ -290,6 +389,9 @@ public class StockViewController extends ViewControllerBase
         Portfolio portfolio = user.getPortfolio();
         BigDecimal balance = portfolio.getBalance();
         availableBalanceLabel.setText("Balance: $" + balance.toString());
+
+        // Populate trending stocks after modelController is initialized
+        populateTrendingStocks();
     }
 
 }

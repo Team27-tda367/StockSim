@@ -181,6 +181,38 @@
 }
 
 /* ============================================
+   TRENDING STOCKS
+   ============================================ */
+
+.trending-stock-item {
+    -fx-padding: 2 0 2 0;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.trending-stock-item:hover {
+    -fx-background-color: #f9fafb;
+    -fx-cursor: hand;
+}
+
+.trending-symbol {
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+.trending-name {
+    -fx-font-size: 9px;
+    -fx-text-fill: #6b7280;
+}
+
+.trending-price {
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+/* ============================================
    CARDS & CONTAINERS
    ============================================ */
 

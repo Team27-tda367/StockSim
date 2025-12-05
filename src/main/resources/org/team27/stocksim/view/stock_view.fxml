@@ -73,12 +73,12 @@
                             <Button fx:id="btn1Y" text="1Y" styleClass="time-period-btn" onAction="#onTimePeriodClick"/>
                         </HBox>
                     </HBox>
-                    <LineChart fx:id="priceChart" prefHeight="300" legendVisible="false" style="-fx-background-color: transparent;">
+                    <LineChart fx:id="priceChart" prefHeight="450" legendVisible="false" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                         <xAxis>
                             <NumberAxis side="BOTTOM" label="Time" autoRanging="true" tickLabelFill="#6B7280"/>
                         </xAxis>
                         <yAxis>
-                            <NumberAxis side="LEFT" label="Price (SEK)" autoRanging="true" tickLabelFill="#6B7280"/>
+                            <NumberAxis side="LEFT" label="Price (SEK)" autoRanging="true" tickLabelFill="#6B7280" forceZeroInRange="false" minorTickVisible="false"/>
                         </yAxis>
                     </LineChart>
                 </VBox>
@@ -92,8 +92,8 @@
                     <HBox alignment="CENTER_LEFT" styleClass="panel-header">
                         <Label text="Top Trending Stocks" styleClass="panel-title"/>
                     </HBox>
-                    <VBox styleClass="panel-body">
-                        <Region style="-fx-background-color: transparent;" minHeight="120"/>
+                    <VBox fx:id="trendingStocksContainer" styleClass="panel-body" spacing="2">
+                        <!-- Trending stocks will be populated here dynamically -->
                     </VBox>
                 </VBox>
 

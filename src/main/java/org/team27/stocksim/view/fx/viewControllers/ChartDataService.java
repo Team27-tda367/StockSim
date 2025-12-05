@@ -42,14 +42,41 @@ public class ChartDataService {
         // Get the most recent points
         int startIndex = Math.max(0, allPoints.size() - pointsToDisplay);
 
-        // Add data points to the series
-        for (int i = startIndex; i < allPoints.size(); i++) {
+        // Calculate sampling interval to avoid overcrowding
+        int samplingInterval = calculateSamplingInterval(pointsToDisplay, timePeriod);
+
+        // Add sampled data points to the series
+        int xIndex = 0;
+        for (int i = startIndex; i < allPoints.size(); i += samplingInterval) {
             PricePoint point = allPoints.get(i);
             series.getData().add(
-                    new XYChart.Data<>(i - startIndex, point.getPrice().doubleValue()));
+                    new XYChart.Data<>(xIndex++, point.getPrice().doubleValue()));
         }
 
         return series;
+    }
+
+    /**
+     * Calculate sampling interval based on time period to prevent overcrowding.
+     * Larger time periods will have fewer points displayed.
+     * 
+     * @param totalPoints Total number of points in the range
+     * @param timePeriod  The time period being displayed
+     * @return The interval at which to sample points (1 = every point, 2 = every
+     *         other point, etc.)
+     */
+    private int calculateSamplingInterval(int totalPoints, ChartTimePeriod timePeriod) {
+        // Target maximum points to display on chart for good visibility
+        int maxDisplayPoints = switch (timePeriod) {
+            case ONE_DAY -> 100; // Show more detail for short periods
+            case ONE_WEEK -> 80;
+            case ONE_MONTH -> 60;
+            case ONE_YEAR -> 50; // Show fewer points for long periods
+        };
+
+        // Calculate interval needed to reduce points to target
+        int interval = Math.max(1, totalPoints / maxDisplayPoints);
+        return interval;
     }
 
     /**
