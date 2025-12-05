@@ -67,7 +67,7 @@ public class SimController implements ISimController {
 
         if (availableQuantity < quantity) {
             System.out.println("Insufficient stock quantity to sell.");
-            return;
+            quantity = availableQuantity;
         }
 
         Order sellOrder = new Order(Order.Side.SELL, stockSymbol, price, quantity, user.getId());
