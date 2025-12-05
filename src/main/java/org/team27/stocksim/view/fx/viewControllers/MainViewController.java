@@ -5,6 +5,7 @@ import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.SelectedStockService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Platform;
@@ -22,19 +23,18 @@ import javafx.scene.layout.Region;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 
-import org.team27.stocksim.model.instruments.Instrument;
-import org.team27.stocksim.model.instruments.Stock;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.User;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 
 public class MainViewController extends ViewControllerBase 
         implements ViewAdapter.PriceUpdateListener {
 
     @Override
     protected void onInit() {
+        initCategories(modelController.getAllCategories());
+
         viewAdapter.addPriceUpdateListener(this);
         stockListView.setItems(stockList);
 
@@ -49,6 +49,23 @@ public class MainViewController extends ViewControllerBase
         Portfolio portfolio = user.getPortfolio();
         BigDecimal balance = portfolio.getBalance();
         availableBalanceLabel.setText("Balance: $" + balance.toString());
+    }
+
+    @FXML private HBox categoryBox;
+    @FXML private Button btnAll;
+    @FXML private Region spacer;
+
+    private void initCategories(ArrayList<String> categories) {
+        // Insert enum buttons right after the "All" button
+        int insertIndex = categoryBox.getChildren().indexOf(btnAll) + 1;
+
+        for (String c : categories) {
+            Button b = new Button(c);
+            b.getStyleClass().add("btn-secondary");
+
+            categoryBox.getChildren().add(insertIndex, b);
+            insertIndex++; // Move the insertion point
+        }
     }
 
     @FXML

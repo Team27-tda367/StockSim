@@ -1,5 +1,6 @@
 package org.team27.stocksim.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.team27.stocksim.model.instruments.Instrument;
@@ -12,6 +13,8 @@ public interface ISimController {
     void addObserver(ModelObserver obs);
 
     void removeObserver(ModelObserver obs);
+
+    ArrayList<String> getAllCategories();
 
     HashMap<String, Instrument> getAllStocks();
 

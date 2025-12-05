@@ -2,10 +2,7 @@ package org.team27.stocksim.model;
 
 import org.team27.stocksim.model.clock.GameClock;
 import org.team27.stocksim.model.clock.GameTicker;
-import org.team27.stocksim.model.instruments.Instrument;
-import org.team27.stocksim.model.instruments.InstrumentFactory;
-import org.team27.stocksim.model.instruments.Stock;
-import org.team27.stocksim.model.instruments.StockFactory;
+import org.team27.stocksim.model.instruments.*;
 import org.team27.stocksim.model.market.*;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.*;
@@ -186,6 +183,14 @@ public class StockSim implements ModelSubject {
     }
 
     // Getters
+    public ArrayList<String> getCategories() {
+        ArrayList<String> categoryLabels = new ArrayList<>();
+        for (ECategory c : ECategory.values()) {
+            categoryLabels.add(c.getLabel());
+        }
+        return categoryLabels;
+    }
+
     public HashMap<String, Instrument> getStocks() {
         return stocks;
     }

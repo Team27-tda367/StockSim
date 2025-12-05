@@ -37,14 +37,11 @@
         <TextField fx:id="searchField" promptText="Search for a stock..." styleClass="input-field"/>
 
         <!-- Filter Buttons -->
-        <HBox alignment="CENTER_LEFT" styleClass="spacing-medium">
-            <Button text="All" styleClass="btn-highlighted"/>
-            <Button text="Technology" styleClass="btn-secondary"/>
-            <Button text="Finance" styleClass="btn-secondary"/>
-            <Button text="Consumer" styleClass="btn-secondary"/>
-            <Button text="Entertainment" styleClass="btn-secondary"/>
-            <Button text="Aviation" styleClass="btn-secondary"/>
-            <Button text="Semiconductors" styleClass="btn-secondary"/>
+        <HBox fx:id="categoryBox" alignment="CENTER_LEFT" styleClass="spacing-medium">
+            <Button fx:id="btnAll" text="All" styleClass="btn-highlighted"/>
+
+            <!-- Enum-generated category buttons will be inserted here -->
+
             <Region HBox.hgrow="SOMETIMES"/>
             <Button text="Show favorites only" styleClass="btn-secondary"/>
         </HBox>

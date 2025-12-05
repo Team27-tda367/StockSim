@@ -1,6 +1,7 @@
 package org.team27.stocksim.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.team27.stocksim.model.SimSetup;
@@ -33,6 +34,11 @@ public class SimController implements ISimController {
 
     public void removeObserver(ModelObserver obs) {
         model.removeObserver(obs);
+    }
+
+    @Override
+    public ArrayList<String> getAllCategories() {
+        return model.getCategories();
     }
 
     @Override
