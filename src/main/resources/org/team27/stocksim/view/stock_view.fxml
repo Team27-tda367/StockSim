@@ -124,7 +124,9 @@
 
                     <Label text="Quantity" styleClass="label-title"/>
 
-                    <TextField text="1" prefHeight="24"/>
+                    <TextField fx:id="quantityField" text="1" prefHeight="24" 
+                               onKeyTyped="#validateNumberInput" 
+                               promptText="Enter quantity"/>
 
                     <VBox styleClass="info-box">
                         <HBox>
@@ -136,7 +138,7 @@
                         <HBox>
                             <Label text="Qty" styleClass="info-header"/>
                             <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="1" styleClass="info-label"/>
+                            <Label fx:id="orderQuantityLabel" styleClass="info-label"/>
                         </HBox>
 
                         <HBox>

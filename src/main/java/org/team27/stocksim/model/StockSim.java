@@ -75,6 +75,14 @@ public class StockSim implements ModelSubject {
         // size, tick size, etc)
         // Track the order ID to trader ID mapping
         orderIdToTraderId.put(order.getOrderId(), order.getTraderId());
+
+        // Record order in user's history (only for Users, not Bots)
+        Trader trader = traders.get(order.getTraderId());
+        if (trader instanceof User) {
+            ((User) trader).getOrderHistory().addOrder(order);
+            System.out.println(((User) trader).getOrderHistory().getAllOrders().size() + " orders in history");
+        }
+
         processOrder(order);
     } // TODO: seperate order placing logic from processing logic
 
@@ -124,6 +132,17 @@ public class StockSim implements ModelSubject {
 
             sellerPortfolio.removeStock(trade.getStockSymbol(), trade.getQuantity());
             buyerPortfolio.addStock(trade.getStockSymbol(), trade.getQuantity());
+
+            // Record trade in user histories (only for Users, not Bots)
+            if (buyer instanceof User) {
+                ((User) buyer).getOrderHistory().addTrade(trade);
+                System.out.println(((User) buyer).getOrderHistory().getAllTrades().size() + " trades in history");
+            }
+            if (seller instanceof User) {
+                ((User) seller).getOrderHistory().addTrade(trade);
+                System.out.println(
+                        ((User) seller).getOrderHistory().getAllTrades().size() + "(seller) trades in history");
+            }
 
             notifyTradeSettled();
 
@@ -287,7 +306,7 @@ public class StockSim implements ModelSubject {
         new Thread(() -> {
             try {
                 Thread.sleep(1000); // 1 second
-                clock.setSpeed(100);
+                clock.setSpeed(10);
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

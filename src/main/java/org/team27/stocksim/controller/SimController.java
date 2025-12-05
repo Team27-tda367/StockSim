@@ -8,6 +8,7 @@ import org.team27.stocksim.model.SimSetup;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.market.Order;
+import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.observer.ModelObserver;
 
@@ -52,11 +53,17 @@ public class SimController implements ISimController {
     }
 
     @Override
-    public void buyStock(String stockSymbol, int quantity) {
+    public void buyStock(String stockSymbol, int quantity, BigDecimal price) {
 
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, quantity, BigDecimal.ZERO, quantity,
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, quantity, price, quantity,
                 model.getCurrentUser().getId());
         model.placeOrder(buyOrder);
+    }
+
+    @Override
+    public OrderHistory getOrderHistory() {
+        User user = model.getCurrentUser();
+        return user != null ? user.getOrderHistory() : new OrderHistory();
     }
 
 }

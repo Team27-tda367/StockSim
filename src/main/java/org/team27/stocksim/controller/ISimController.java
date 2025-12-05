@@ -1,9 +1,11 @@
 package org.team27.stocksim.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.observer.ModelObserver;
 
@@ -22,5 +24,7 @@ public interface ISimController {
 
     User getUser();
 
-    void buyStock(String stockSymbol, int quantity);
+    void buyStock(String stockSymbol, int quantity, BigDecimal price);
+
+    OrderHistory getOrderHistory();
 }

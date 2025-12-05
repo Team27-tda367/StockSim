@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
@@ -43,10 +44,25 @@ public class StockViewController extends ViewControllerBase
     private Label availableBalanceLabel;
 
     @FXML
+    private TextField quantityField;
+
+    @FXML
+    private Label orderQuantityLabel;
+
+    @FXML
+    private void validateNumberInput() {
+        String text = quantityField.getText();
+        if (!text.matches("\\d*")) {
+            quantityField.setText(text.replaceAll("[^\\d]", ""));
+        }
+    }
+
+    @FXML
     private void handleBuy(ActionEvent event) {
         // Hantera köp-logik här
-        int quantity = 1; // Exempel: köp 1 aktie - annars hämta från fält
-        modelController.buyStock(stock.getSymbol(), quantity);
+        int quantity = Integer.parseInt(quantityField.getText()); // Hämta kvantitet från fältet
+        System.out.println("Buy button clicked for stock: " + stock.getSymbol() + " Quantity: " + quantity);
+        modelController.buyStock(stock.getSymbol(), quantity, stock.getCurrentPrice());
     }
 
     @FXML
@@ -72,6 +88,13 @@ public class StockViewController extends ViewControllerBase
 
     @FXML
     private void initialize() {
+        // Bind orderQuantityLabel to quantityField text
+        if (quantityField != null && orderQuantityLabel != null) {
+            quantityField.textProperty().addListener((observable, oldValue, newValue) -> {
+                orderQuantityLabel.setText(newValue);
+            });
+        }
+
         // Hämta vald aktie från service
         stock = SelectedStockService.getSelectedStock();
         System.out.println("Selected stock in StockViewController: " + (stock != null ? stock.getSymbol() : "null"));
