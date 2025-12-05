@@ -31,8 +31,17 @@ public class ViewSwitcher {
             ViewControllerBase controller = loader.getController();
             controller.init(modelController, this, viewAdapter);
 
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+            // Check if we already have a scene, and reuse it to preserve window state
+            Scene currentScene = stage.getScene();
+            if (currentScene != null) {
+                // Just change the root of the existing scene
+                currentScene.setRoot(root);
+            } else {
+                // First time, create a new scene
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            }
+
             stage.show();
 
         } catch (Exception e) {

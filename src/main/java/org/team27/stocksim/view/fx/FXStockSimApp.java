@@ -36,6 +36,7 @@ public class FXStockSimApp extends Application {
         viewSwitcher.switchTo(EView.MAINVIEW);
 
         primaryStage.setTitle("Stocksim");
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 }
