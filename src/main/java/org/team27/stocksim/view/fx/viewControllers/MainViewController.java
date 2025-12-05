@@ -55,16 +55,42 @@ public class MainViewController extends ViewControllerBase
     @FXML private Button btnAll;
     @FXML private Region spacer;
 
+    private final ArrayList<Button> categoryButtons = new ArrayList<>();
+
     private void initCategories(ArrayList<String> categories) {
+
+        // Add "All" button to highlight-selector
+        categoryButtons.add(btnAll);
+
         // Insert enum buttons right after the "All" button
         int insertIndex = categoryBox.getChildren().indexOf(btnAll) + 1;
 
         for (String c : categories) {
             Button b = new Button(c);
             b.getStyleClass().add("btn-secondary");
-
             categoryBox.getChildren().add(insertIndex, b);
+
+            categoryButtons.add(b);
             insertIndex++; // Move the insertion point
+
+            // Add click handler
+            b.setOnAction(event -> highlight(b));
+        }
+
+        // Add click handler for the All button too
+        btnAll.setOnAction(event -> highlight(btnAll));
+    }
+
+    /** Highlights the selected button and resets others. */
+    private void highlight(Button selected) {
+        for (Button b : categoryButtons) {
+            b.getStyleClass().removeAll("btn-secondary", "btn-highlighted");
+
+            if (b == selected) {
+                b.getStyleClass().add("btn-highlighted");
+            } else {
+                b.getStyleClass().add("btn-secondary");
+            }
         }
     }
 
