@@ -51,7 +51,13 @@ public class StockViewController extends ViewControllerBase
     private TextField quantityField;
 
     @FXML
+    private TextField priceField;
+
+    @FXML
     private Label orderQuantityLabel;
+
+    @FXML
+    private Label orderTotalLabel;
 
     @FXML
     private void validateNumberInput() {
@@ -59,22 +65,87 @@ public class StockViewController extends ViewControllerBase
         if (!text.matches("\\d*")) {
             quantityField.setText(text.replaceAll("[^\\d]", ""));
         }
+        updateOrderTotal();
+    }
+
+    @FXML
+    private void validatePriceInput() {
+        String text = priceField.getText();
+        // Allow digits and one decimal point
+        if (!text.matches("\\d*\\.?\\d*")) {
+            priceField.setText(text.replaceAll("[^\\d.]", ""));
+            // Remove extra decimal points (keep only the first one)
+            int firstDot = priceField.getText().indexOf('.');
+            if (firstDot != -1) {
+                String beforeDot = priceField.getText().substring(0, firstDot + 1);
+                String afterDot = priceField.getText().substring(firstDot + 1).replace(".", "");
+                priceField.setText(beforeDot + afterDot);
+            }
+        }
+        updateOrderTotal();
+    }
+
+    private void updateOrderTotal() {
+        try {
+            String quantityText = quantityField.getText();
+            String priceText = priceField.getText();
+
+            if (!quantityText.isEmpty() && !priceText.isEmpty()) {
+                int quantity = Integer.parseInt(quantityText);
+                BigDecimal price = new BigDecimal(priceText);
+                BigDecimal total = price.multiply(BigDecimal.valueOf(quantity));
+
+                orderPriceLabel.setText(price + " SEK");
+                orderTotalLabel.setText(String.format("%.2f SEK", total));
+            }
+        } catch (NumberFormatException e) {
+            // Ignore invalid input
+        }
     }
 
     @FXML
     private void handleBuy(ActionEvent event) {
-        // Hantera köp-logik här
-        int quantity = Integer.parseInt(quantityField.getText()); // Hämta kvantitet från fältet
-        System.out.println("Buy button clicked for stock: " + stock.getSymbol() + " Quantity: " + quantity);
-        modelController.buyStock(stock.getSymbol(), quantity, stock.getCurrentPrice());
+        try {
+            int quantity = Integer.parseInt(quantityField.getText());
+            String priceText = priceField.getText();
+            if (priceText.isEmpty()) {
+                return;
+            }
+            BigDecimal price = new BigDecimal(priceText);
+
+            System.out.println("Buy button clicked for stock: " + stock.getSymbol() + " Quantity: " + quantity
+                    + " Price: " + price);
+            modelController.buyStock(stock.getSymbol(), quantity, price);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid quantity or price");
+        }
     }
 
     @FXML
     private void handleSell(ActionEvent event) {
-        // Hantera sälj-logik här
-        System.out.println("Sell button clicked for stock: " + stock.getSymbol());
-        // Du kan lägga till sälj-logik som att öppna en sälj-dialog eller direkt
-        // genomföra försäljningen
+        try {
+            int quantity = Integer.parseInt(quantityField.getText());
+            String priceText = priceField.getText();
+            if (priceText.isEmpty()) {
+                return;
+            }
+            BigDecimal price = new BigDecimal(priceText);
+
+            System.out.println("Sell button clicked for stock: " + stock.getSymbol() + " Quantity: " + quantity
+                    + " Price: " + price);
+            modelController.sellStock(stock.getSymbol(), quantity, price);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid quantity or price");
+        }
+    }
+
+    @FXML
+    private void handleSetMarketPrice(ActionEvent event) {
+        if (stock != null && priceField != null) {
+            BigDecimal currentPrice = stock.getCurrentPrice();
+            priceField.setText(currentPrice.toString());
+            updateOrderTotal();
+        }
     }
 
     @FXML
@@ -115,6 +186,14 @@ public class StockViewController extends ViewControllerBase
             quantityField.textProperty().addListener((observable, oldValue, newValue) -> {
                 orderQuantityLabel.setText(newValue);
             });
+            orderQuantityLabel.setText(quantityField.getText());
+        }
+
+        // Bind price field changes to update order summary
+        if (priceField != null) {
+            priceField.textProperty().addListener((observable, oldValue, newValue) -> {
+                updateOrderTotal();
+            });
         }
 
         // Hämta vald aktie från service
@@ -134,6 +213,12 @@ public class StockViewController extends ViewControllerBase
             if (priceLabel != null) {
                 priceLabel.setText(price.toString());
             }
+
+            // Initialize price field with current price
+            if (priceField != null) {
+                priceField.setText(price.toString());
+            }
+
             if (orderPriceLabel != null) {
                 orderPriceLabel.setText(price + " SEK");
             }
@@ -185,6 +270,9 @@ public class StockViewController extends ViewControllerBase
             System.err.println("Error populating trending stocks: " + e.getMessage());
             e.printStackTrace();
         }
+
+        // Initialize order total
+        updateOrderTotal();
     }
 
     /**
@@ -351,9 +439,13 @@ public class StockViewController extends ViewControllerBase
             BigDecimal newPrice = stock.getCurrentPrice();
             Platform.runLater(() -> {
                 priceLabel.setText(newPrice.toString());
-                orderPriceLabel.setText(newPrice + " SEK");
+                // Update price field if user hasn't entered a custom price
+                if (priceField != null && priceField.getText().isEmpty()) {
+                    priceField.setText(newPrice.toString());
+                }
                 // Update the chart with new price data
                 updateChartData();
+                updateOrderTotal();
             });
         }
 

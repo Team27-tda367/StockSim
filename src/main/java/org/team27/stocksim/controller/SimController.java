@@ -55,9 +55,17 @@ public class SimController implements ISimController {
     @Override
     public void buyStock(String stockSymbol, int quantity, BigDecimal price) {
 
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, quantity, price, quantity,
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, price, quantity,
                 model.getCurrentUser().getId());
         model.placeOrder(buyOrder);
+    }
+
+    @Override
+    public void sellStock(String stockSymbol, int quantity, BigDecimal price) {
+
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, price, quantity,
+                model.getCurrentUser().getId());
+        model.placeOrder(sellOrder);
     }
 
     @Override

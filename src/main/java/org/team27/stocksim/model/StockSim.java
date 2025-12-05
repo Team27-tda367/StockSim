@@ -130,8 +130,8 @@ public class StockSim implements ModelSubject {
         if (buyerPortfolio.withdraw(tradeValue)) {
             sellerPortfolio.deposit(tradeValue);
 
-            sellerPortfolio.removeStock(trade.getStockSymbol(), trade.getQuantity());
-            buyerPortfolio.addStock(trade.getStockSymbol(), trade.getQuantity());
+            sellerPortfolio.removeStock(trade.getStockSymbol(), trade.getQuantity(), trade);
+            buyerPortfolio.addStock(trade.getStockSymbol(), trade.getQuantity(), trade.getPrice(), trade);
 
             // Record trade in user histories (only for Users, not Bots)
             if (buyer instanceof User) {

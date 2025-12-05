@@ -42,8 +42,8 @@ class TradeSettlementTest {
     @Test
     void testSimpleTradeSettlement() {
         // Arrange: Create matching orders
-        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, 1, money("100.00"), 10, sellerTraderId);
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, 2, money("100.00"), 10, buyerTraderId);
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, money("100.00"), 10, sellerTraderId);
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, money("100.00"), 10, buyerTraderId);
 
         Portfolio buyerPortfolio = stockSim.getTraders().get(buyerTraderId).getPortfolio();
         Portfolio sellerPortfolio = stockSim.getTraders().get(sellerTraderId).getPortfolio();
@@ -75,8 +75,8 @@ class TradeSettlementTest {
     @Test
     void testPartialTradeSettlement() {
         // Arrange: Create partially matching orders
-        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, 1, money("100.00"), 50, sellerTraderId);
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, 2, money("100.00"), 30, buyerTraderId);
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, money("100.00"), 50, sellerTraderId);
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, money("100.00"), 30, buyerTraderId);
 
         Portfolio buyerPortfolio = stockSim.getTraders().get(buyerTraderId).getPortfolio();
         Portfolio sellerPortfolio = stockSim.getTraders().get(sellerTraderId).getPortfolio();
@@ -108,10 +108,10 @@ class TradeSettlementTest {
         stockSim.getTraders().get(seller2Id).getPortfolio().addStock(stockSymbol, 500);
         stockSim.getTraders().get(seller3Id).getPortfolio().addStock(stockSymbol, 500);
 
-        Order sellOrder1 = new Order(Order.Side.SELL, stockSymbol, 1, money("98.00"), 20, sellerTraderId);
-        Order sellOrder2 = new Order(Order.Side.SELL, stockSymbol, 2, money("99.00"), 30, seller2Id);
-        Order sellOrder3 = new Order(Order.Side.SELL, stockSymbol, 3, money("100.00"), 40, seller3Id);
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, 4, money("100.00"), 70, buyerTraderId);
+        Order sellOrder1 = new Order(Order.Side.SELL, stockSymbol, money("98.00"), 20, sellerTraderId);
+        Order sellOrder2 = new Order(Order.Side.SELL, stockSymbol, money("99.00"), 30, seller2Id);
+        Order sellOrder3 = new Order(Order.Side.SELL, stockSymbol, money("100.00"), 40, seller3Id);
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, money("100.00"), 70, buyerTraderId);
 
         Portfolio buyerPortfolio = stockSim.getTraders().get(buyerTraderId).getPortfolio();
         BigDecimal buyerInitialBalance = buyerPortfolio.getBalance();
@@ -145,8 +145,8 @@ class TradeSettlementTest {
         poorBuyerPortfolio.withdraw(money("9900.00"));
         BigDecimal poorBuyerInitialBalance = poorBuyerPortfolio.getBalance(); // Should be 100
 
-        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, 1, money("50.00"), 10, sellerTraderId);
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, 2, money("50.00"), 10, poorBuyerId);
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, money("50.00"), 10, sellerTraderId);
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, money("50.00"), 10, poorBuyerId);
 
         Portfolio sellerPortfolio = stockSim.getTraders().get(sellerTraderId).getPortfolio();
         BigDecimal sellerInitialBalance = sellerPortfolio.getBalance();
@@ -169,8 +169,8 @@ class TradeSettlementTest {
         Portfolio sellerPortfolio = stockSim.getTraders().get(sellerTraderId).getPortfolio();
         int initialStock = sellerPortfolio.getStockQuantity(stockSymbol);
 
-        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, 1, money("100.00"), 100, sellerTraderId);
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, 2, money("100.00"), 100, buyerTraderId);
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, money("100.00"), 100, sellerTraderId);
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, money("100.00"), 100, buyerTraderId);
 
         // Act
         stockSim.placeOrder(sellOrder);
@@ -186,8 +186,8 @@ class TradeSettlementTest {
         Portfolio buyerPortfolio = stockSim.getTraders().get(buyerTraderId).getPortfolio();
         assertEquals(0, buyerPortfolio.getStockQuantity(stockSymbol));
 
-        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, 1, money("100.00"), 50, sellerTraderId);
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, 2, money("100.00"), 50, buyerTraderId);
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, money("100.00"), 50, sellerTraderId);
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, money("100.00"), 50, buyerTraderId);
 
         // Act
         stockSim.placeOrder(sellOrder);
@@ -209,8 +209,8 @@ class TradeSettlementTest {
         BigDecimal tradePrice = money("125.50");
         int quantity = 25;
 
-        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, 1, tradePrice, quantity, sellerTraderId);
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, 2, tradePrice, quantity, buyerTraderId);
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, tradePrice, quantity, sellerTraderId);
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, tradePrice, quantity, buyerTraderId);
 
         // Act
         stockSim.placeOrder(sellOrder);
@@ -235,8 +235,8 @@ class TradeSettlementTest {
         BigDecimal buyerInitial = buyerPortfolio.getBalance();
         BigDecimal sellerInitial = sellerPortfolio.getBalance();
 
-        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, 1, money("105.00"), 10, sellerTraderId);
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, 2, money("100.00"), 10, buyerTraderId);
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, money("105.00"), 10, sellerTraderId);
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, money("100.00"), 10, buyerTraderId);
 
         // Act
         stockSim.placeOrder(sellOrder);
@@ -258,14 +258,14 @@ class TradeSettlementTest {
         BigDecimal buyerInitial = buyerPortfolio.getBalance();
 
         // Act: First trade
-        Order sellOrder1 = new Order(Order.Side.SELL, stockSymbol, 1, money("100.00"), 10, sellerTraderId);
-        Order buyOrder1 = new Order(Order.Side.BUY, stockSymbol, 2, money("100.00"), 10, buyerTraderId);
+        Order sellOrder1 = new Order(Order.Side.SELL, stockSymbol, money("100.00"), 10, sellerTraderId);
+        Order buyOrder1 = new Order(Order.Side.BUY, stockSymbol, money("100.00"), 10, buyerTraderId);
         stockSim.placeOrder(sellOrder1);
         stockSim.placeOrder(buyOrder1);
 
         // Second trade
-        Order sellOrder2 = new Order(Order.Side.SELL, stockSymbol, 3, money("101.00"), 15, sellerTraderId);
-        Order buyOrder2 = new Order(Order.Side.BUY, stockSymbol, 4, money("101.00"), 15, buyerTraderId);
+        Order sellOrder2 = new Order(Order.Side.SELL, stockSymbol, money("101.00"), 15, sellerTraderId);
+        Order buyOrder2 = new Order(Order.Side.BUY, stockSymbol, money("101.00"), 15, buyerTraderId);
         stockSim.placeOrder(sellOrder2);
         stockSim.placeOrder(buyOrder2);
 
@@ -286,8 +286,8 @@ class TradeSettlementTest {
         BigDecimal buyerInitial = buyerPortfolio.getBalance();
         BigDecimal sellerInitial = sellerPortfolio.getBalance();
 
-        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, 1, money("100.00"), 20, buyerTraderId);
-        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, 2, money("100.00"), 20, sellerTraderId);
+        Order buyOrder = new Order(Order.Side.BUY, stockSymbol, money("100.00"), 20, buyerTraderId);
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, money("100.00"), 20, sellerTraderId);
 
         // Act: Buy order first
         stockSim.placeOrder(buyOrder);
@@ -301,3 +301,4 @@ class TradeSettlementTest {
         assertEquals(980, sellerPortfolio.getStockQuantity(stockSymbol));
     }
 }
+
