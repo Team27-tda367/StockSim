@@ -3,6 +3,8 @@ package org.team27.stocksim.view.fx.viewControllers;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.SelectedStockService;
+import org.team27.stocksim.view.fx.chart.ChartDataService;
+import org.team27.stocksim.view.fx.chart.ChartTimePeriod;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

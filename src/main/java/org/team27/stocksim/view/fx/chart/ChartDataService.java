@@ -1,4 +1,4 @@
-package org.team27.stocksim.view.fx.viewControllers;
+package org.team27.stocksim.view.fx.chart;
 
 import org.team27.stocksim.model.instruments.PriceHistory;
 import org.team27.stocksim.model.instruments.PricePoint;

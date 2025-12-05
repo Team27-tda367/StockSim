@@ -1,4 +1,4 @@
-package org.team27.stocksim.view.fx.viewControllers;
+package org.team27.stocksim.view.fx.chart;
 
 /**
  * Enum representing different time periods for chart display.
