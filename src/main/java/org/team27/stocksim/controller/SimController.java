@@ -62,9 +62,15 @@ public class SimController implements ISimController {
 
     @Override
     public void sellStock(String stockSymbol, int quantity, BigDecimal price) {
+        User user = model.getCurrentUser();
+        int availableQuantity = user.getPortfolio().getStockQuantity(stockSymbol);
 
-        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, price, quantity,
-                model.getCurrentUser().getId());
+        if (availableQuantity < quantity) {
+            System.out.println("Insufficient stock quantity to sell.");
+            return;
+        }
+
+        Order sellOrder = new Order(Order.Side.SELL, stockSymbol, price, quantity, user.getId());
         model.placeOrder(sellOrder);
     }
 
