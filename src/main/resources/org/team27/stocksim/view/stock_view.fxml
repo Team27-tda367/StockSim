@@ -62,7 +62,7 @@
                 </BorderPane>
 
                 <!-- Price History Chart -->
-                <VBox spacing="12">
+                <VBox spacing="12" styleClass="chart-section">
                     <HBox alignment="CENTER_LEFT">
                         <Label text="Price History" styleClass="chart-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
