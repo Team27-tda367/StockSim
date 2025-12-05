@@ -104,8 +104,9 @@ public class RandomStrategy implements BotStrategy {
     }
 
     private BigDecimal randomPrice(BigDecimal basePrice) {
-        // Create a variation of ±5% from the base price
-        double variationPercent = (random.nextDouble() - 0.5) * 0.1; // -5% to +5%
+        // Create a variation using normal distribution (mean=0, std dev=0.5%)
+        // This gives approximately 95% of prices within ±1% of base price
+        double variationPercent = random.nextGaussian() * 0.005;
         BigDecimal variation = basePrice.multiply(BigDecimal.valueOf(variationPercent));
         BigDecimal newPrice = basePrice.add(variation);
 
