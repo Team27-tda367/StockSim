@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.team27.stocksim.model.SimSetup;
+import org.team27.stocksim.SimSetup;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.market.Order;
