@@ -27,7 +27,7 @@
             <Button text="Create Stock" styleClass="btn-ghost" onAction="#onExample"/> -->
             <Region HBox.hgrow="ALWAYS"/>
             <VBox alignment="CENTER_RIGHT" styleClass="spacing-small">
-                <Label fx:id="availableBalanceLabel" text="Available Balance" styleClass="text-small, text-muted"/>
+                <Label fx:id="availableBalanceLabel" text="Available Balance" styleClass="title-small"/>
             </VBox>
         </HBox>
     </top>

@@ -39,6 +39,10 @@ public class PortfolioViewController extends ViewControllerBase
         // Register for portfolio change events
         viewAdapter.addPortfolioChangedListener(this);
         viewAdapter.addTradeSettledListener(this);
+        User user = modelController.getUser();
+        Portfolio portfolio = user.getPortfolio();
+        BigDecimal balance = portfolio.getBalance();
+        availableBalanceLabel.setText("Balance: $" + balance.toString());
 
         // Set up ListViews
         if (positionsListView != null) {

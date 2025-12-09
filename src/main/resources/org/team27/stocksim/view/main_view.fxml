@@ -15,7 +15,7 @@
 
         <Label text="StonkSim" styleClass="logo"/>
 
-        <Button text="Home" styleClass="btn-ghost" onAction="#onMainView"/>
+        <Button text="Home" styleClass="btn-highlighted" onAction="#onMainView"/>
         <Button text="Portfolio" styleClass="btn-ghost" onAction="#onPortfolioView"/>
         <!-- 
         <Button text="Create Stock" styleClass="btn-ghost" onAction="#onExample"/> -->

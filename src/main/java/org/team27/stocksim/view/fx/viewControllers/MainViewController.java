@@ -26,6 +26,7 @@ import javafx.geometry.Pos;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.User;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 public class MainViewController extends ViewControllerBase 
@@ -48,7 +49,8 @@ public class MainViewController extends ViewControllerBase
         User user = modelController.getUser();
         Portfolio portfolio = user.getPortfolio();
         BigDecimal balance = portfolio.getBalance();
-        availableBalanceLabel.setText("Balance: $" + balance.toString());
+        availableBalanceLabel.setText("Balance: $" + String.format("%.2f", balance));
+
     }
 
     @FXML private HBox categoryBox;
@@ -150,6 +152,7 @@ public class MainViewController extends ViewControllerBase
         private final Label symbol;
         private final Label meta;
         private final Label price;
+
         private final Button actionButton;
 
         public StockListCell() {
@@ -166,6 +169,7 @@ public class MainViewController extends ViewControllerBase
             // Create a spacer region to push the price and button to the right
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
+                        
 
             // Trade button
             actionButton = new Button("Trade");
