@@ -28,8 +28,7 @@ public class StockSim implements ModelSubject {
     HashMap<String, Instrument> stocks;
     InstrumentFactory stockFactory;
     HashMap<String, Trader> traders;
-    TraderFactory userFactory;
-    TraderFactory botFactory;
+    TraderFactoryRegistry traderFactoryRegistry;
     private MatchingEngine matchingEngine;
     private HashMap<String, OrderBook> orderBooks;
     private HashMap<Integer, String> orderIdToTraderId; // maps order ID to trader ID
@@ -45,8 +44,9 @@ public class StockSim implements ModelSubject {
         // Trader related inits
         orderBooks = new HashMap<>();
         traders = new HashMap<>();
-        userFactory = new UserFactory();
-        botFactory = new BotFactory();
+        traderFactoryRegistry = new TraderFactoryRegistry();
+        traderFactoryRegistry.register(TraderType.USER, new UserFactory());
+        traderFactoryRegistry.register(TraderType.BOT, new BotFactory());
         matchingEngine = new MatchingEngine();
         orderIdToTraderId = new HashMap<>();
         completedTrades = new ArrayList<>();
@@ -184,8 +184,7 @@ public class StockSim implements ModelSubject {
         if (traders.containsKey(highId)) {
             System.out.println("userID already exists");
         } else {
-            Portfolio portfolio = createPortfolio(highId);
-            Trader user = userFactory.createTrader(highId, name, portfolio);
+            Trader user = traderFactoryRegistry.createTrader(TraderType.USER, highId, name);
             traders.put(highId, user);
         }
     }
@@ -195,8 +194,7 @@ public class StockSim implements ModelSubject {
         if (traders.containsKey(highId)) {
             System.out.println("botID already exists");
         } else {
-            Portfolio portfolio = createPortfolio(highId);
-            Trader bot = botFactory.createTrader(highId, name, portfolio);
+            Trader bot = traderFactoryRegistry.createTrader(TraderType.BOT, highId, name);
             traders.put(highId, bot);
         }
     }
