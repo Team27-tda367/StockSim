@@ -2,6 +2,7 @@ package org.team27.stocksim.model.users.bot;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -37,31 +38,32 @@ public class RandomStrategy implements BotStrategy {
     }
 
     @Override
-    public void decide(StockSim model, Bot bot) {
-        // 1Determine if we should buy or sell anything in this tick
+    public List<Order> decide(StockSim model, Bot bot) {
+        // Determine if we should buy or sell anything in this tick
         Action action = randomAction();
 
         if (action == Action.NONE) {
-            return;
+            return Collections.emptyList();
         }
         if (action == Action.SELL) {
-            sell(model, bot);
+            return sell(model, bot);
         } else if (action == Action.BUY) {
-            buy(model, bot);
+            return buy(model, bot);
         }
 
+        return Collections.emptyList();
     }
 
-    private void sell(StockSim model, Bot bot) {
+    private List<Order> sell(StockSim model, Bot bot) {
         // Check if the bot owns any stocks
         if (bot.getPortfolio().isEmpty()) {
-            return;
+            return Collections.emptyList();
         }
 
         // Get the stocks the bot owns
         HashMap<String, Integer> holdings = new HashMap<>(bot.getPortfolio().getStockHoldings());
         if (holdings.isEmpty()) {
-            return;
+            return Collections.emptyList();
         }
 
         // Pick a random stock from the bot's holdings
@@ -71,13 +73,13 @@ public class RandomStrategy implements BotStrategy {
         // Get the instrument from the market
         Instrument stock = model.getStocks().get(symbol);
         if (stock == null) {
-            return;
+            return Collections.emptyList();
         }
 
         // Get the maximum quantity the bot can sell
         int maxAvailableQuantity = holdings.get(symbol);
         if (maxAvailableQuantity <= 0) {
-            return;
+            return Collections.emptyList();
         }
 
         // Determine quantity to sell (can't sell more than owned)
@@ -85,14 +87,14 @@ public class RandomStrategy implements BotStrategy {
         BigDecimal price = randomPrice(stock.getCurrentPrice());
 
         Order sellOrder = new Order(Order.Side.SELL, stock.getSymbol(), price, quantity, bot.getId());
-        model.placeOrder(sellOrder);
+        return Collections.singletonList(sellOrder);
     }
 
-    private void buy(StockSim model, Bot bot) {
+    private List<Order> buy(StockSim model, Bot bot) {
         // Choose a random instrument in market
         Instrument stock = pickRandomStock(model);
         if (stock == null) {
-            return;
+            return Collections.emptyList();
         }
 
         int quantity = randomQuantity();
@@ -100,7 +102,7 @@ public class RandomStrategy implements BotStrategy {
         BigDecimal price = randomPrice(stock.getCurrentPrice());
 
         Order buyOrder = new Order(Order.Side.BUY, stock.getSymbol(), price, quantity, bot.getId());
-        model.placeOrder(buyOrder);
+        return Collections.singletonList(buyOrder);
     }
 
     private BigDecimal randomPrice(BigDecimal basePrice) {
