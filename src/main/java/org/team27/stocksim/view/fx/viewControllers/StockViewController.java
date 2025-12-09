@@ -249,7 +249,7 @@ public class StockViewController extends ViewControllerBase
 
         try {
             // Get all stocks and sort by price (most valuable first)
-            HashMap<String, Instrument> allStocks = modelController.getAllStocks();
+            HashMap<String, Instrument> allStocks = modelController.getStocks("All");
             if (allStocks == null || allStocks.isEmpty()) {
                 return;
             }

@@ -165,14 +165,14 @@ public class StockSim implements ModelSubject {
         }
     }
 
-    public void createStock(String symbol, String stockName, String tickSize, String lotSize) {
+    public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {
         // checking if symbol already exists (if yes -> error)
         String highSymbol = symbol.toUpperCase();
         if (stocks.containsKey(highSymbol)) {
             System.out.println("Stock symbol already exists");
         } else {
             Instrument stock = stockFactory.createInstrument(highSymbol, stockName, new BigDecimal(tickSize),
-                    Integer.parseInt(lotSize));
+                    Integer.parseInt(lotSize), category);
             stocks.put(highSymbol, stock);
         }
 
@@ -212,6 +212,20 @@ public class StockSim implements ModelSubject {
 
     public HashMap<String, Instrument> getStocks() {
         return stocks;
+    }
+
+    public HashMap<String, Instrument> getStocks(String category) {
+        if (category.equals("All")) {
+            return stocks;
+        } else {
+            HashMap<String, Instrument> filteredStocks = new HashMap<>();
+            for(Instrument stock : stocks.values()){
+                if(stock.getCategory().equals(category)){
+                    filteredStocks.put(stock.getSymbol(), stock);
+                }
+            }
+            return filteredStocks;
+        }
     }
 
     public HashMap<String, Trader> getTraders() {

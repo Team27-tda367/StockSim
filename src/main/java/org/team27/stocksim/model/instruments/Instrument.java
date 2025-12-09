@@ -7,12 +7,14 @@ public abstract class Instrument {
     protected final String name;
     protected final BigDecimal tickSize;
     protected final int lotSize;
+    protected final String category;
 
-    public Instrument(String symbol, String name, BigDecimal tickSize, int lotSize) {
+    public Instrument(String symbol, String name, BigDecimal tickSize, int lotSize, String category) {
         this.symbol = symbol;
         this.name = name;
         this.tickSize = tickSize;
         this.lotSize = lotSize;
+        this.category = category;
     }
 
     public String getSymbol() {
@@ -30,6 +32,8 @@ public abstract class Instrument {
     public int getLotSize() {
         return lotSize;
     }
+
+    public String getCategory() { return category; }
 
     public abstract void setCurrentPrice(BigDecimal price);
 

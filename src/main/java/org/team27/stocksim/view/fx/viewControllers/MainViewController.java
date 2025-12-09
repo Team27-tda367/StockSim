@@ -42,7 +42,7 @@ public class MainViewController extends ViewControllerBase
         stockListView.setCellFactory(listView -> new StockListCell());
 
         // Get all stocks from the model
-        HashMap<String, Instrument> stocks = modelController.getAllStocks();
+        HashMap<String, Instrument> stocks = modelController.getStocks("All");
         stockList.addAll(stocks.values());
 
         User user = modelController.getUser();
@@ -57,6 +57,8 @@ public class MainViewController extends ViewControllerBase
 
     private final ArrayList<Button> categoryButtons = new ArrayList<>();
 
+
+    /** Category filtering */
     private void initCategories(ArrayList<String> categories) {
 
         // Add "All" button to highlight-selector
@@ -74,14 +76,25 @@ public class MainViewController extends ViewControllerBase
             insertIndex++; // Move the insertion point
 
             // Add click handler
-            b.setOnAction(event -> highlight(b));
+            b.setOnAction(event -> categoryClicked(b));
         }
 
         // Add click handler for the All button too
-        btnAll.setOnAction(event -> highlight(btnAll));
+        btnAll.setOnAction(event -> categoryClicked(btnAll));
     }
 
-    /** Highlights the selected button and resets others. */
+    private void categoryClicked(Button selected) {
+        highlight(selected);
+        fetchStocksFromCategory(selected.getText());
+    }
+
+    private void fetchStocksFromCategory(String category) {
+        stockList.clear();
+        HashMap<String, Instrument> stocks = modelController.getStocks(category);
+        stockList.addAll(stocks.values());
+    }
+
+    /* Highlights the selected button and resets others. */
     private void highlight(Button selected) {
         for (Button b : categoryButtons) {
             b.getStyleClass().removeAll("btn-secondary", "btn-highlighted");
@@ -109,10 +122,6 @@ public class MainViewController extends ViewControllerBase
      * }
      */
 
-    @FXML
-    private void sortByTag(ActionEvent event) {
-        // TODO: Implement sorting logic - send call to simController if needed
-    }
 
     @FXML
     public void onMainView(ActionEvent event) {
@@ -190,7 +199,7 @@ public class MainViewController extends ViewControllerBase
                 setGraphic(null);
             } else {
                 symbol.setText(stock.getSymbol());
-                meta.setText("Technology");
+                meta.setText(stock.getCategory());
                 price.setText(String.format("$%.2f", stock.getCurrentPrice()));
                 setGraphic(content);
             }

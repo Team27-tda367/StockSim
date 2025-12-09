@@ -25,8 +25,8 @@ public class SimController implements ISimController {
         setup.start();
     }
 
-    public void createStock(String symbol, String stockName, String tickSize, String lotSize) {
-        model.createStock(symbol, stockName, tickSize, lotSize);
+    public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {
+        model.createStock(symbol, stockName, tickSize, lotSize, category);
     }
 
     public void addObserver(ModelObserver obs) {
@@ -43,8 +43,8 @@ public class SimController implements ISimController {
     }
 
     @Override
-    public HashMap<String, Instrument> getAllStocks() {
-        return model.getStocks();
+    public HashMap<String, Instrument> getStocks(String category) {
+        return model.getStocks(category);
     }
 
     @Override
