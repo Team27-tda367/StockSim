@@ -34,8 +34,9 @@ public class CreateStockPageController extends ViewControllerBase {
         String stockName = inputStockName.getText();
         String tickSize = inputTickSize.getText();
         String lotSize = inputLotSize.getText();
+        String category = "Technology"; // placeholder
 
-        modelController.createStock(symbol, stockName, tickSize, lotSize);
+        modelController.createStock(symbol, stockName, tickSize, lotSize, category);
         // Clear input fields after creation
         clearFields();
     }

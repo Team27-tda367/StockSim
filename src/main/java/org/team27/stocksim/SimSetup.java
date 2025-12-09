@@ -64,28 +64,28 @@ public class SimSetup {
 
     private void createDefaultStocks() {
         // Original stocks
-        model.createStock("AAPL", "Apple Inc.", "0.01", "100");
-        model.createStock("GOOGL", "Alphabet Inc.", "0.01", "100");
-        model.createStock("MSFT", "Microsoft Corp.", "0.01", "100");
+        model.createStock("AAPL", "Apple Inc.", "0.01", "100", "Technology");
+        model.createStock("GOOGL", "Alphabet Inc.", "0.01", "100", "Technology");
+        model.createStock("MSFT", "Microsoft Corp.", "0.01", "100", "Technology");
 
-        // Additional 17 random stocks to make 20 total
-        model.createStock("TSLA", "Tesla Inc.", "0.01", "100");
-        model.createStock("AMZN", "Amazon.com Inc.", "0.01", "100");
-        model.createStock("META", "Meta Platforms Inc.", "0.01", "100");
-        model.createStock("NVDA", "NVIDIA Corporation", "0.01", "100");
-        model.createStock("JPM", "JPMorgan Chase & Co.", "0.01", "100");
-        model.createStock("V", "Visa Inc.", "0.01", "100");
-        model.createStock("WMT", "Walmart Inc.", "0.01", "100");
-        model.createStock("DIS", "The Walt Disney Company", "0.01", "100");
-        model.createStock("NFLX", "Netflix Inc.", "0.01", "100");
-        model.createStock("PYPL", "PayPal Holdings Inc.", "0.01", "100");
-        model.createStock("INTC", "Intel Corporation", "0.01", "100");
-        model.createStock("CSCO", "Cisco Systems Inc.", "0.01", "100");
-        model.createStock("PEP", "PepsiCo Inc.", "0.01", "100");
-        model.createStock("KO", "The Coca-Cola Company", "0.01", "100");
-        model.createStock("NKE", "Nike Inc.", "0.01", "100");
-        model.createStock("BA", "The Boeing Company", "0.01", "100");
-        model.createStock("AMD", "Advanced Micro Devices Inc.", "0.01", "100");
+// Additional 17 random stocks
+        model.createStock("TSLA", "Tesla Inc.", "0.01", "100", "Consumer");
+        model.createStock("AMZN", "Amazon.com Inc.", "0.01", "100", "Consumer");
+        model.createStock("META", "Meta Platforms Inc.", "0.01", "100", "Entertainment");
+        model.createStock("NVDA", "NVIDIA Corporation", "0.01", "100", "Semiconductors");
+        model.createStock("JPM", "JPMorgan Chase & Co.", "0.01", "100", "Finance");
+        model.createStock("V", "Visa Inc.", "0.01", "100", "Finance");
+        model.createStock("WMT", "Walmart Inc.", "0.01", "100", "Consumer");
+        model.createStock("DIS", "The Walt Disney Company", "0.01", "100", "Entertainment");
+        model.createStock("NFLX", "Netflix Inc.", "0.01", "100", "Entertainment");
+        model.createStock("PYPL", "PayPal Holdings Inc.", "0.01", "100", "Finance");
+        model.createStock("INTC", "Intel Corporation", "0.01", "100", "Semiconductors");
+        model.createStock("CSCO", "Cisco Systems Inc.", "0.01", "100", "Technology");
+        model.createStock("PEP", "PepsiCo Inc.", "0.01", "100", "Consumer");
+        model.createStock("KO", "The Coca-Cola Company", "0.01", "100", "Consumer");
+        model.createStock("NKE", "Nike Inc.", "0.01", "100", "Consumer");
+        model.createStock("BA", "The Boeing Company", "0.01", "100", "Aviation");
+        model.createStock("AMD", "Advanced Micro Devices Inc.", "0.01", "100", "Semiconductors");
     }
 
     private void createBots(int numberOfBots) {

@@ -10,7 +10,7 @@ import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.observer.ModelObserver;
 
 public interface ISimController {
-    void createStock(String symbol, String stockName, String tickSize, String lotSize);
+    void createStock(String symbol, String stockName, String tickSize, String lotSize, String category);
 
     void addObserver(ModelObserver obs);
 
@@ -18,7 +18,7 @@ public interface ISimController {
 
     ArrayList<String> getAllCategories();
 
-    HashMap<String, Instrument> getAllStocks();
+    HashMap<String, Instrument> getStocks(String category);
 
     void setUpSimulation();
 
