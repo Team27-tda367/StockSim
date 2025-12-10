@@ -3,7 +3,6 @@ package org.team27.stocksim.view.fx.viewControllers;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
-import org.team27.stocksim.view.fx.SelectedStockService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +28,7 @@ import org.team27.stocksim.model.users.User;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
-public class MainViewController extends ViewControllerBase 
+public class MainViewController extends ViewControllerBase
         implements ViewAdapter.PriceUpdateListener {
 
     @Override
@@ -53,12 +52,14 @@ public class MainViewController extends ViewControllerBase
 
     }
 
-    @FXML private HBox categoryBox;
-    @FXML private Button btnAll;
-    @FXML private Region spacer;
+    @FXML
+    private HBox categoryBox;
+    @FXML
+    private Button btnAll;
+    @FXML
+    private Region spacer;
 
     private final ArrayList<Button> categoryButtons = new ArrayList<>();
-
 
     /** Category filtering */
     private void initCategories(ArrayList<String> categories) {
@@ -124,7 +125,6 @@ public class MainViewController extends ViewControllerBase
      * }
      */
 
-
     @FXML
     public void onMainView(ActionEvent event) {
         viewSwitcher.switchTo(EView.MAINVIEW);
@@ -178,7 +178,6 @@ public class MainViewController extends ViewControllerBase
             // Create a spacer region to push the price and button to the right
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
-                        
 
             // Trade button
             actionButton = new Button("Trade");
@@ -213,9 +212,9 @@ public class MainViewController extends ViewControllerBase
         private void handleButtonClick(Instrument instrument) {
             System.out.println(instrument.getSymbol());
 
-            // 1. Spara vald aktie
-            SelectedStockService.setSelectedStock(instrument);
-            // 2. Byt till stock view
+            // 1. Save selected stock using controller
+            modelController.setSelectedStock(instrument);
+            // 2. Switch to stock view
             viewSwitcher.switchTo(EView.STOCKVIEW);
         }
 

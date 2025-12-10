@@ -29,4 +29,8 @@ public interface ISimController {
     void sellStock(String stockSymbol, int quantity, BigDecimal price);
 
     OrderHistory getOrderHistory();
+
+    void setSelectedStock(Instrument stock);
+
+    Instrument getSelectedStock();
 }

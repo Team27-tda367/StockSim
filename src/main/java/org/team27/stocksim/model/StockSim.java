@@ -36,11 +36,13 @@ public class StockSim implements ModelSubject {
     private List<Trade> completedTrades; // tracks all completed trades
     private GameTicker ticker; // reference to ticker for stopping simulation
     private static User currentUser;
+    private SelectionManager selectionManager; // manages currently selected stock
 
     public StockSim() {
         // Stock related inits
         stocks = new HashMap<>();
         stockFactory = new StockFactory();
+        selectionManager = new SelectionManager();
 
         // Trader related inits
         orderBooks = new HashMap<>();
@@ -219,8 +221,8 @@ public class StockSim implements ModelSubject {
             return stocks;
         } else {
             HashMap<String, Instrument> filteredStocks = new HashMap<>();
-            for(Instrument stock : stocks.values()){
-                if(stock.getCategory().equals(category)){
+            for (Instrument stock : stocks.values()) {
+                if (stock.getCategory().equals(category)) {
                     filteredStocks.put(stock.getSymbol(), stock);
                 }
             }
@@ -260,6 +262,10 @@ public class StockSim implements ModelSubject {
 
     public void setCurrentUser(String userId) {
         currentUser = (User) getUsers().get(userId.toUpperCase());
+    }
+
+    public SelectionManager getSelectionManager() {
+        return selectionManager;
     }
 
     public Portfolio createPortfolio(String id) {
