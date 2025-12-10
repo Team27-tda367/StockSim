@@ -12,7 +12,7 @@ import java.util.List;
 public class Bot extends Trader {
     private BotStrategy strategy;
 
-    public Bot(String id, String name, Portfolio portfolio) {
+    Bot(String id, String name, Portfolio portfolio) {
         super(id, name, portfolio);
         this.strategy = new RandomStrategy();
     }

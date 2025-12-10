@@ -16,7 +16,7 @@ import org.team27.stocksim.model.market.Trade;
  */
 public class Portfolio {
 
-    List<Instrument> instruments;
+    private List<Instrument> instruments;
     private BigDecimal balance;
     private Map<String, Position> positions; // symbol -> Position
 

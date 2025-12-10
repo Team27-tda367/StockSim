@@ -24,12 +24,12 @@ import static org.team27.stocksim.model.util.MoneyUtils.money;
 public class StockSim implements ModelSubject {
     /* Listeners */
     private final List<ModelObserver> observers = new ArrayList<>();
-    MarketState state;
-    HashMap<String, Instrument> stocks;
-    InstrumentFactory stockFactory;
-    HashMap<String, Trader> traders;
-    TraderFactory userFactory;
-    TraderFactory botFactory;
+    private MarketState state;
+    private HashMap<String, Instrument> stocks;
+    private InstrumentFactory stockFactory;
+    private HashMap<String, Trader> traders;
+    private TraderFactory userFactory;
+    private TraderFactory botFactory;
     private MatchingEngine matchingEngine;
     private HashMap<String, OrderBook> orderBooks;
     private HashMap<Integer, String> orderIdToTraderId; // maps order ID to trader ID
@@ -219,8 +219,8 @@ public class StockSim implements ModelSubject {
             return stocks;
         } else {
             HashMap<String, Instrument> filteredStocks = new HashMap<>();
-            for(Instrument stock : stocks.values()){
-                if(stock.getCategory().equals(category)){
+            for (Instrument stock : stocks.values()) {
+                if (stock.getCategory().equals(category)) {
                     filteredStocks.put(stock.getSymbol(), stock);
                 }
             }
