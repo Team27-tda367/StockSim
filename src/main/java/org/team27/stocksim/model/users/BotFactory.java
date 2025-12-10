@@ -2,7 +2,7 @@ package org.team27.stocksim.model.users;
 
 import org.team27.stocksim.model.portfolio.Portfolio;
 
-public class BotFactory implements TraderFactory {
+public class BotFactory implements ITraderFactory {
     @Override
     public Trader createTrader(String id, String name, Portfolio portfolio) {
         return new Bot(id, name, portfolio);

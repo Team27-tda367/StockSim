@@ -6,6 +6,6 @@ import org.team27.stocksim.model.users.Bot;
 
 import java.util.List;
 
-public interface BotStrategy {
+public interface IBotStrategy {
     List<Order> decide(StockSim model, Bot bot);
 }

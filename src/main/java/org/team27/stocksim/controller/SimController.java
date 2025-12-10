@@ -10,7 +10,7 @@ import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
-import org.team27.stocksim.observer.ModelObserver;
+import org.team27.stocksim.observer.IModelObserver;
 
 public class SimController implements ISimController {
 
@@ -29,11 +29,11 @@ public class SimController implements ISimController {
         model.createStock(symbol, stockName, tickSize, lotSize, category);
     }
 
-    public void addObserver(ModelObserver obs) {
+    public void addObserver(IModelObserver obs) {
         model.addObserver(obs);
     }
 
-    public void removeObserver(ModelObserver obs) {
+    public void removeObserver(IModelObserver obs) {
         model.removeObserver(obs);
     }
 

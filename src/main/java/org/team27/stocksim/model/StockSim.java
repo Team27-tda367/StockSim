@@ -1,30 +1,33 @@
 package org.team27.stocksim.model;
 
+import org.team27.stocksim.model.instruments.IInstrumentRegistry;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.instruments.InstrumentRegistry;
 import org.team27.stocksim.model.instruments.StockFactory;
+import org.team27.stocksim.model.market.IMarket;
 import org.team27.stocksim.model.market.Market;
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.market.OrderBook;
 import org.team27.stocksim.model.portfolio.Portfolio;
+import org.team27.stocksim.model.simulation.IMarketSimulator;
 import org.team27.stocksim.model.simulation.MarketSimulator;
 import org.team27.stocksim.model.users.*;
-import org.team27.stocksim.observer.ModelObserver;
-import org.team27.stocksim.observer.ModelSubject;
+import org.team27.stocksim.observer.IModelObserver;
+import org.team27.stocksim.observer.IModelSubject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
-public class StockSim implements ModelSubject {
-    private final List<ModelObserver> observers = new ArrayList<>();
+public class StockSim implements IModelSubject {
+    private final List<IModelObserver> observers = new ArrayList<>();
 
-    // Specialized components
-    private final Market market;
-    private final InstrumentRegistry instrumentRegistry;
-    private final TraderRegistry traderRegistry;
-    private final MarketSimulator marketSimulator;
+    // Depend on abstractions (interfaces), not concrete classes - DIP
+    private final IMarket market;
+    private final IInstrumentRegistry instrumentRegistry;
+    private final ITraderRegistry traderRegistry;
+    private final IMarketSimulator marketSimulator;
 
     public StockSim() {
         // Initialize registries
@@ -164,36 +167,36 @@ public class StockSim implements ModelSubject {
 
 
     private void notifyPriceUpdate(HashMap<String, Instrument> stocks) {
-        for (ModelObserver o : observers) {
+        for (IModelObserver o : observers) {
             o.onPriceUpdate(stocks);
         }
     }
 
     private void notifyTradeSettled() {
-        for (ModelObserver o : observers) {
+        for (IModelObserver o : observers) {
             o.onTradeSettled();
         }
     }
 
     private void notifyStocksChanged(Object payload) {
-        for (ModelObserver o : observers) {
+        for (IModelObserver o : observers) {
             o.onStocksChanged(payload);
         }
     }
 
     private void notifyPortfolioChanged() {
-        for (ModelObserver o : observers) {
+        for (IModelObserver o : observers) {
             o.onPortfolioChanged();
         }
     }
 
     @Override
-    public void addObserver(ModelObserver obs) {
+    public void addObserver(IModelObserver obs) {
         observers.add(obs);
     }
 
     @Override
-    public void removeObserver(ModelObserver obs) {
+    public void removeObserver(IModelObserver obs) {
         observers.remove(obs);
     }
 

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 
-public class MarketSimulator {
+public class MarketSimulator implements IMarketSimulator {
 
     private final Supplier<HashMap<String, Trader>> botsSupplier;
     private final Runnable onTick;
@@ -26,6 +26,7 @@ public class MarketSimulator {
         this.totalTradesExecuted = 0;
     }
 
+    @Override
     public void start() {
         state = MarketState.RUNNING;
 
@@ -50,12 +51,14 @@ public class MarketSimulator {
         System.out.println("Market simulation started");
     }
 
+
+    @Override
     public void pause() {
         state = MarketState.PAUSED;
         System.out.println("Market simulation paused");
     }
 
-
+    @Override
     public void stop() {
         state = MarketState.PAUSED;
 
@@ -80,12 +83,13 @@ public class MarketSimulator {
         }
     }
 
+    @Override
     public MarketState getState() {
         return state;
     }
 
+    @Override
     public void setTotalTradesExecuted(int count) {
         this.totalTradesExecuted = count;
     }
 }
-

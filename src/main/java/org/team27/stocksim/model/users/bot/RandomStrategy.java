@@ -12,7 +12,7 @@ import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.Bot;
 
-public class RandomStrategy implements BotStrategy {
+public class RandomStrategy implements IBotStrategy {
 
     private enum Action {
         BUY, SELL, NONE

@@ -7,14 +7,14 @@ import java.util.HashMap;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
-import org.team27.stocksim.observer.ModelObserver;
+import org.team27.stocksim.observer.IModelObserver;
 
 public interface ISimController {
     void createStock(String symbol, String stockName, String tickSize, String lotSize, String category);
 
-    void addObserver(ModelObserver obs);
+    void addObserver(IModelObserver obs);
 
-    void removeObserver(ModelObserver obs);
+    void removeObserver(IModelObserver obs);
 
     ArrayList<String> getAllCategories();
 

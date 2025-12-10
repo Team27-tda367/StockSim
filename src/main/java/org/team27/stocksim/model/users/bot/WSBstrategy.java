@@ -7,7 +7,7 @@ import org.team27.stocksim.model.users.Bot;
 import java.util.Collections;
 import java.util.List;
 
-public class WSBstrategy implements BotStrategy {
+public class WSBstrategy implements IBotStrategy {
 
     @Override
     public List<Order> decide(StockSim model, Bot bot) {

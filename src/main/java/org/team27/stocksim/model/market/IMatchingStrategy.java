@@ -1,5 +1,5 @@
 package org.team27.stocksim.model.market;
 
-public interface MatchingStrategy {
+public interface IMatchingStrategy {
     void match(OrderBook book);
 }

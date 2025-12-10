@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 
-public class SettlementEngine {
+public class SettlementEngine implements ISettlementEngine {
 
     private final HashMap<Integer, String> orderIdToTraderId;
     private final Consumer<Trade> onTradeSettled;
@@ -21,6 +21,7 @@ public class SettlementEngine {
     }
 
 
+    @Override
     public boolean settleTrade(Trade trade, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks) {
         String buyerTraderId = orderIdToTraderId.get(trade.getBuyOrderId());
         String sellerTraderId = orderIdToTraderId.get(trade.getSellOrderId());
@@ -85,8 +86,8 @@ public class SettlementEngine {
         }
     }
 
+    @Override
     public void trackOrder(int orderId, String traderId) {
         orderIdToTraderId.put(orderId, traderId);
     }
 }
-

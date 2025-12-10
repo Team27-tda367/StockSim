@@ -4,17 +4,18 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class InstrumentRegistry {
+public class InstrumentRegistry implements IInstrumentRegistry {
 
     private final HashMap<String, Instrument> instruments;
-    private final InstrumentFactory instrumentFactory;
+    private final IInstrumentFactory instrumentFactory;
 
-    public InstrumentRegistry(InstrumentFactory instrumentFactory) {
+    public InstrumentRegistry(IInstrumentFactory instrumentFactory) {
         this.instruments = new HashMap<>();
         this.instrumentFactory = instrumentFactory;
     }
 
 
+    @Override
     public boolean createInstrument(String symbol, String stockName, String tickSize, String lotSize, String category) {
         String highSymbol = symbol.toUpperCase();
 
@@ -24,22 +25,25 @@ public class InstrumentRegistry {
         }
 
         Instrument instrument = instrumentFactory.createInstrument(
-            highSymbol,
-            stockName,
-            new BigDecimal(tickSize),
-            Integer.parseInt(lotSize),
-            category
+                highSymbol,
+                stockName,
+                new BigDecimal(tickSize),
+                Integer.parseInt(lotSize),
+                category
         );
 
         instruments.put(highSymbol, instrument);
         return true;
     }
 
+
+    @Override
     public HashMap<String, Instrument> getAllInstruments() {
         return instruments;
     }
 
 
+    @Override
     public HashMap<String, Instrument> getInstrumentsByCategory(String category) {
         if (category.equals("All")) {
             return instruments;
@@ -54,6 +58,8 @@ public class InstrumentRegistry {
         return filtered;
     }
 
+
+    @Override
     public ArrayList<String> getCategories() {
         ArrayList<String> categoryLabels = new ArrayList<>();
         for (ECategory category : ECategory.values()) {
@@ -62,12 +68,14 @@ public class InstrumentRegistry {
         return categoryLabels;
     }
 
+    @Override
     public Instrument getInstrument(String symbol) {
         return instruments.get(symbol.toUpperCase());
     }
 
+
+    @Override
     public boolean hasInstrument(String symbol) {
         return instruments.containsKey(symbol.toUpperCase());
     }
 }
-

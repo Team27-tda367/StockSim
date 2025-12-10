@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
-public class Market {
+public class Market implements IMarket {
 
     private final HashMap<String, OrderBook> orderBooks;
     private final MatchingEngine matchingEngine;
@@ -29,6 +29,7 @@ public class Market {
         this.settlementEngine = new SettlementEngine(orderIdToTraderId, this::handleTradeSettled);
     }
 
+    @Override
     public void placeOrder(Order order, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks) {
 
         settlementEngine.trackOrder(order.getOrderId(), order.getTraderId());
@@ -72,28 +73,33 @@ public class Market {
         }
     }
 
+    @Override
     public void addOrderBook(String symbol, OrderBook orderBook) {
         orderBooks.put(symbol, orderBook);
     }
 
+    @Override
     public void removeOrderBook(String symbol) {
         orderBooks.remove(symbol);
     }
 
+    @Override
     public OrderBook getOrderBook(String symbol) {
         return orderBooks.computeIfAbsent(symbol, OrderBook::new);
     }
 
+    @Override
     public List<Trade> getCompletedTrades() {
         return new ArrayList<>(completedTrades);
     }
 
+    @Override
     public void setOnPriceUpdate(Consumer<Void> callback) {
         this.onPriceUpdate = callback;
     }
 
+    @Override
     public void setOnTradeSettled(Consumer<Trade> callback) {
         this.onTradeSettled = callback;
     }
 }
-

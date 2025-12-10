@@ -1,0 +1,23 @@
+package org.team27.stocksim.model.market;
+import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.users.Trader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.Consumer;
+
+public interface IMarket {
+
+    void placeOrder(Order order, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks);
+
+    void addOrderBook(String symbol, OrderBook orderBook);
+
+    void removeOrderBook(String symbol);
+
+    OrderBook getOrderBook(String symbol);
+
+    List<Trade> getCompletedTrades();
+
+    void setOnPriceUpdate(Consumer<Void> callback);
+
+    void setOnTradeSettled(Consumer<Trade> callback);
+}

@@ -4,7 +4,7 @@ import org.team27.stocksim.model.instruments.Instrument;
 
 import java.util.HashMap;
 
-public interface ModelObserver {
+public interface IModelObserver {
 
     void onStocksChanged(Object payload);
 

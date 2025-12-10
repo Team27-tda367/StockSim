@@ -10,21 +10,22 @@ import java.util.function.Function;
 import static org.team27.stocksim.model.util.MoneyUtils.money;
 
 
-public class TraderRegistry {
+public class TraderRegistry implements ITraderRegistry {
 
     private final HashMap<String, Trader> traders;
-    private final TraderFactory userFactory;
-    private final TraderFactory botFactory;
+    private final ITraderFactory userFactory;
+    private final ITraderFactory botFactory;
     private final Function<String, Portfolio> portfolioFactory;
     private User currentUser;
 
-    public TraderRegistry(TraderFactory userFactory, TraderFactory botFactory) {
+    public TraderRegistry(ITraderFactory userFactory, ITraderFactory botFactory) {
         this.traders = new HashMap<>();
         this.userFactory = userFactory;
         this.botFactory = botFactory;
         this.portfolioFactory = this::createDefaultPortfolio;
     }
 
+    @Override
     public boolean createUser(String id, String name) {
         String highId = id.toUpperCase();
 
@@ -40,6 +41,7 @@ public class TraderRegistry {
     }
 
 
+    @Override
     public boolean createBot(String id, String name) {
         String highId = id.toUpperCase();
 
@@ -55,11 +57,15 @@ public class TraderRegistry {
     }
 
 
+
+    @Override
     public HashMap<String, Trader> getAllTraders() {
         return traders;
     }
 
 
+
+    @Override
     public HashMap<String, Trader> getBots() {
         HashMap<String, Trader> bots = new HashMap<>();
         for (Map.Entry<String, Trader> entry : traders.entrySet()) {
@@ -71,6 +77,7 @@ public class TraderRegistry {
     }
 
 
+    @Override
     public HashMap<String, User> getUsers() {
         HashMap<String, User> users = new HashMap<>();
         for (Map.Entry<String, Trader> entry : traders.entrySet()) {
@@ -82,14 +89,19 @@ public class TraderRegistry {
     }
 
 
+    @Override
     public Trader getTrader(String id) {
         return traders.get(id.toUpperCase());
     }
 
+
+    @Override
     public User getCurrentUser() {
         return currentUser;
     }
 
+
+    @Override
     public void setCurrentUser(String userId) {
         User user = getUsers().get(userId.toUpperCase());
         if (user != null) {
@@ -104,4 +116,3 @@ public class TraderRegistry {
         return new Portfolio(startingBalance);
     }
 }
-
