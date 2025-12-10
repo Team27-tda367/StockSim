@@ -293,8 +293,8 @@ public class StockViewController extends ViewControllerBase
         // Refresh chart with new time period
         refreshChartForTimePeriod();
 
-        System.out.println("Selected time period: " + currentTimePeriod.getLabel() + " (" + currentTimePeriod.getDays()
-                + " days)");
+        System.out.println("Selected time period: " + currentTimePeriod.getLabel() + " (" 
+                + currentTimePeriod.toModelTimePeriod().getDays() + " days)");
     }
 
     private void setActiveTimePeriodButton(Button button) {
@@ -329,7 +329,7 @@ public class StockViewController extends ViewControllerBase
         priceChart.getData().add(priceSeries);
 
         // Update time axis label based on period
-        priceChart.getXAxis().setLabel(chartDataService.getTimeAxisLabel(currentTimePeriod));
+        priceChart.getXAxis().setLabel(currentTimePeriod.getTimeAxisLabel());
 
         // Style the chart
         priceChart.setCreateSymbols(false); // Don't show dots on the line
@@ -369,7 +369,7 @@ public class StockViewController extends ViewControllerBase
         lastPriceHistorySize = stock.getPriceHistory().getPoints().size();
 
         // Update time axis label
-        priceChart.getXAxis().setLabel(chartDataService.getTimeAxisLabel(currentTimePeriod));
+        priceChart.getXAxis().setLabel(currentTimePeriod.getTimeAxisLabel());
     }
 
     /*
