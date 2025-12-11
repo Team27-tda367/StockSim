@@ -18,8 +18,12 @@ public class Stock extends Instrument {
     }
 
     public void setCurrentPrice(BigDecimal price) {
+        setCurrentPrice(price, System.currentTimeMillis());
+    }
+
+    public void setCurrentPrice(BigDecimal price, long timestamp) {
         this.price = price;
-        priceHistory.addPrice(price);
+        priceHistory.addPrice(price, timestamp);
     }
 
     public PriceHistory getPriceHistory() {

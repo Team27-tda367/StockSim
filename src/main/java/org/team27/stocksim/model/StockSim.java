@@ -9,8 +9,12 @@ import org.team27.stocksim.model.users.*;
 import org.team27.stocksim.observer.ModelObserver;
 import org.team27.stocksim.observer.ModelSubject;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.j256.ormlite.stmt.query.In;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -35,6 +39,7 @@ public class StockSim implements ModelSubject {
     private HashMap<Integer, String> orderIdToTraderId; // maps order ID to trader ID
     private List<Trade> completedTrades; // tracks all completed trades
     private GameTicker ticker; // reference to ticker for stopping simulation
+    private GameClock clock; // game clock for simulation time
     private static User currentUser;
     private SelectionManager selectionManager; // manages currently selected stock
 
@@ -156,7 +161,8 @@ public class StockSim implements ModelSubject {
             // Set stock price to last trade price
             Instrument stock = stocks.get(trade.getStockSymbol());
             if (stock != null) {
-                stock.setCurrentPrice(trade.getPrice());
+                long timestamp = (clock != null) ? clock.instant().toEpochMilli() : System.currentTimeMillis();
+                stock.setCurrentPrice(trade.getPrice(), timestamp);
             }
 
             return true; // Price changed
@@ -268,6 +274,10 @@ public class StockSim implements ModelSubject {
         return selectionManager;
     }
 
+    public GameClock getClock() {
+        return clock;
+    }
+
     public Portfolio createPortfolio(String id) {
         // if id in portfolio-db, fetch balance and insert, else -> new User/Bot, insert
         // startingBalance
@@ -313,10 +323,10 @@ public class StockSim implements ModelSubject {
         state = MarketState.RUNNING;
 
         // start the clock/timer for market simulation
-        GameClock clock = new GameClock(
+        clock = new GameClock(
                 ZoneId.of("Europe/Stockholm"),
                 Instant.now(),
-                10000);
+                3600); // 1 real second = 1 in-game hour
 
         ticker = new GameTicker(clock, simInstant -> {
             tick();
@@ -325,7 +335,7 @@ public class StockSim implements ModelSubject {
 
         new Thread(() -> {
             try {
-                Thread.sleep(1000); // 1 second
+                Thread.sleep(10000); // let the market run for 10 seconds
                 clock.setSpeed(5);
 
             } catch (InterruptedException e) {
@@ -349,17 +359,63 @@ public class StockSim implements ModelSubject {
         state = MarketState.PAUSED;
     }
 
-    public void stopMarketSimulation() {
-        state = MarketState.PAUSED;
+    private void stopMarketSimulation() {
         if (ticker != null) {
             ticker.stop();
         }
-        System.out.println("\n========================================");
-        System.out.println("Simulation stopped after 10 seconds");
-        System.out.println("Total trades executed: " + completedTrades.size());
-        System.out.println("========================================\n");
-        // TODO: Add market stopped notification if needed
-        // notifyMarketStopped();
+        state = MarketState.PAUSED;
+
+        try {
+            savePriceHistoryToFile();
+        } catch (IOException e) {
+            System.err.println("Error saving price history: " + e.getMessage());
+        }
+
     }
 
+    /**
+     * Writes all stocks' price history to the stock_prices.json file.
+     * The JSON structure includes stock symbol, name, and price history with
+     * timestamps and prices.
+     * 
+     * @throws IOException if there's an error writing to the file
+     */
+    public void savePriceHistoryToFile() throws IOException {
+        // Create a list to hold all stock data
+        List<Map<String, Object>> stocksData = new ArrayList<>();
+
+        for (Instrument stock : stocks.values()) {
+            Map<String, Object> stockData = new HashMap<>();
+            stockData.put("symbol", stock.getSymbol());
+            stockData.put("name", stock.getName());
+            stockData.put("category", stock.getCategory());
+            stockData.put("currentPrice", stock.getCurrentPrice());
+
+            // Get price history
+            PriceHistory priceHistory = stock.getPriceHistory();
+            List<Map<String, Object>> pricePoints = new ArrayList<>();
+
+            for (PricePoint point : priceHistory.getPoints()) {
+                Map<String, Object> pointData = new HashMap<>();
+                pointData.put("timestamp", point.getTimestamp());
+                pointData.put("price", point.getPrice());
+                pricePoints.add(pointData);
+            }
+
+            stockData.put("priceHistory", pricePoints);
+            stocksData.add(stockData);
+        }
+
+        // Convert to JSON and write to file
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(stocksData);
+
+        // Get the path to resources/db/stock_prices.json
+        String filePath = "src/main/resources/db/stock_prices.json";
+
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write(json);
+            System.out.println("Successfully saved price history to " + filePath);
+        }
+    }
 }

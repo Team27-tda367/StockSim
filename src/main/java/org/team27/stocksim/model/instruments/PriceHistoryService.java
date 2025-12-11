@@ -9,11 +9,14 @@ import java.util.List;
  * windowing
  * without any dependencies on UI frameworks.
  * 
+ * Uses timestamp-based filtering for accurate time-period representation.
+ * Follows Single Responsibility Principle - only handles data processing logic.
  */
 public class PriceHistoryService {
 
     /**
      * Filters and samples price history data based on a time period.
+     * Uses actual timestamps to filter trades within the specified time window.
      * Returns a subset of price points optimized for display.
      * 
      * @param priceHistory The complete price history
@@ -31,17 +34,25 @@ public class PriceHistoryService {
             return new ArrayList<>();
         }
 
-        // Calculate how many points to display
-        int pointsToDisplay = timePeriod.calculatePointsToDisplay(allPoints.size());
+        // Get current time and calculate cutoff time for this period
+        long currentTime = System.currentTimeMillis();
+        long timeWindowMillis = timePeriod.getTimeWindowMillis();
+        long cutoffTime = currentTime - timeWindowMillis;
 
-        // Get the most recent points
-        int startIndex = Math.max(0, allPoints.size() - pointsToDisplay);
+        // Filter points within the time window
+        List<PricePoint> filteredPoints = new ArrayList<>();
+        for (PricePoint point : allPoints) {
+            if (point.getTimestamp() >= cutoffTime) {
+                filteredPoints.add(point);
+            }
+        }
 
-        // Calculate sampling interval to avoid overcrowding
-        int samplingInterval = calculateSamplingInterval(pointsToDisplay, timePeriod);
+        // If we have too many points, sample them to avoid overcrowding
+        if (filteredPoints.size() > timePeriod.getMaxDisplayPoints()) {
+            return samplePointsUniform(filteredPoints, timePeriod.getMaxDisplayPoints());
+        }
 
-        // Sample the data points
-        return samplePoints(allPoints, startIndex, samplingInterval);
+        return filteredPoints;
     }
 
     /**
@@ -80,59 +91,35 @@ public class PriceHistoryService {
             return new FilterResult(new ArrayList<>(), currentSize, false);
         }
 
-        // Check if window has shifted
-        int pointsToDisplay = timePeriod.calculatePointsToDisplay(currentSize);
-        int startIndex = Math.max(0, currentSize - pointsToDisplay);
-
-        if (startIndex > lastKnownSize) {
-            // Window has moved, need full redraw
-            return new FilterResult(
-                    filterPriceData(priceHistory, timePeriod),
-                    currentSize,
-                    true);
-        }
-
-        // Just get new points within the window
-        List<PricePoint> newPoints = new ArrayList<>();
-        for (int i = lastKnownSize; i < currentSize; i++) {
-            if (i >= startIndex) {
-                newPoints.add(allPoints.get(i));
-            }
-        }
-
-        return new FilterResult(newPoints, currentSize, false);
+        // Time-based filtering means we should do a full redraw more often
+        // because old points may fall out of the time window
+        // For simplicity, do a full redraw on any update
+        return new FilterResult(
+                filterPriceData(priceHistory, timePeriod),
+                currentSize,
+                true // full redraw to apply time filtering
+        );
     }
 
     /**
-     * Calculate sampling interval based on time period to prevent overcrowding.
-     * Larger time periods will have fewer points displayed.
+     * Sample points from a list to reduce to a target count.
+     * Uses uniform sampling to maintain temporal distribution.
      * 
-     * @param totalPoints Total number of points in the range
-     * @param timePeriod  The time period being displayed
-     * @return The interval at which to sample points (1 = every point, 2 = every
-     *         other point, etc.)
-     */
-    private int calculateSamplingInterval(int totalPoints, TimePeriod timePeriod) {
-        int maxDisplayPoints = timePeriod.getMaxDisplayPoints();
-
-        // Calculate interval needed to reduce points to target
-        int interval = Math.max(1, totalPoints / maxDisplayPoints);
-        return interval;
-    }
-
-    /**
-     * Sample points from a list using a specific interval.
-     * 
-     * @param points           The list of all points
-     * @param startIndex       The index to start sampling from
-     * @param samplingInterval The interval between sampled points
+     * @param points      The list of all points
+     * @param targetCount The target number of points to return
      * @return List of sampled points
      */
-    private List<PricePoint> samplePoints(List<PricePoint> points, int startIndex, int samplingInterval) {
-        List<PricePoint> sampledPoints = new ArrayList<>();
+    private List<PricePoint> samplePointsUniform(List<PricePoint> points, int targetCount) {
+        if (points.size() <= targetCount) {
+            return new ArrayList<>(points);
+        }
 
-        for (int i = startIndex; i < points.size(); i += samplingInterval) {
-            sampledPoints.add(points.get(i));
+        List<PricePoint> sampledPoints = new ArrayList<>();
+        double interval = (double) points.size() / targetCount;
+
+        for (int i = 0; i < targetCount; i++) {
+            int index = (int) (i * interval);
+            sampledPoints.add(points.get(index));
         }
 
         return sampledPoints;

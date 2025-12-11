@@ -37,6 +37,8 @@ public abstract class Instrument {
 
     public abstract void setCurrentPrice(BigDecimal price);
 
+    public abstract void setCurrentPrice(BigDecimal price, long timestamp);
+
     public abstract BigDecimal getCurrentPrice();
 
     public abstract PriceHistory getPriceHistory();

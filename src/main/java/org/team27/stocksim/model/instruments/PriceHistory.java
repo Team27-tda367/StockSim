@@ -11,8 +11,8 @@ public class PriceHistory {
         this.points = new ArrayList<>();
     }
 
-    public void addPrice(BigDecimal price) {
-        PricePoint point = new PricePoint(System.currentTimeMillis(), price);
+    public void addPrice(BigDecimal price, long timestamp) {
+        PricePoint point = new PricePoint(timestamp, price);
         points.add(point);
     }
 

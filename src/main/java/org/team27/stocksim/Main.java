@@ -20,6 +20,15 @@ public class Main {
 
         controller.setUpSimulation();
 
+        // Wait a moment to ensure setup is complete
+        System.out.println("Running simulation for 10 seconds...");
+        try {
+            Thread.sleep(10000); // 10 seconds
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         // Pass to JavaFX application and launch
         FXStockSimApp.setModelAndController(model, controller);
         Application.launch(FXStockSimApp.class, args);

@@ -3,6 +3,7 @@ package org.team27.stocksim.model.instruments;
 /**
  * Represents different time periods for filtering price history data.
  * This is a domain model concept separate from UI concerns.
+ * Uses actual timestamps for true time-based filtering.
  */
 public enum TimePeriod {
     ONE_DAY(1),
@@ -26,15 +27,12 @@ public enum TimePeriod {
     }
 
     /**
-     * Calculate how many data points to display based on available history.
-     * Assumes roughly hourly data points.
+     * Get the time window in milliseconds for this period.
      * 
-     * @param totalPoints Total number of price points available
-     * @return Number of points to display for this time period
+     * @return Time window in milliseconds
      */
-    public int calculatePointsToDisplay(int totalPoints) {
-        // Limit to hourly data points for the time period
-        return Math.min(totalPoints, days * 24);
+    public long getTimeWindowMillis() {
+        return days * 24L * 60L * 60L * 1000L; // days to milliseconds
     }
 
     /**
