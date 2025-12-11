@@ -16,16 +16,13 @@ public class SimSetup {
     }
 
     public void start() {
-        // Create some default stocks
         createDefaultStocks();
         createBots(1000);
-        // Create user
         model.createUser("user1", "Default User");
         model.setCurrentUser("user1");
-        // createSellOrders(100, BigDecimal.valueOf(100.00));
         initializeBotPositions();
 
-        model.startMarketSimulation(); // Start the simulation if needed
+        model.startMarketSimulation();
 
     }
 
@@ -43,32 +40,11 @@ public class SimSetup {
         }
     }
 
-    /*
-     * private void createSellOrders(int numberOfOrders, BigDecimal startingPrice) {
-     * 
-     * for (Instrument stock : model.getStocks().values()) {
-     * String symbol = stock.getSymbol();
-     * // You can customize the starting price based on the stock if needed
-     * for (var i = 0; i < numberOfOrders / 10; i++) {
-     * for (var quantity = 1; quantity <= 10; quantity++) {
-     * 
-     * BigDecimal randomPrice = startingPrice.add(BigDecimal.valueOf(i));
-     * Order sellOrder = new Order(Order.Side.SELL, symbol, quantity, randomPrice,
-     * 10, "bot" + i);
-     * model.placeOrder(sellOrder);
-     * }
-     * }
-     * }
-     * }
-     */
-
     private void createDefaultStocks() {
-        // Original stocks
+        // 20 random stocks
         model.createStock("AAPL", "Apple Inc.", "0.01", "100", "Technology");
         model.createStock("GOOGL", "Alphabet Inc.", "0.01", "100", "Technology");
         model.createStock("MSFT", "Microsoft Corp.", "0.01", "100", "Technology");
-
-// Additional 17 random stocks
         model.createStock("TSLA", "Tesla Inc.", "0.01", "100", "Consumer");
         model.createStock("AMZN", "Amazon.com Inc.", "0.01", "100", "Consumer");
         model.createStock("META", "Meta Platforms Inc.", "0.01", "100", "Entertainment");

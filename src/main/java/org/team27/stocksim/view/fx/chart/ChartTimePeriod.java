@@ -1,29 +1,42 @@
 package org.team27.stocksim.view.fx.chart;
 
+import org.team27.stocksim.model.instruments.TimePeriod;
+
 /**
- * Enum representing different time periods for chart display.
- * Each period defines how to filter and display price history data.
+ * View-layer enum that maps UI labels to domain model TimePeriod.
+ * Responsible only for UI presentation concerns (button labels).
+ * Business logic has been moved to the model's TimePeriod enum.
  */
 public enum ChartTimePeriod {
-    ONE_DAY("1D", 1),
-    ONE_WEEK("1W", 7),
-    ONE_MONTH("1M", 30),
-    ONE_YEAR("1Y", 365);
+    ONE_DAY("1D", TimePeriod.ONE_DAY),
+    ONE_WEEK("1W", TimePeriod.ONE_WEEK),
+    ONE_MONTH("1M", TimePeriod.ONE_MONTH),
+    ONE_YEAR("1Y", TimePeriod.ONE_YEAR);
 
     private final String label;
-    private final int days;
+    private final TimePeriod modelTimePeriod;
 
-    ChartTimePeriod(String label, int days) {
+    ChartTimePeriod(String label, TimePeriod modelTimePeriod) {
         this.label = label;
-        this.days = days;
+        this.modelTimePeriod = modelTimePeriod;
     }
 
+    /**
+     * Get the UI label for this time period.
+     * 
+     * @return Button label (e.g., "1D", "1W")
+     */
     public String getLabel() {
         return label;
     }
 
-    public int getDays() {
-        return days;
+    /**
+     * Get the corresponding domain model TimePeriod.
+     * 
+     * @return Domain model representation
+     */
+    public TimePeriod toModelTimePeriod() {
+        return modelTimePeriod;
     }
 
     /**
@@ -42,15 +55,16 @@ public enum ChartTimePeriod {
     }
 
     /**
-     * Calculate how many data points to display based on available history.
-     * This method can be extended to implement more sophisticated filtering.
+     * Get appropriate time axis label for UI display.
      * 
-     * @param totalPoints Total number of price points available
-     * @return Number of points to display for this time period
+     * @return Label for the chart's time axis
      */
-    public int calculatePointsToDisplay(int totalPoints) {
-        // For now, return all points up to the period's limit
-        // This can be extended to sample or aggregate data differently
-        return Math.min(totalPoints, days * 24); // Assuming hourly data points
+    public String getTimeAxisLabel() {
+        return switch (this) {
+            case ONE_DAY -> "Hours";
+            case ONE_WEEK -> "Days";
+            case ONE_MONTH -> "Days";
+            case ONE_YEAR -> "Months";
+        };
     }
 }

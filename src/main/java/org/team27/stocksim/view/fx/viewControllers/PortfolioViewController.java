@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-public class PortfolioViewController extends ViewControllerBase 
+public class PortfolioViewController extends ViewControllerBase
         implements ViewAdapter.PortfolioChangedListener, ViewAdapter.TradeSettledListener {
 
     @FXML

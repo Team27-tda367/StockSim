@@ -80,4 +80,13 @@ public class SimController implements ISimController {
         return user != null ? user.getOrderHistory() : new OrderHistory();
     }
 
+    @Override
+    public void setSelectedStock(Instrument stock) {
+        model.getSelectionManager().setSelectedStock(stock);
+    }
+
+    @Override
+    public Instrument getSelectedStock() {
+        return model.getSelectionManager().getSelectedStock();
+    }
 }

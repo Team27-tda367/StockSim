@@ -35,7 +35,7 @@ public class FXStockSimApp extends Application {
         ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage, controller, viewAdapter);
         viewSwitcher.switchTo(EView.MAINVIEW);
 
-        primaryStage.setTitle("Stocksim");
+        primaryStage.setTitle("StonkSim");
         primaryStage.setMaximized(true);
         primaryStage.show();
     }

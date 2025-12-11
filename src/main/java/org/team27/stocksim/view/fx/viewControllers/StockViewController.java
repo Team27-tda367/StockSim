@@ -2,7 +2,6 @@ package org.team27.stocksim.view.fx.viewControllers;
 
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
-import org.team27.stocksim.view.fx.SelectedStockService;
 import org.team27.stocksim.view.fx.chart.ChartDataService;
 import org.team27.stocksim.view.fx.chart.ChartTimePeriod;
 
@@ -198,45 +197,7 @@ public class StockViewController extends ViewControllerBase
             });
         }
 
-        // Hämta vald aktie från service
-        stock = SelectedStockService.getSelectedStock();
-        System.out.println("Selected stock in StockViewController: " + (stock != null ? stock.getSymbol() : "null"));
-
-        if (stock != null) {
-            // Symbol
-            symbolLabel.setText(stock.getSymbol());
-
-            // Namn/beskrivning – anpassa efter din Stock-modell
-            // Om ni har t.ex. getName() / getFullName():
-            nameLabel.setText(stock.getName());
-
-            // Pris – anpassa efter vad modellen har (getCurrentPrice, getLastPrice, etc.)
-            BigDecimal price = stock.getCurrentPrice(); // EXEMPEL – byt till rätt getter
-            if (priceLabel != null) {
-                priceLabel.setText(price.toString());
-            }
-
-            // Initialize price field with current price
-            if (priceField != null) {
-                priceField.setText(price.toString());
-            }
-
-            if (orderPriceLabel != null) {
-                orderPriceLabel.setText(price + " SEK");
-            }
-
-            // Initialize chart data service and default time period
-            chartDataService = new ChartDataService();
-            currentTimePeriod = ChartTimePeriod.ONE_DAY;
-
-            // Initialize and populate the price chart
-            initializePriceChart();
-
-            // Set default active button (1D)
-            if (btn1D != null) {
-                setActiveTimePeriodButton(btn1D);
-            }
-        }
+        // Note: Stock loading moved to onInit() where modelController is available
     }
 
     /**
@@ -313,7 +274,7 @@ public class StockViewController extends ViewControllerBase
 
         // Make clickable - navigate to this stock's detail view
         container.setOnMouseClicked(event -> {
-            SelectedStockService.setSelectedStock(instrument);
+            modelController.setSelectedStock(instrument);
             viewSwitcher.switchTo(EView.STOCKVIEW);
         });
 
@@ -332,8 +293,8 @@ public class StockViewController extends ViewControllerBase
         // Refresh chart with new time period
         refreshChartForTimePeriod();
 
-        System.out.println("Selected time period: " + currentTimePeriod.getLabel() + " (" + currentTimePeriod.getDays()
-                + " days)");
+        System.out.println("Selected time period: " + currentTimePeriod.getLabel() + " (" 
+                + currentTimePeriod.toModelTimePeriod().getDays() + " days)");
     }
 
     private void setActiveTimePeriodButton(Button button) {
@@ -368,7 +329,7 @@ public class StockViewController extends ViewControllerBase
         priceChart.getData().add(priceSeries);
 
         // Update time axis label based on period
-        priceChart.getXAxis().setLabel(chartDataService.getTimeAxisLabel(currentTimePeriod));
+        priceChart.getXAxis().setLabel(currentTimePeriod.getTimeAxisLabel());
 
         // Style the chart
         priceChart.setCreateSymbols(false); // Don't show dots on the line
@@ -408,7 +369,7 @@ public class StockViewController extends ViewControllerBase
         lastPriceHistorySize = stock.getPriceHistory().getPoints().size();
 
         // Update time axis label
-        priceChart.getXAxis().setLabel(chartDataService.getTimeAxisLabel(currentTimePeriod));
+        priceChart.getXAxis().setLabel(currentTimePeriod.getTimeAxisLabel());
     }
 
     /*
@@ -483,6 +444,45 @@ public class StockViewController extends ViewControllerBase
         Portfolio portfolio = user.getPortfolio();
         BigDecimal balance = portfolio.getBalance();
         availableBalanceLabel.setText("Balance: $" + balance.toString());
+
+        // Get selected stock from controller
+        stock = modelController.getSelectedStock();
+        System.out.println("Selected stock in StockViewController: " + (stock != null ? stock.getSymbol() : "null"));
+
+        if (stock != null) {
+            // Symbol
+            symbolLabel.setText(stock.getSymbol());
+
+            // Name/description
+            nameLabel.setText(stock.getName());
+
+            // Price
+            BigDecimal price = stock.getCurrentPrice();
+            if (priceLabel != null) {
+                priceLabel.setText(price.toString());
+            }
+
+            // Initialize price field with current price
+            if (priceField != null) {
+                priceField.setText(price.toString());
+            }
+
+            if (orderPriceLabel != null) {
+                orderPriceLabel.setText(price + " SEK");
+            }
+
+            // Initialize chart data service and default time period
+            chartDataService = new ChartDataService();
+            currentTimePeriod = ChartTimePeriod.ONE_DAY;
+
+            // Initialize and populate the price chart
+            initializePriceChart();
+
+            // Set default active button (1D)
+            if (btn1D != null) {
+                setActiveTimePeriodButton(btn1D);
+            }
+        }
 
         // Populate trending stocks after modelController is initialized
         populateTrendingStocks();

@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class StockSim implements IModelSubject {
     private final List<IModelObserver> observers = new ArrayList<>();
+    private final SelectionManager selectionManager = new SelectionManager();
 
     // Depend on abstractions (interfaces), not concrete classes - DIP
     private final IMarket market;
@@ -56,8 +56,7 @@ public class StockSim implements IModelSubject {
         // Initialize simulator
         this.marketSimulator = new MarketSimulator(
                 traderRegistry::getBots,
-                this::onSimulationTick
-        );
+                this::onSimulationTick);
 
         System.out.println("Successfully created Sim-model");
     }
@@ -85,7 +84,6 @@ public class StockSim implements IModelSubject {
         marketSimulator.setTotalTradesExecuted(market.getCompletedTrades().size());
     }
 
-
     public void addOrderBook(String symbol, OrderBook orderBook) {
         market.addOrderBook(symbol, orderBook);
     }
@@ -101,7 +99,6 @@ public class StockSim implements IModelSubject {
     public void placeOrder(Order order) {
         market.placeOrder(order, traderRegistry.getAllTraders(), instrumentRegistry.getAllInstruments());
     }
-
 
     public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {
         instrumentRegistry.createInstrument(symbol, stockName, tickSize, lotSize, category);
@@ -148,10 +145,8 @@ public class StockSim implements IModelSubject {
     }
 
     public Portfolio createPortfolio(String id) {
-        return traderRegistry.getTrader(id) != null ?
-                traderRegistry.getTrader(id).getPortfolio() : null;
+        return traderRegistry.getTrader(id) != null ? traderRegistry.getTrader(id).getPortfolio() : null;
     }
-
 
     public void startMarketSimulation() {
         marketSimulator.start();
@@ -164,7 +159,6 @@ public class StockSim implements IModelSubject {
     public void stopMarketSimulation() {
         marketSimulator.stop();
     }
-
 
     private void notifyPriceUpdate(HashMap<String, Instrument> stocks) {
         for (IModelObserver o : observers) {
@@ -188,6 +182,10 @@ public class StockSim implements IModelSubject {
         for (IModelObserver o : observers) {
             o.onPortfolioChanged();
         }
+    }
+
+    public SelectionManager getSelectionManager() {
+        return selectionManager;
     }
 
     @Override
