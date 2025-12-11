@@ -1,40 +1,28 @@
 package org.team27.stocksim;
 
+import org.team27.stocksim.controller.ISimController;
+import org.team27.stocksim.controller.SimController;
+import org.team27.stocksim.model.StockSim;
+import org.team27.stocksim.view.fx.FXStockSimApp;
+
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import org.team27.stocksim.db.Database;
 
-public class Main extends Application {
-
-    @Override
-    public void init() throws Exception {
-        super.init();
-        // Starta databasen innan UI
-        Database.init();
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/org/team27/stocksim/view/exampel.fxml"));
-
-        Scene scene = new Scene(loader.load(), 400, 300);
-
-        primaryStage.setTitle("Stocksim");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    @Override
-    public void stop() throws Exception {
-        // Stäng databasen snyggt
-        Database.close();
-        super.stop();
-    }
+/**
+ * Main entry point for the StockSim application.
+ * Initializes the model and controller, then launches the JavaFX application.
+ */
+public class Main {
 
     public static void main(String[] args) {
-        launch(args);
+        // Initialize the model and controller
+        StockSim model = new StockSim();
+        ISimController controller = new SimController(model);
+
+        controller.setUpSimulation();
+
+        // Pass to JavaFX application and launch
+        FXStockSimApp.setModelAndController(model, controller);
+        Application.launch(FXStockSimApp.class, args);
     }
+
 }

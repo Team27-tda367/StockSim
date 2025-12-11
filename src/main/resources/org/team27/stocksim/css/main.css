@@ -1,10 +1,765 @@
+/* Root container */
+.root-container {
 
-/* /src/main/resources/org/team27/stocksim/css/main.css
-    JavaFX button styles - base, variants, states
-*/
 
-/* Base button - applies to all JavaFX Buttons */
-.button {
-     -fx-font-size: 20px;
-     -fx-background-color: linear-gradient(#4a90e2, #3378d8);
+    -fx-background-color: white;
+}
+
+.title-large {
+    -fx-font-size: 36px;
+    -fx-font-weight: 600;
+    -fx-font-family: 'Inter', sans-serif;
+}
+
+.title-medium {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.title-small {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.text-bold {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.text-regular {
+    -fx-font-size: 14px;
+}
+
+.text-small {
+    -fx-font-size: 12px;
+}
+
+.text-muted {
+    -fx-text-fill: #666666;
+}
+
+/* LAYOUT */
+
+/* Header bar */
+.header-bar {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20 30 20 30;
+}
+
+/* Content area with padding */
+.content-area {
+    -fx-padding: 30;
+}
+
+.content-area-small {
+    -fx-padding: 20;
+}
+
+/* List header */
+.list-header {
+    -fx-padding: 10 20 10 20;
+    -fx-background-color: #f9fafb;
+}
+
+
+.list-item:hover {
+    -fx-background-color: #f9fafb;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+/* Primary button (blue) */
+.btn-highlighted {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-background-radius: 15;
+    -fx-cursor: hand;
+    -fx-font-family: "Inter", sans-serif;
+}
+
+.btn-highlighted:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+/* Secondary button (gray) */
+.btn-secondary {
+    -fx-background-color: #f3f4f6;
+    -fx-background-radius: 15;
+    -fx-cursor: hand;
+    -fx-font-family: "Inter", sans-serif;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #e5e7eb;
+}
+
+/* Transparent/ghost button */
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.btn-ghost:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Success button (green) */
+.btn-success {
+    -fx-background-color: #16a34a;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-success:hover {
+    -fx-background-color: #15803d;
+}
+
+/* Danger button (red) */
+.btn-danger {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #b91c1c;
+}
+
+/* ============================================
+   FORM INPUTS
+   ============================================ */
+
+.input-field {
+    -fx-pref-height: 45;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5;
+}
+
+.input-field-small {
+    -fx-pref-height: 35;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5;
+}
+
+/* ============================================
+   COLOR UTILITIES
+   ============================================ */
+
+.text-positive {
+    -fx-text-fill: #16a34a;
+}
+
+.text-negative {
+    -fx-text-fill: #dc2626;
+}
+
+.text-primary {
+    -fx-text-fill: #2563eb;
+}
+
+.text-warning {
+    -fx-text-fill: #d97706;
+}
+
+.bg-light {
+    -fx-background-color: #f9fafb;
+}
+
+.bg-white {
+    -fx-background-color: white;
+}
+
+/* ============================================
+   TRENDING STOCKS
+   ============================================ */
+
+.trending-stock-item {
+    -fx-padding: 2 0 2 0;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.trending-stock-item:hover {
+    -fx-background-color: #f9fafb;
+    -fx-cursor: hand;
+}
+
+.trending-symbol {
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+.trending-name {
+    -fx-font-size: 9px;
+    -fx-text-fill: #6b7280;
+}
+
+.trending-price {
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+/* ============================================
+   CARDS & CONTAINERS
+   ============================================ */
+
+.card {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 20;
+}
+
+.card-header {
+    -fx-background-color: #f9fafb;
+    -fx-padding: 15 20 15 20;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* 
+   INTERACTIVE ELEMENTS
+   */
+
+.clickable {
+    -fx-cursor: hand;
+}
+
+.icon-large {
+    -fx-font-size: 18px;
+}
+
+.icon-medium {
+    -fx-font-size: 16px;
+}
+
+.icon-small {
+    -fx-font-size: 14px;
+}
+
+/*
+   SPACING UTILITIES
+ */
+
+.spacing-small {
+    -fx-spacing: 5;
+}
+
+.spacing-medium {
+    -fx-spacing: 10;
+}
+
+.spacing-large {
+    -fx-spacing: 20;
+}
+
+/* ============================================
+   SPECIFIC COMPONENTS (Stock app specific)
+   ============================================ */
+
+.logo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Inter", sans-serif;
+}
+
+.stock-symbol {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.stock-meta {
+    -fx-text-fill: #666666;
+    -fx-font-size: 12px;
+}
+
+.order-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-padding: 8 10 8 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 8, 0.2, 0, 2);
+}
+
+.order-card .info-box {
+    -fx-background-color: #F9FAFB;
+    -fx-background-radius: 8;
+    -fx-padding: 5 8 5 8;
+}
+
+.order-card .label-title {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: bold;
+}
+
+.order-card .info-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #111827;
+}
+
+.order-card .info-header {
+    -fx-font-size: 10px;
+    -fx-text-fill: #6B7280;
+}
+
+.order-card TextField {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #E5E7EB;
+    -fx-padding: 0 6 0 6;
+    -fx-font-size: 12px;
+}
+
+.buy-btn {
+    -fx-background-color: #3B82F6;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999;
+    -fx-padding: 5 0 5 0;
+}
+
+.sell-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #EF4444;
+    -fx-border-color: #EF4444;
+    -fx-border-width: 1;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999;
+    -fx-border-radius: 999;
+    -fx-padding: 5 0 5 0;
+}
+
+.stock-price-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-padding: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 8, 0.2, 0, 2);
+}
+
+.price-title {
+    -fx-font-size: 13;
+    -fx-text-fill: #6B7280;
+}
+
+.price-value-large {
+    -fx-font-size: 28;
+    -fx-font-weight: 500;
+    -fx-text-fill: #111827;
+}
+
+.price-value-medium {
+    -fx-font-size: 22;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+.price-value-main {
+    -fx-font-size: 18;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+.price-value-compact {
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+    -fx-text-fill: #111827;
+}
+
+.price-title-small {
+    -fx-font-size: 10;
+    -fx-text-fill: #6B7280;
+}
+
+.price-change-compact {
+    -fx-font-size: 11;
+    -fx-font-weight: 600;
+    -fx-text-fill: #16a34a;
+}
+
+.price-icon-small {
+    -fx-font-size: 12;
+    -fx-background-color: #DBEAFE;
+    -fx-text-fill: #2563eb;
+    -fx-background-radius: 6;
+    -fx-padding: 2;
+}
+
+.price-value-small {
+    -fx-font-size: 18;
+    -fx-font-weight: 500;
+    -fx-text-fill: #4B5563;
+}
+
+.price-change-positive {
+    -fx-font-size: 14;
+    -fx-font-weight: 600;
+    -fx-text-fill: #16a34a;
+}
+
+.price-icon {
+    -fx-font-size: 16;
+    -fx-background-color: #DBEAFE;
+    -fx-text-fill: #2563eb;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+}
+
+/* ====== REUSABLE CARD COMPONENTS ====== */
+.panel-card {
+    -fx-background-color: #F9FAFB;
+    -fx-padding: 24;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.07), 12, 0.3, 0, 2);
+}
+
+.chart-section {
+    -fx-background-color: white;
+    -fx-padding: 16;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+}
+
+.panel-header {
+    -fx-background-color: #F3F4F6;
+    -fx-background-radius: 12 12 0 0;
+    -fx-border-radius: 12 12 0 0;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-padding: 3 14;
+    -fx-spacing: 3;
+}
+
+.panel-body {
+    -fx-background-color: white;
+    -fx-background-radius: 0 0 12 12;
+    -fx-border-radius: 0 0 12 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-padding: 7;
+    -fx-spacing: 10;
+}
+
+.panel-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-font-family: 'Inter', 'Arial';
+    -fx-text-fill: #111827;
+}
+
+.chart-container {
+    -fx-background-color: white;
+    -fx-padding: 16;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.07), 12, 0.3, 0, 2);
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-font-family: 'Inter', 'Arial';
+    -fx-text-fill: #111827;
+    -fx-padding: 0 0 12 0;
+}
+
+.stock-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 600;
+    -fx-font-family: 'Inter', 'Arial';
+    -fx-text-fill: #111827;
+}
+
+.stock-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: 'Inter', 'Arial';
+}
+
+.badge {
+    -fx-padding: 2 12;
+    -fx-background-radius: 14;
+    -fx-font-size: 12px;
+    -fx-font-family: 'Inter';
+    -fx-font-weight: 500;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+}
+
+.badge-blue {
+    -fx-background-color: #DBEAFE;
+    -fx-text-fill: #1447E6;
+    -fx-border-color: #BEDBFF;
+}
+
+.badge-green {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #008236;
+    -fx-border-color: #B9F8CF;
+}
+
+.favorite-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: #D1D5DC;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-padding: 4 10;
+    -fx-cursor: hand;
+}
+
+.favorite-icon {
+    -fx-font-size: 18px;
+    -fx-text-fill: #4B5563;
+}
+
+/* ====== SIDE STOCK LIST CARD ====== */
+.stock-list-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-padding: 10 12 10 12;
+    -fx-spacing: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 8, 0.2, 0, 2);
+    -fx-pref-width: 340;
+}
+
+/* Header */
+.stock-list-header {
+    -fx-background-color: #F3F4F6;
+    -fx-padding: 6 12;
+    -fx-background-radius: 12 12 0 0;
+    -fx-border-radius: 12 12 0 0;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+    -fx-font-family: "Inter", "Arial";
+    -fx-text-fill: #111827;
+}
+
+/* List item rows */
+.stock-row {
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+}
+
+/* Symbol text */
+.stock-symbol {
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+}
+
+/* Company name */
+.stock-company {
+    -fx-font-size: 11;
+    -fx-text-fill: #6B7280;
+}
+
+/* Price box (right side) */
+.stock-price-box {
+    -fx-alignment: center-right;
+    -fx-spacing: 2;
+}
+
+/* Large price */
+.stock-price {
+    -fx-font-size: 13;
+    -fx-font-weight: 600;
+}
+
+/* Change percent row */
+.stock-change {
+    -fx-spacing: 4;
+    -fx-alignment: center-right;
+}
+
+/* Colors for stock change */
+.stock-up {
+    -fx-text-fill: #16A34A;
+}
+
+.stock-down {
+    -fx-text-fill: #DC2626;
+}
+
+/* Divider line */
+.stock-divider {
+    -fx-background-color: #E5E7EB;
+    -fx-pref-height: 1;
+}
+
+/* Time period selector buttons */
+.time-period-btn {
+    -fx-background-color: #F3F4F6;
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+    -fx-font-family: 'Inter', 'Arial';
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 1;
+    -fx-padding: 4 8;
+    -fx-cursor: hand;
+    -fx-min-width: 32;
+    -fx-min-height: 24;
+}
+
+.time-period-btn:hover {
+    -fx-background-color: #E5E7EB;
+}
+
+.time-period-btn:pressed {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-border-color: #2563eb;
+}
+
+.time-period-btn-active {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-border-color: #2563eb;
+}
+
+.time-period-btn-active:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+
+/* ============================================
+   LISTVIEW STYLING
+   ============================================ */
+
+/* Custom ListView container */
+.list-view-custom {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    /* Light gray border */
+    -fx-border-width: 1px;
+    /* Thin border */
+    -fx-border-radius: 12px;
+    /* Rounded corners */
+    -fx-background-radius: 12px;
+    /* Rounded corners */
+    -fx-padding: 10;
+    /* Inner padding */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 8, 0.2, 0, 2);
+    /* Subtle shadow */
+}
+
+/* Custom ListCell styling */
+.list-cell {
+    -fx-padding: 14 20;
+    /* Padding inside each cell */
+    -fx-background-color: white;
+    /* Default background color */
+    -fx-border-color: #e5e7eb;
+    /* Light border between cells */
+    -fx-border-width: 0 0 1 0;
+    /* Bottom border only */
+    -fx-font-family: "Inter", sans-serif;
+    /* Use the Inter font */
+    -fx-font-size: 14px;
+    /* Default font size */
+    -fx-text-fill: #111827;
+    /* Dark text color */
+}
+
+/* Hover effect for ListView cells */
+.list-cell:hover {
+    -fx-background-color: #f3f4f6;
+    /* Light gray background on hover */
+}
+
+/* Selected cell styling */
+.list-cell:filled:selected {
+    -fx-background-color: #2563eb;
+    /* Blue background for selected cell */
+    -fx-text-fill: white;
+    /* White text for selected cell */
+}
+
+/* Stock symbol styling inside the ListView */
+.list-cell .stock-symbol {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    /* Dark text color */
+}
+
+/* Stock meta information styling inside the ListView */
+.list-cell .stock-meta {
+    -fx-text-fill: #6b7280;
+    /* Muted gray color for meta information */
+    -fx-font-size: 12px;
+}
+
+/* Add spacing between the stock symbol and meta information */
+.list-cell .stock-info {
+    -fx-spacing: 5;
+    /* Space between symbol and meta */
+}
+
+/* Add spacing between the content and the action button */
+.list-cell .content {
+    -fx-spacing: 10;
+    /* Space between content and button */
+}
+
+/* Style the "Trade" button inside the ListView */
+.list-cell .btn-trade {
+    -fx-background-color: #16a34a;
+    /* Green background for the button */
+    -fx-text-fill: white;
+    /* White text for the button */
+    -fx-background-radius: 5;
+    /* Rounded corners */
+    -fx-padding: 5 10;
+    /* Padding inside the button */
+    -fx-cursor: hand;
+    /* Pointer cursor on hover */
+    -fx-font-family: "Inter", sans-serif;
+    /* Use the Inter font */
+    -fx-font-size: 12px;
+    /* Smaller font size for the button */
+}
+
+/* Hover effect for the "Trade" button */
+.list-cell .btn-trade:hover {
+    -fx-background-color: #15803d;
+    /* Darker green on hover */
 }

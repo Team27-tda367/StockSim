@@ -1,0 +1,19 @@
+package org.team27.stocksim.view.fx;
+
+public enum EView {
+    MAINVIEW("/org/team27/stocksim/view/main_view.fxml"), // Add full path
+    // CREATESTOCK("/org/team27/stocksim/view/create_stock_page.fxml"), // Add full
+    // path
+    STOCKVIEW("/org/team27/stocksim/view/stock_view.fxml"), // Add full path
+    PORTFOLIOVIEW("/org/team27/stocksim/view/portfolio_view.fxml"); // Add full path
+
+    private String fileName;
+
+    EView(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+}

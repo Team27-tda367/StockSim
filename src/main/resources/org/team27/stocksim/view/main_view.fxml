@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.collections.FXCollections?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml" fx:controller="org.team27.stocksim.view.fx.viewControllers.MainViewController" prefHeight="700.0" prefWidth="800" styleClass="root-container" stylesheets="@../css/main.css">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" styleClass="header-bar, spacing-large">
+
+        <Label text="StonkSim" styleClass="logo"/>
+
+        <Button text="Home" styleClass="btn-highlighted" onAction="#onMainView"/>
+        <Button text="Portfolio" styleClass="btn-ghost" onAction="#onPortfolioView"/>
+        <!-- 
+        <Button text="Create Stock" styleClass="btn-ghost" onAction="#onExample"/> -->
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <VBox alignment="CENTER_RIGHT" styleClass="spacing-small">
+            <Label fx:id="availableBalanceLabel" styleClass="text-medium, text-bold"/>
+        </VBox>
+    </HBox>
+
+    <!-- Main Content -->
+    <VBox VBox.vgrow="ALWAYS" styleClass="content-area, spacing-large">
+
+        <!-- Title -->
+        <Label text="Stocks" styleClass="title-large"/>
+
+        <!-- Search Bar -->
+        <TextField fx:id="searchField" promptText="Search for a stock..." styleClass="input-field"/>
+
+        <!-- Filter Buttons -->
+        <HBox fx:id="categoryBox" alignment="CENTER_LEFT" styleClass="spacing-medium">
+            <Button fx:id="btnAll" text="All" styleClass="btn-highlighted"/>
+
+            <!-- Enum-generated category buttons will be inserted here -->
+
+            <Region HBox.hgrow="SOMETIMES"/>
+            <Button text="Show favorites only" styleClass="btn-secondary"/>
+        </HBox>
+
+        <!-- Stock List Header -->
+        <HBox styleClass="list-header, spacing-medium">
+            <Label text="Name" prefWidth="180" styleClass="text-bold"/>
+            <Label text="Today" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
+
+            <Label text="1 week" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="1 year" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="Last price" prefWidth="190" alignment="CENTER_RIGHT" styleClass="text-bold"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Watchlist" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="Trade" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
+        </HBox>
+
+        <!-- Stock List Items -->
+        <ListView fx:id="stockListView" VBox.vgrow="ALWAYS" styleClass="list-view">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                </FXCollections>
+            </items>
+        </ListView>
+    </VBox>
+
+</VBox>
