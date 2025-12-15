@@ -11,6 +11,7 @@ import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.Bot;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
 
 public class RandomStrategy implements IBotStrategy {
 
@@ -71,7 +72,7 @@ public class RandomStrategy implements IBotStrategy {
         String symbol = ownedSymbols.get(random.nextInt(ownedSymbols.size()));
 
         // Get the instrument from the market
-        Instrument stock = model.getStocks().get(symbol);
+        InstrumentDTO stock = model.getStocks().get(symbol);
         if (stock == null) {
             return Collections.emptyList();
         }
@@ -84,7 +85,7 @@ public class RandomStrategy implements IBotStrategy {
 
         // Determine quantity to sell (can't sell more than owned)
         int quantity = Math.min(randomQuantity(), maxAvailableQuantity);
-        BigDecimal price = randomPrice(stock.getCurrentPrice());
+        BigDecimal price = randomPrice(stock.getPrice());
 
         Order sellOrder = new Order(Order.Side.SELL, stock.getSymbol(), price, quantity, bot.getId());
         return Collections.singletonList(sellOrder);
@@ -92,14 +93,14 @@ public class RandomStrategy implements IBotStrategy {
 
     private List<Order> buy(StockSim model, Bot bot) {
         // Choose a random instrument in market
-        Instrument stock = pickRandomStock(model);
+        InstrumentDTO stock = pickRandomStock(model);
         if (stock == null) {
             return Collections.emptyList();
         }
 
         int quantity = randomQuantity();
 
-        BigDecimal price = randomPrice(stock.getCurrentPrice());
+        BigDecimal price = randomPrice(stock.getPrice());
 
         Order buyOrder = new Order(Order.Side.BUY, stock.getSymbol(), price, quantity, bot.getId());
         return Collections.singletonList(buyOrder);
@@ -124,12 +125,12 @@ public class RandomStrategy implements IBotStrategy {
         return random.nextDouble() < doSomethingProbability;
     }
 
-    private Instrument pickRandomStock(StockSim model) {
-        HashMap<String, Instrument> stocks = model.getStocks();
+    private InstrumentDTO pickRandomStock(StockSim model) {
+        HashMap<String, InstrumentDTO> stocks = model.getStocks();
         if (stocks == null || stocks.isEmpty()) {
             return null;
         }
-        List<Instrument> instruments = new ArrayList<>(stocks.values());
+        List<InstrumentDTO> instruments = new ArrayList<>(stocks.values());
         int index = random.nextInt(instruments.size());
         return instruments.get(index);
     }

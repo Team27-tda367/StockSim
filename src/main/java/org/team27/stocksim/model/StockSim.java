@@ -1,7 +1,8 @@
 package org.team27.stocksim.model;
 
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.StockMapper;
 import org.team27.stocksim.model.instruments.IInstrumentRegistry;
-import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.instruments.InstrumentRegistry;
 import org.team27.stocksim.model.instruments.StockFactory;
 import org.team27.stocksim.model.market.IMarket;
@@ -38,7 +39,7 @@ public class StockSim implements IModelSubject {
         this.market = new Market();
 
         // Set up market callbacks
-        market.setOnPriceUpdate(unused -> notifyPriceUpdate(instrumentRegistry.getAllInstruments()));
+        market.setOnPriceUpdate(unused -> notifyPriceUpdate());
         market.setOnTradeSettled(trade -> {
             notifyTradeSettled();
 
@@ -108,12 +109,28 @@ public class StockSim implements IModelSubject {
         return instrumentRegistry.getCategories();
     }
 
-    public HashMap<String, Instrument> getStocks() {
-        return instrumentRegistry.getAllInstruments();
+    public HashMap<String, InstrumentDTO> getStocks() {
+        HashMap<String, InstrumentDTO> result = new HashMap<>();
+
+        for (var entry : instrumentRegistry.getAllInstruments().entrySet()) {
+            result.put(
+                    entry.getKey(),
+                    StockMapper.toDto(entry.getValue()));
+        }
+
+        return result;
     }
 
-    public HashMap<String, Instrument> getStocks(String category) {
-        return instrumentRegistry.getInstrumentsByCategory(category);
+    public HashMap<String, InstrumentDTO> getStocks(String category) {
+        HashMap<String, InstrumentDTO> result = new HashMap<>();
+
+        for (var entry : instrumentRegistry.getInstrumentsByCategory(category).entrySet()) {
+            result.put(
+                    entry.getKey(),
+                    StockMapper.toDto(entry.getValue()));
+        }
+
+        return result;
     }
 
     public void createUser(String id, String name) {
@@ -160,7 +177,8 @@ public class StockSim implements IModelSubject {
         marketSimulator.stop();
     }
 
-    private void notifyPriceUpdate(HashMap<String, Instrument> stocks) {
+    private void notifyPriceUpdate() {
+        HashMap<String, InstrumentDTO> stocks = getStocks();
         for (IModelObserver o : observers) {
             o.onPriceUpdate(stocks);
         }

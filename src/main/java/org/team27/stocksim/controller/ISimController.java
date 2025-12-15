@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public interface ISimController {
@@ -18,7 +19,7 @@ public interface ISimController {
 
     ArrayList<String> getAllCategories();
 
-    HashMap<String, Instrument> getStocks(String category);
+    HashMap<String, InstrumentDTO> getStocks(String category);
 
     void setUpSimulation();
 
@@ -30,8 +31,7 @@ public interface ISimController {
 
     OrderHistory getOrderHistory();
 
-    void setSelectedStock(Instrument stock);
+    void setSelectedStock(InstrumentDTO stock);
 
-    Instrument getSelectedStock();
-
+    InstrumentDTO getSelectedStock();
 }

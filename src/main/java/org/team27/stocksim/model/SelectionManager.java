@@ -1,6 +1,6 @@
 package org.team27.stocksim.model;
 
-import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
 
 /**
  * Manages the currently selected stock in the application.
@@ -9,14 +9,14 @@ import org.team27.stocksim.model.instruments.Instrument;
  */
 public class SelectionManager {
 
-    private Instrument selectedStock;
+    private InstrumentDTO selectedStock;
 
     /**
      * Set the currently selected stock.
      * 
      * @param stock The stock to select, or null to clear selection
      */
-    public void setSelectedStock(Instrument stock) {
+    public void setSelectedStock(InstrumentDTO stock) {
         this.selectedStock = stock;
     }
 
@@ -25,7 +25,7 @@ public class SelectionManager {
      * 
      * @return The selected stock, or null if no stock is selected
      */
-    public Instrument getSelectedStock() {
+    public InstrumentDTO getSelectedStock() {
         return selectedStock;
     }
 

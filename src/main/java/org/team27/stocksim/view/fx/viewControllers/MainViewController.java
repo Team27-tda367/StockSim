@@ -1,8 +1,9 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
+import org.team27.stocksim.view.fx.SelectedStockService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class MainViewController extends ViewControllerBase
         stockListView.setCellFactory(listView -> new StockListCell());
 
         // Get all stocks from the model
-        HashMap<String, Instrument> stocks = modelController.getStocks("All");
+        HashMap<String, InstrumentDTO> stocks = modelController.getStocks("All");
         stockList.addAll(stocks.values());
 
         User user = modelController.getUser();
@@ -93,7 +94,7 @@ public class MainViewController extends ViewControllerBase
 
     private void fetchStocksFromCategory(String category) {
         stockList.clear();
-        HashMap<String, Instrument> stocks = modelController.getStocks(category);
+        HashMap<String, InstrumentDTO> stocks = modelController.getStocks(category);
         stockList.addAll(stocks.values());
     }
 
@@ -111,9 +112,9 @@ public class MainViewController extends ViewControllerBase
     }
 
     @FXML
-    private ListView<Instrument> stockListView;
+    private ListView<InstrumentDTO> stockListView;
 
-    private ObservableList<Instrument> stockList = FXCollections.observableArrayList();
+    private ObservableList<InstrumentDTO> stockList = FXCollections.observableArrayList();
 
     @FXML
     private Label availableBalanceLabel;
@@ -141,13 +142,13 @@ public class MainViewController extends ViewControllerBase
     }
 
     @Override
-    public void onPriceUpdate(HashMap<String, ? extends Instrument> stocks) {
+    public void onPriceUpdate(HashMap<String, ? extends InstrumentDTO> stocks) {
 
         Platform.runLater(() -> {
             // Update the existing list items to trigger UI refresh
             for (int i = 0; i < stockList.size(); i++) {
-                Instrument existing = stockList.get(i);
-                Instrument updated = stocks.get(existing.getSymbol());
+                InstrumentDTO existing = stockList.get(i);
+                InstrumentDTO updated = stocks.get(existing.getSymbol());
                 if (updated != null) {
                     stockList.set(i, updated);
                 }
@@ -156,7 +157,7 @@ public class MainViewController extends ViewControllerBase
     }
 
     // ListCell object for displaying Stock items
-    class StockListCell extends ListCell<Instrument> {
+    class StockListCell extends ListCell<InstrumentDTO> {
         private final HBox content;
         private final Label symbol;
         private final Label meta;
@@ -183,7 +184,7 @@ public class MainViewController extends ViewControllerBase
             actionButton = new Button("Trade");
             actionButton.getStyleClass().add("btn-highlighted");
             actionButton.setOnAction(event -> {
-                Instrument instrument = getItem();
+                InstrumentDTO instrument = getItem();
                 if (instrument != null) {
                     handleButtonClick(instrument);
                 }
@@ -195,7 +196,7 @@ public class MainViewController extends ViewControllerBase
         }
 
         @Override
-        protected void updateItem(Instrument stock, boolean empty) {
+        protected void updateItem(InstrumentDTO stock, boolean empty) {
             super.updateItem(stock, empty);
             if (empty || stock == null) {
                 setText(null);
@@ -203,17 +204,18 @@ public class MainViewController extends ViewControllerBase
             } else {
                 symbol.setText(stock.getSymbol());
                 meta.setText(stock.getCategory());
-                price.setText(String.format("$%.2f", stock.getCurrentPrice()));
+                price.setText(String.format("$%.2f", stock.getPrice()));
                 setGraphic(content);
             }
         }
 
         // Trade button handler
-        private void handleButtonClick(Instrument instrument) {
+        private void handleButtonClick(InstrumentDTO instrument) {
             System.out.println(instrument.getSymbol());
 
             // 1. Save selected stock using controller
             modelController.setSelectedStock(instrument);
+
             // 2. Switch to stock view
             viewSwitcher.switchTo(EView.STOCKVIEW);
         }

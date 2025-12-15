@@ -6,6 +6,7 @@ import java.util.Random;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.Bot;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
 
 public class SimSetup {
     private final Random random = new Random();
@@ -30,7 +31,7 @@ public class SimSetup {
         for (var trader : model.getTraders().values()) {
             if (trader instanceof Bot) {
                 var bot = (Bot) trader;
-                for (Instrument stock : model.getStocks().values()) {
+                for (InstrumentDTO stock : model.getStocks().values()) {
                     int quantity = random.nextInt(151) + 50; // Random quantity between 50 and 200
                     // Initialize with a random cost basis between 95 and 105
                     BigDecimal initialCost = BigDecimal.valueOf(95 + random.nextInt(11));

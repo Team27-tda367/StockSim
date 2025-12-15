@@ -1,5 +1,6 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.chart.ChartDataService;
@@ -18,7 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 import javafx.geometry.Pos;
 
-import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.User;
 
@@ -143,7 +143,7 @@ public class StockViewController extends ViewControllerBase
     @FXML
     private void handleSetMarketPrice(ActionEvent event) {
         if (stock != null && priceField != null) {
-            BigDecimal currentPrice = stock.getCurrentPrice();
+            BigDecimal currentPrice = stock.getPrice();
             priceField.setText(currentPrice.toString());
             updateOrderTotal();
         }
@@ -165,7 +165,7 @@ public class StockViewController extends ViewControllerBase
     private VBox trendingStocksContainer;
 
     private boolean isFavorite = false;
-    private Instrument stock;
+    private InstrumentDTO stock;
     private XYChart.Series<Number, Number> priceSeries;
     private int lastPriceHistorySize = 0;
     private Button activeTimePeriodButton = null;
@@ -210,13 +210,13 @@ public class StockViewController extends ViewControllerBase
 
         try {
             // Get all stocks and sort by price (most valuable first)
-            HashMap<String, Instrument> allStocks = modelController.getStocks("All");
+            HashMap<String, InstrumentDTO> allStocks = modelController.getStocks("All");
             if (allStocks == null || allStocks.isEmpty()) {
                 return;
             }
 
-            List<Instrument> topStocks = allStocks.values().stream()
-                    .sorted((s1, s2) -> s2.getCurrentPrice().compareTo(s1.getCurrentPrice()))
+            List<InstrumentDTO> topStocks = allStocks.values().stream()
+                    .sorted((s1, s2) -> s2.getPrice().compareTo(s1.getPrice()))
                     .limit(3)
                     .collect(Collectors.toList());
 
@@ -225,7 +225,7 @@ public class StockViewController extends ViewControllerBase
             trendingStockPriceLabels.clear();
 
             // Create UI for each trending stock
-            for (Instrument instrument : topStocks) {
+            for (InstrumentDTO instrument : topStocks) {
                 HBox stockItem = createTrendingStockItem(instrument);
                 trendingStocksContainer.getChildren().add(stockItem);
             }
@@ -241,7 +241,7 @@ public class StockViewController extends ViewControllerBase
     /**
      * Creates a single trending stock item UI component.
      */
-    private HBox createTrendingStockItem(Instrument instrument) {
+    private HBox createTrendingStockItem(InstrumentDTO instrument) {
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER_LEFT);
         container.getStyleClass().add("trending-stock-item");
@@ -264,7 +264,7 @@ public class StockViewController extends ViewControllerBase
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
         // Right side: Price
-        Label priceLabel = new Label(String.format("%.2f", instrument.getCurrentPrice()));
+        Label priceLabel = new Label(String.format("%.2f", instrument.getPrice()));
         priceLabel.getStyleClass().add("trending-price");
 
         // Store price label reference for dynamic updates
@@ -293,7 +293,7 @@ public class StockViewController extends ViewControllerBase
         // Refresh chart with new time period
         refreshChartForTimePeriod();
 
-        System.out.println("Selected time period: " + currentTimePeriod.getLabel() + " (" 
+        System.out.println("Selected time period: " + currentTimePeriod.getLabel() + " ("
                 + currentTimePeriod.toModelTimePeriod().getDays() + " days)");
     }
 
@@ -396,10 +396,10 @@ public class StockViewController extends ViewControllerBase
     }
 
     @Override
-    public void onPriceUpdate(HashMap<String, ? extends Instrument> stocks) {
+    public void onPriceUpdate(HashMap<String, ? extends InstrumentDTO> stocks) {
         // Uppdatera priset om det har ändrats
         if (stock != null) {
-            BigDecimal newPrice = stock.getCurrentPrice();
+            BigDecimal newPrice = stock.getPrice();
             Platform.runLater(() -> {
                 priceLabel.setText(newPrice.toString());
                 // Update price field if user hasn't entered a custom price
@@ -415,10 +415,10 @@ public class StockViewController extends ViewControllerBase
         // Update trending stock prices dynamically
         Platform.runLater(() -> {
             for (String symbol : trendingStockPriceLabels.keySet()) {
-                Instrument instrument = stocks.get(symbol);
+                InstrumentDTO instrument = stocks.get(symbol);
                 if (instrument != null) {
                     Label label = trendingStockPriceLabels.get(symbol);
-                    label.setText(String.format("%.2f", instrument.getCurrentPrice()));
+                    label.setText(String.format("%.2f", instrument.getPrice()));
                 }
             }
         });
@@ -446,7 +446,7 @@ public class StockViewController extends ViewControllerBase
         availableBalanceLabel.setText("Balance: $" + balance.toString());
 
         // Get selected stock from controller
-        stock = modelController.getSelectedStock();
+        InstrumentDTO stock = modelController.getSelectedStock();
         System.out.println("Selected stock in StockViewController: " + (stock != null ? stock.getSymbol() : "null"));
 
         if (stock != null) {
@@ -457,7 +457,7 @@ public class StockViewController extends ViewControllerBase
             nameLabel.setText(stock.getName());
 
             // Price
-            BigDecimal price = stock.getCurrentPrice();
+            BigDecimal price = stock.getPrice();
             if (priceLabel != null) {
                 priceLabel.setText(price.toString());
             }
