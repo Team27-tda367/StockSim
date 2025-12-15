@@ -1,5 +1,7 @@
 package org.team27.stocksim.model.instruments;
 
+import org.team27.stocksim.model.clock.ClockProvider;
+
 import java.math.BigDecimal;
 
 public class Stock extends Instrument {
@@ -18,7 +20,7 @@ public class Stock extends Instrument {
     }
 
     public void setCurrentPrice(BigDecimal price) {
-        setCurrentPrice(price, System.currentTimeMillis());
+        setCurrentPrice(price, ClockProvider.currentTimeMillis());
     }
 
     public void setCurrentPrice(BigDecimal price, long timestamp) {

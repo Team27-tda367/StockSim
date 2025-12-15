@@ -1,5 +1,6 @@
 package org.team27.stocksim.model.simulation;
 
+import org.team27.stocksim.model.clock.ClockProvider;
 import org.team27.stocksim.model.clock.GameClock;
 import org.team27.stocksim.model.clock.GameTicker;
 import org.team27.stocksim.model.market.MarketState;
@@ -10,19 +11,24 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
-
 public class MarketSimulator implements IMarketSimulator {
 
     private final Supplier<HashMap<String, Trader>> botsSupplier;
     private final Runnable onTick;
+    private final Runnable onSaveData;
     private MarketState state;
     private GameTicker ticker;
     private int totalTradesExecuted;
 
     public MarketSimulator(Supplier<HashMap<String, Trader>> botsSupplier, Runnable onTick) {
+        this(botsSupplier, onTick, null);
+    }
+
+    public MarketSimulator(Supplier<HashMap<String, Trader>> botsSupplier, Runnable onTick, Runnable onSaveData) {
         this.state = MarketState.PAUSED;
         this.botsSupplier = botsSupplier;
         this.onTick = onTick;
+        this.onSaveData = onSaveData;
         this.totalTradesExecuted = 0;
     }
 
@@ -33,16 +39,24 @@ public class MarketSimulator implements IMarketSimulator {
         GameClock clock = new GameClock(
                 ZoneId.of("Europe/Stockholm"),
                 Instant.now(),
-                10000
-        );
+                3600);
+
+        // Set the game clock globally so all components use simulation time
+        ClockProvider.setClock(clock);
 
         ticker = new GameTicker(clock, simInstant -> tick());
         ticker.start();
 
         new Thread(() -> {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(10000); // Let the simulation run for 10 seconds
+
                 clock.setSpeed(5);
+                // Save stock prices to database
+                if (onSaveData != null) {
+                    onSaveData.run();
+                }
+
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -50,7 +64,6 @@ public class MarketSimulator implements IMarketSimulator {
 
         System.out.println("Market simulation started");
     }
-
 
     @Override
     public void pause() {
@@ -76,7 +89,6 @@ public class MarketSimulator implements IMarketSimulator {
         if (state != MarketState.RUNNING) {
             return;
         }
-
 
         if (onTick != null) {
             onTick.run();
