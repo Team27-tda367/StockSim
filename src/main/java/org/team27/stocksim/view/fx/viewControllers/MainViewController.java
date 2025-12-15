@@ -3,7 +3,6 @@ package org.team27.stocksim.view.fx.viewControllers;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
-import org.team27.stocksim.view.fx.SelectedStockService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +25,6 @@ import javafx.geometry.Pos;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.User;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 public class MainViewController extends ViewControllerBase
@@ -119,13 +117,6 @@ public class MainViewController extends ViewControllerBase
     @FXML
     private Label availableBalanceLabel;
 
-    /*
-     * @FXML
-     * public void onExample(ActionEvent event) {
-     * viewSwitcher.switchTo(EView.CREATESTOCK);
-     * }
-     */
-
     @FXML
     public void onMainView(ActionEvent event) {
         viewSwitcher.switchTo(EView.MAINVIEW);
@@ -211,8 +202,6 @@ public class MainViewController extends ViewControllerBase
 
         // Trade button handler
         private void handleButtonClick(InstrumentDTO instrument) {
-            System.out.println(instrument.getSymbol());
-
             // 1. Save selected stock using controller
             modelController.setSelectedStock(instrument);
 

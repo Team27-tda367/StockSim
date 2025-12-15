@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-
 public class SettlementEngine implements ISettlementEngine {
 
     private final HashMap<Integer, String> orderIdToTraderId;
@@ -20,14 +19,13 @@ public class SettlementEngine implements ISettlementEngine {
         this.onTradeSettled = onTradeSettled;
     }
 
-
     @Override
     public boolean settleTrade(Trade trade, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks) {
         String buyerTraderId = orderIdToTraderId.get(trade.getBuyOrderId());
         String sellerTraderId = orderIdToTraderId.get(trade.getSellOrderId());
 
         if (buyerTraderId == null || sellerTraderId == null) {
-            //TODO
+            // TODO
             return false;
         }
 
@@ -35,7 +33,7 @@ public class SettlementEngine implements ISettlementEngine {
         Trader seller = traders.get(sellerTraderId);
 
         if (buyer == null || seller == null) {
-            //TODO
+            // TODO
             return false;
         }
 
@@ -44,26 +42,20 @@ public class SettlementEngine implements ISettlementEngine {
         Portfolio buyerPortfolio = buyer.getPortfolio();
         Portfolio sellerPortfolio = seller.getPortfolio();
 
-
         if (!buyerPortfolio.withdraw(tradeValue)) {
-            //TODO
+            // TODO
             return false;
         }
 
-
         sellerPortfolio.deposit(tradeValue);
-
 
         sellerPortfolio.removeStock(trade.getStockSymbol(), trade.getQuantity(), trade);
         buyerPortfolio.addStock(trade.getStockSymbol(), trade.getQuantity(), trade.getPrice(), trade);
 
-
         recordTradeInHistory(buyer, trade);
         recordTradeInHistory(seller, trade);
 
-
         updateStockPrice(stocks, trade);
-
 
         if (onTradeSettled != null) {
             onTradeSettled.accept(trade);
@@ -75,7 +67,8 @@ public class SettlementEngine implements ISettlementEngine {
     private void recordTradeInHistory(Trader trader, Trade trade) {
         if (trader instanceof User) {
             ((User) trader).getOrderHistory().addTrade(trade);
-            System.out.println(((User) trader).getOrderHistory().getAllTrades().size() + " trades in history for " + trader.getId());
+            System.out.println(((User) trader).getOrderHistory().getAllTrades().size() + " trades in history for "
+                    + trader.getId());
         }
     }
 

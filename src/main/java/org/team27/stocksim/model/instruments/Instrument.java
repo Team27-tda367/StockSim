@@ -33,7 +33,9 @@ public abstract class Instrument {
         return lotSize;
     }
 
-    public String getCategory() { return category; }
+    public String getCategory() {
+        return category;
+    }
 
     public abstract void setCurrentPrice(BigDecimal price);
 

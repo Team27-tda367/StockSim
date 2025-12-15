@@ -98,19 +98,19 @@
                 </VBox>
 
                 <!-- 🔹 RELATED STOCKS PANEL -->
-                <VBox>
+                <!-- <VBox>
                     <HBox alignment="CENTER_LEFT" styleClass="panel-header">
                         <Label text="Related Stocks" styleClass="panel-title"/>
                     </HBox>
                     <VBox styleClass="panel-body">
                         <Region style="-fx-background-color: transparent;" minHeight="120"/>
                     </VBox>
-                </VBox>
+                </VBox> -->
 
                 <!-- Box 3  -->
-                <VBox styleClass="stock-price-card" prefWidth="300" minHeight="120" maxHeight="120" spacing="4">
+                <!-- <VBox styleClass="stock-price-card" prefWidth="300" minHeight="120" maxHeight="120" spacing="4"> -->
 
-                    <HBox alignment="CENTER_LEFT" spacing="4">
+                    <!-- <HBox alignment="CENTER_LEFT" spacing="4">
                         <Label text="High" styleClass="price-title-small"/>
                         <Label text="187.37" styleClass="price-value-compact"/>
                         <Region HBox.hgrow="ALWAYS"/>
@@ -121,27 +121,33 @@
                     <HBox spacing="3" alignment="CENTER_LEFT">
                         <Label text="📈" styleClass="price-icon-small"/>
                         <Label text="+1.33% (+2.34)" styleClass="price-change-compact"/>
-                    </HBox>
+                    </HBox> -->
 
-                    <VBox spacing="0">
-                        <Label fx:id="priceLabel" text="178.45" styleClass="price-value-main" maxWidth="Infinity" wrapText="false"/>
-                        <Label text="Last paid price" styleClass="price-title-small"/>
-                    </VBox>
+                    
 
-                </VBox>
+                <!-- </VBox> -->
 
 
                 <!-- Box 4  -->
                 <VBox fx:id="orderCard" prefWidth="340" prefHeight="140" spacing="6" styleClass="order-card">
+                    <VBox spacing="0">
+                        <Label text="Last traded price" styleClass="price-title-big"/>
+                        <Label fx:id="priceLabel" text="" styleClass="price-value-main" maxWidth="Infinity" wrapText="false"/>
+                    </VBox>
 
                     <Label text="Quantity" styleClass="label-title"/>
                     <TextField fx:id="quantityField" text="1" prefHeight="24" onKeyTyped="#validateNumberInput" promptText="Enter quantity"/>
 
                     <HBox spacing="8" alignment="CENTER_LEFT">
                         <Label text="Price" styleClass="label-title"/>
-                        <Button text="Market" styleClass="btn-ghost" prefHeight="20" onAction="#handleSetMarketPrice"/>
+                        <Button text="Set market price" styleClass="btn-ghost" prefHeight="20" onAction="#handleSetMarketPrice"/>
                     </HBox>
                     <TextField fx:id="priceField" prefHeight="24" onKeyTyped="#validatePriceInput" promptText="Enter price"/>
+                    
+                    <VBox>
+                        <Label text="Order Summary" styleClass="label-title"/>
+
+                    </VBox>
 
                     <VBox styleClass="info-box">
                         <HBox>
@@ -167,6 +173,11 @@
                         <Button text="Buy" prefHeight="34" prefWidth="140" styleClass="buy-btn, btn-highlighted" onAction="#handleBuy"/>
                         <Button text="Sell" prefHeight="34" prefWidth="140" styleClass="sell-btn, btn-secondary" onAction="#handleSell"/>
                     </HBox>
+
+                    <VBox>
+                        <Button text="Place market order" prefHeight="34" prefWidth="140" styleClass="buy-btn, btn-highlighted" onAction="#handleMarketOrder"/>
+                    </VBox>
+
 
 
                 </VBox>

@@ -3,6 +3,7 @@ package org.team27.stocksim.model;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.model.util.dto.StockMapper;
 import org.team27.stocksim.model.instruments.IInstrumentRegistry;
+import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.instruments.InstrumentRegistry;
 import org.team27.stocksim.model.instruments.StockFactory;
 import org.team27.stocksim.model.market.IMarket;
@@ -19,6 +20,7 @@ import org.team27.stocksim.observer.IModelSubject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class StockSim implements IModelSubject {
     private final List<IModelObserver> observers = new ArrayList<>();
@@ -39,7 +41,7 @@ public class StockSim implements IModelSubject {
         this.market = new Market();
 
         // Set up market callbacks
-        market.setOnPriceUpdate(unused -> notifyPriceUpdate());
+        market.setOnPriceUpdate(this::notifyPriceUpdate);
         market.setOnTradeSettled(trade -> {
             notifyTradeSettled();
 
@@ -177,22 +179,24 @@ public class StockSim implements IModelSubject {
         marketSimulator.stop();
     }
 
-    private void notifyPriceUpdate() {
-        HashMap<String, InstrumentDTO> stocks = getStocks();
+    private void notifyPriceUpdate(Set<String> changedSymbols) {
+        HashMap<String, InstrumentDTO> changedStocks = new HashMap<>();
+        
+        for (String symbol : changedSymbols) {
+            Instrument instrument = instrumentRegistry.getAllInstruments().get(symbol);
+            if (instrument != null) {
+                changedStocks.put(symbol, StockMapper.toDto(instrument));
+            }
+        }
+        
         for (IModelObserver o : observers) {
-            o.onPriceUpdate(stocks);
+            o.onPriceUpdate(changedStocks);
         }
     }
 
     private void notifyTradeSettled() {
         for (IModelObserver o : observers) {
             o.onTradeSettled();
-        }
-    }
-
-    private void notifyStocksChanged(Object payload) {
-        for (IModelObserver o : observers) {
-            o.onStocksChanged(payload);
         }
     }
 

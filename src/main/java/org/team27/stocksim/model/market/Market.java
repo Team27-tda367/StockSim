@@ -6,7 +6,9 @@ import org.team27.stocksim.model.users.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 
@@ -18,7 +20,7 @@ public class Market implements IMarket {
     private final List<Trade> completedTrades;
     private final HashMap<Integer, String> orderIdToTraderId;
 
-    private Consumer<Void> onPriceUpdate;
+    private Consumer<Set<String>> onPriceUpdate;
     private Consumer<Trade> onTradeSettled;
 
     public Market() {
@@ -53,17 +55,17 @@ public class Market implements IMarket {
         OrderBook orderBook = getOrderBook(order.getSymbol());
         List<Trade> trades = matchingEngine.match(order, orderBook);
 
-        boolean priceChanged = false;
+        Set<String> affectedSymbols = new HashSet<>();
         for (Trade trade : trades) {
             completedTrades.add(trade);
             boolean settled = settlementEngine.settleTrade(trade, traders, stocks);
             if (settled) {
-                priceChanged = true;
+                affectedSymbols.add(trade.getStockSymbol());
             }
         }
 
-        if (priceChanged && onPriceUpdate != null) {
-            onPriceUpdate.accept(null);
+        if (!affectedSymbols.isEmpty() && onPriceUpdate != null) {
+            onPriceUpdate.accept(affectedSymbols);
         }
     }
 
@@ -94,7 +96,7 @@ public class Market implements IMarket {
     }
 
     @Override
-    public void setOnPriceUpdate(Consumer<Void> callback) {
+    public void setOnPriceUpdate(Consumer<Set<String>> callback) {
         this.onPriceUpdate = callback;
     }
 

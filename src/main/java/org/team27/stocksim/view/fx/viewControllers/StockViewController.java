@@ -123,6 +123,18 @@ public class StockViewController extends ViewControllerBase
     }
 
     @FXML
+    private void handleMarketOrder(ActionEvent event) {
+
+        try {
+            int quantity = Integer.parseInt(quantityField.getText());
+
+            modelController.placeMarketOrder(stock.getSymbol(), quantity);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid quantity for market order");
+        }
+    }
+
+    @FXML
     private void handleSell(ActionEvent event) {
         try {
             int quantity = Integer.parseInt(quantityField.getText());
@@ -293,8 +305,6 @@ public class StockViewController extends ViewControllerBase
         // Refresh chart with new time period
         refreshChartForTimePeriod();
 
-        System.out.println("Selected time period: " + currentTimePeriod.getLabel() + " ("
-                + currentTimePeriod.toModelTimePeriod().getDays() + " days)");
     }
 
     private void setActiveTimePeriodButton(Button button) {
@@ -399,17 +409,24 @@ public class StockViewController extends ViewControllerBase
     public void onPriceUpdate(HashMap<String, ? extends InstrumentDTO> stocks) {
         // Uppdatera priset om det har ändrats
         if (stock != null) {
-            BigDecimal newPrice = stock.getPrice();
-            Platform.runLater(() -> {
-                priceLabel.setText(newPrice.toString());
-                // Update price field if user hasn't entered a custom price
-                if (priceField != null && priceField.getText().isEmpty()) {
-                    priceField.setText(newPrice.toString());
-                }
-                // Update the chart with new price data
-                updateChartData();
-                updateOrderTotal();
-            });
+            // Check if the currently displayed stock is in the update
+            InstrumentDTO updatedStock = stocks.get(stock.getSymbol());
+            if (updatedStock != null) {
+                // Update the reference to the new DTO
+                stock = updatedStock;
+                BigDecimal newPrice = stock.getPrice();
+                Platform.runLater(() -> {
+                    priceLabel.setText(newPrice.toString());
+                    orderPriceLabel.setText(newPrice + " SEK");
+                    // Update price field if user hasn't entered a custom price
+                    if (priceField != null && priceField.getText().isEmpty()) {
+                        priceField.setText(newPrice.toString());
+                    }
+                    // Update the chart with new price data
+                    updateChartData();
+                    updateOrderTotal();
+                });
+            }
         }
 
         // Update trending stock prices dynamically
@@ -446,8 +463,7 @@ public class StockViewController extends ViewControllerBase
         availableBalanceLabel.setText("Balance: $" + balance.toString());
 
         // Get selected stock from controller
-        InstrumentDTO stock = modelController.getSelectedStock();
-        System.out.println("Selected stock in StockViewController: " + (stock != null ? stock.getSymbol() : "null"));
+        stock = modelController.getSelectedStock();
 
         if (stock != null) {
             // Symbol

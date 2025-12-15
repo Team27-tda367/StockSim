@@ -9,7 +9,6 @@ import java.util.Random;
 
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.StockSim;
-import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
 
