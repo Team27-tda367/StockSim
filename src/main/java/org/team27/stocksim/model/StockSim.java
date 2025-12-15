@@ -20,6 +20,7 @@ import org.team27.stocksim.observer.IModelSubject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class StockSim implements IModelSubject {
@@ -59,7 +60,8 @@ public class StockSim implements IModelSubject {
         // Initialize simulator
         this.marketSimulator = new MarketSimulator(
                 traderRegistry::getBots,
-                this::onSimulationTick);
+                this::onSimulationTick,
+                this::saveStockPrices);
 
         System.out.println("Successfully created Sim-model");
     }
@@ -181,14 +183,14 @@ public class StockSim implements IModelSubject {
 
     private void notifyPriceUpdate(Set<String> changedSymbols) {
         HashMap<String, InstrumentDTO> changedStocks = new HashMap<>();
-        
+
         for (String symbol : changedSymbols) {
             Instrument instrument = instrumentRegistry.getAllInstruments().get(symbol);
             if (instrument != null) {
                 changedStocks.put(symbol, StockMapper.toDto(instrument));
             }
         }
-        
+
         for (IModelObserver o : observers) {
             o.onPriceUpdate(changedStocks);
         }
@@ -208,6 +210,14 @@ public class StockSim implements IModelSubject {
 
     public SelectionManager getSelectionManager() {
         return selectionManager;
+    }
+
+    /**
+     * Save all stock price histories to JSON database.
+     */
+    public void saveStockPrices() {
+        StockPriceRepository repository = new StockPriceRepository();
+        repository.saveStockPrices(instrumentRegistry.getAllInstruments());
     }
 
     @Override
