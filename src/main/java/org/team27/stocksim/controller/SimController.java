@@ -10,6 +10,7 @@ import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public class SimController implements ISimController {
@@ -43,7 +44,7 @@ public class SimController implements ISimController {
     }
 
     @Override
-    public HashMap<String, Instrument> getStocks(String category) {
+    public HashMap<String, InstrumentDTO> getStocks(String category) {
         return model.getStocks(category);
     }
 

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 /**
@@ -20,7 +21,7 @@ public class ViewAdapter implements IModelObserver {
     }
 
     public interface PriceUpdateListener {
-        void onPriceUpdate(HashMap<String, ? extends Instrument> stocks);
+        void onPriceUpdate(HashMap<String, ? extends InstrumentDTO> stocks);
     }
 
     public interface TradeSettledListener {
@@ -79,7 +80,7 @@ public class ViewAdapter implements IModelObserver {
     }
 
     @Override
-    public void onPriceUpdate(HashMap<String, ? extends Instrument> stocks) {
+    public void onPriceUpdate(HashMap<String, ? extends InstrumentDTO> stocks) {
         for (PriceUpdateListener listener : priceUpdateListeners) {
             listener.onPriceUpdate(stocks);
         }
