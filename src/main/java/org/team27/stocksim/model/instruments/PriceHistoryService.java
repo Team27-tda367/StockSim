@@ -1,5 +1,6 @@
 package org.team27.stocksim.model.instruments;
 
+import org.team27.stocksim.model.clock.ClockProvider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +36,9 @@ public class PriceHistoryService {
         }
 
         // Get current time and calculate cutoff time for this period
-        long currentTime = System.currentTimeMillis();
+        long simTime = ClockProvider.currentTimeMillis();
         long timeWindowMillis = timePeriod.getTimeWindowMillis();
-        long cutoffTime = currentTime - timeWindowMillis;
+        long cutoffTime = Math.min(simTime - timeWindowMillis, simTime);
 
         // Filter points within the time window
         List<PricePoint> filteredPoints = new ArrayList<>();
@@ -47,9 +48,11 @@ public class PriceHistoryService {
             }
         }
 
-        // If we have too many points, sample them to avoid overcrowding
+        // If we have too many points, sample down to max display points
         if (filteredPoints.size() > timePeriod.getMaxDisplayPoints()) {
-            return samplePointsUniform(filteredPoints, timePeriod.getMaxDisplayPoints());
+            return filteredPoints.subList(filteredPoints.size() - timePeriod.getMaxDisplayPoints(),
+                    filteredPoints.size());
+            // return samplePointsUniform(filteredPoints, timePeriod.getMaxDisplayPoints());
         }
 
         return filteredPoints;
@@ -91,13 +94,52 @@ public class PriceHistoryService {
             return new FilterResult(new ArrayList<>(), currentSize, false);
         }
 
-        // Time-based filtering means we should do a full redraw more often
-        // because old points may fall out of the time window
-        // For simplicity, do a full redraw on any update
+        // Get what the filtered data SHOULD look like
+        List<PricePoint> correctFilteredData = filterPriceData(priceHistory, timePeriod);
+
+        // Calculate what we would have if we just added new points incrementally
+        long simTime = ClockProvider.currentTimeMillis();
+        long timeWindowMillis = timePeriod.getTimeWindowMillis();
+        long cutoffTime = Math.min(simTime - timeWindowMillis, simTime);
+
+        // Count how many old points would still be in the time window
+        int oldPointsStillValid = 0;
+        for (int i = 0; i < lastKnownSize; i++) {
+            if (allPoints.get(i).getTimestamp() >= cutoffTime) {
+                oldPointsStillValid++;
+            }
+        }
+
+        // Get only the new points that are within the time window
+        List<PricePoint> newPoints = new ArrayList<>();
+        for (int i = lastKnownSize; i < currentSize; i++) {
+            PricePoint point = allPoints.get(i);
+            if (point.getTimestamp() >= cutoffTime) {
+                newPoints.add(point);
+            }
+        }
+
+        // Check if we need a full redraw:
+        // 1. If old points have aged out (oldPointsStillValid != number we had
+        // displayed)
+        // 2. If we would exceed max display points with incremental add
+        int potentialTotalPoints = oldPointsStillValid + newPoints.size();
+        boolean needsFullRedraw = correctFilteredData.size() != potentialTotalPoints ||
+                potentialTotalPoints > timePeriod.getMaxDisplayPoints();
+
+        if (needsFullRedraw) {
+            return new FilterResult(
+                    correctFilteredData,
+                    currentSize,
+                    true // needs full redraw
+            );
+        }
+
+        // Return incremental update without full redraw
         return new FilterResult(
-                filterPriceData(priceHistory, timePeriod),
+                newPoints,
                 currentSize,
-                true // full redraw to apply time filtering
+                false // no full redraw needed for incremental updates
         );
     }
 

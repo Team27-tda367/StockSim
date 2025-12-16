@@ -16,19 +16,31 @@ public class MarketSimulator implements IMarketSimulator {
     private final Supplier<HashMap<String, Trader>> botsSupplier;
     private final Runnable onTick;
     private final Runnable onSaveData;
+    private final int tickInterval;
+    private final int speedupFactor;
+    private final int durationInRealSeconds;
     private MarketState state;
     private GameTicker ticker;
     private int totalTradesExecuted;
+    private GameClock clock;
 
     public MarketSimulator(Supplier<HashMap<String, Trader>> botsSupplier, Runnable onTick) {
-        this(botsSupplier, onTick, null);
+        this(botsSupplier, onTick, null, 3600, 50, 10);
     }
 
     public MarketSimulator(Supplier<HashMap<String, Trader>> botsSupplier, Runnable onTick, Runnable onSaveData) {
+        this(botsSupplier, onTick, onSaveData, 3600, 50, 10);
+    }
+
+    public MarketSimulator(Supplier<HashMap<String, Trader>> botsSupplier, Runnable onTick, Runnable onSaveData,
+            int speedupFactor, int tickInterval, int durationInRealSeconds) {
         this.state = MarketState.PAUSED;
         this.botsSupplier = botsSupplier;
         this.onTick = onTick;
         this.onSaveData = onSaveData;
+        this.speedupFactor = speedupFactor;
+        this.tickInterval = tickInterval;
+        this.durationInRealSeconds = durationInRealSeconds;
         this.totalTradesExecuted = 0;
     }
 
@@ -36,31 +48,16 @@ public class MarketSimulator implements IMarketSimulator {
     public void start() {
         state = MarketState.RUNNING;
 
-        GameClock clock = new GameClock(
+        clock = new GameClock(
                 ZoneId.of("Europe/Stockholm"),
-                Instant.now(),
-                3600);
+                Instant.EPOCH,
+                speedupFactor);
 
         // Set the game clock globally so all components use simulation time
         ClockProvider.setClock(clock);
 
-        ticker = new GameTicker(clock, simInstant -> tick());
+        ticker = new GameTicker(clock, simInstant -> tick(), tickInterval);
         ticker.start();
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(10000); // Let the simulation run for 10 seconds
-
-                clock.setSpeed(5);
-                // Save stock prices to database
-                if (onSaveData != null) {
-                    onSaveData.run();
-                }
-
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }).start();
 
         System.out.println("Market simulation started");
     }

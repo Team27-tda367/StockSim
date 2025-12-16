@@ -1,29 +1,49 @@
 package org.team27.stocksim;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import org.team27.stocksim.data.StockData;
+import org.team27.stocksim.data.StockDataLoader;
 import org.team27.stocksim.model.StockSim;
+import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.StockPriceRepository;
 import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
 
 public class SimSetup {
     private final Random random = new Random();
     private final StockSim model;
+    private final int initialBotCount;
 
-    public SimSetup(StockSim model) {
+    public SimSetup(StockSim model, int initialBotCount) {
         this.model = model;
+        this.initialBotCount = initialBotCount;
     }
 
     public void start() {
+        start(false);
+    }
+
+    public void startWithLoadedPrices() {
+        start(true);
+    }
+
+    private void start(boolean loadExistingPrices) {
         createDefaultStocks();
-        createBots(1000);
+        createBots(initialBotCount);
         model.createUser("user1", "Default User");
         model.setCurrentUser("user1");
         initializeBotPositions();
 
+        if (loadExistingPrices) {
+            // Load existing prices
+            loadStockPrices();
+        }
+        // Start the market simulation
         model.startMarketSimulation();
-
     }
 
     private void initializeBotPositions() {
@@ -41,27 +61,17 @@ public class SimSetup {
     }
 
     private void createDefaultStocks() {
-        // 20 random stocks
-        model.createStock("AAPL", "Apple Inc.", "0.01", "100", "Technology");
-        model.createStock("GOOGL", "Alphabet Inc.", "0.01", "100", "Technology");
-        model.createStock("MSFT", "Microsoft Corp.", "0.01", "100", "Technology");
-        model.createStock("TSLA", "Tesla Inc.", "0.01", "100", "Consumer");
-        model.createStock("AMZN", "Amazon.com Inc.", "0.01", "100", "Consumer");
-        model.createStock("META", "Meta Platforms Inc.", "0.01", "100", "Entertainment");
-        model.createStock("NVDA", "NVIDIA Corporation", "0.01", "100", "Semiconductors");
-        model.createStock("JPM", "JPMorgan Chase & Co.", "0.01", "100", "Finance");
-        model.createStock("V", "Visa Inc.", "0.01", "100", "Finance");
-        model.createStock("WMT", "Walmart Inc.", "0.01", "100", "Consumer");
-        model.createStock("DIS", "The Walt Disney Company", "0.01", "100", "Entertainment");
-        model.createStock("NFLX", "Netflix Inc.", "0.01", "100", "Entertainment");
-        model.createStock("PYPL", "PayPal Holdings Inc.", "0.01", "100", "Finance");
-        model.createStock("INTC", "Intel Corporation", "0.01", "100", "Semiconductors");
-        model.createStock("CSCO", "Cisco Systems Inc.", "0.01", "100", "Technology");
-        model.createStock("PEP", "PepsiCo Inc.", "0.01", "100", "Consumer");
-        model.createStock("KO", "The Coca-Cola Company", "0.01", "100", "Consumer");
-        model.createStock("NKE", "Nike Inc.", "0.01", "100", "Consumer");
-        model.createStock("BA", "The Boeing Company", "0.01", "100", "Aviation");
-        model.createStock("AMD", "Advanced Micro Devices Inc.", "0.01", "100", "Semiconductors");
+        StockDataLoader loader = new StockDataLoader();
+        List<StockData> stocks = loader.loadDefaultStocks();
+
+        for (StockData stock : stocks) {
+            model.createStock(
+                    stock.getSymbol(),
+                    stock.getName(),
+                    stock.getTickSize(),
+                    stock.getLotSize(),
+                    stock.getCategory());
+        }
     }
 
     private void createBots(int numberOfBots) {
@@ -70,5 +80,42 @@ public class SimSetup {
             String botName = "Bot " + i;
             model.createBot(botId, botName);
         }
+    }
+
+    /**
+     * Load stock price histories from JSON database.
+     * Call this instead of starting market simulation to use pre-generated price
+     * data.
+     */
+    public void loadStockPrices() {
+        StockPriceRepository repository = new StockPriceRepository();
+        Map<String, StockPriceRepository.StockPriceData> priceData = repository.loadStockPrices();
+
+        if (priceData.isEmpty()) {
+            System.out.println("No price data found to load");
+            return;
+        }
+
+        // Apply loaded prices to instruments
+        for (Map.Entry<String, StockPriceRepository.StockPriceData> entry : priceData.entrySet()) {
+            String symbol = entry.getKey();
+            StockPriceRepository.StockPriceData data = entry.getValue();
+
+            Instrument instrument = model.getInstrument(symbol);
+            if (instrument != null && data.priceHistory != null) {
+                // Set current price
+                if (data.currentPrice != null) {
+                    instrument.setCurrentPrice(data.currentPrice, 0);
+                }
+
+                // Load price history
+
+                for (var point : data.priceHistory) {
+                    instrument.getPriceHistory().addPrice(point.getPrice(), point.getTimestamp());
+                }
+            }
+        }
+
+        System.out.println("Loaded price data for " + priceData.size() + " stocks");
     }
 }
