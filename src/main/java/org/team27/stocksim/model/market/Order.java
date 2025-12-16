@@ -1,11 +1,13 @@
 package org.team27.stocksim.model.market;
 
+import org.team27.stocksim.model.clock.ClockProvider;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 
 public class Order {
     private static int nextOrderId = 1;
-    
+
     private final Side side;
     private final int orderId;
     private final BigDecimal price;
@@ -25,9 +27,9 @@ public class Order {
         this.remainingQuantity = quantity;
         this.traderId = traderId;
 
-        this.timeStamp = Instant.now(); // Using java.time before deciding on our time implementation
+        this.timeStamp = ClockProvider.getClock().instant();
     }
-    
+
     private static synchronized int generateOrderId() {
         return nextOrderId++;
     }

@@ -5,6 +5,7 @@ import org.team27.stocksim.model.util.dto.StockMapper;
 import org.team27.stocksim.model.instruments.IInstrumentRegistry;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.instruments.InstrumentRegistry;
+import org.team27.stocksim.model.instruments.PricePoint;
 import org.team27.stocksim.model.instruments.StockFactory;
 import org.team27.stocksim.model.market.IMarket;
 import org.team27.stocksim.model.market.Market;
@@ -34,6 +35,10 @@ public class StockSim implements IModelSubject {
     private final IMarketSimulator marketSimulator;
 
     public StockSim() {
+        this(3600, 50, 10);
+    }
+
+    public StockSim(int simulationSpeed, int tickInterval, int durationInRealSeconds) {
         // Initialize registries
         this.instrumentRegistry = new InstrumentRegistry(new StockFactory());
         this.traderRegistry = new TraderRegistry(new UserFactory(), new BotFactory());
@@ -57,11 +62,14 @@ public class StockSim implements IModelSubject {
             }
         });
 
-        // Initialize simulator
+        // Initialize simulator with configuration
         this.marketSimulator = new MarketSimulator(
                 traderRegistry::getBots,
                 this::onSimulationTick,
-                this::saveStockPrices);
+                this::saveStockPrices,
+                simulationSpeed,
+                tickInterval,
+                durationInRealSeconds);
 
         System.out.println("Successfully created Sim-model");
     }
@@ -218,6 +226,14 @@ public class StockSim implements IModelSubject {
     public void saveStockPrices() {
         StockPriceRepository repository = new StockPriceRepository();
         repository.saveStockPrices(instrumentRegistry.getAllInstruments());
+    }
+
+    /**
+     * Get instrument by symbol for direct access.
+     * Used by setup classes to configure instruments.
+     */
+    public Instrument getInstrument(String symbol) {
+        return instrumentRegistry.getAllInstruments().get(symbol);
     }
 
     @Override

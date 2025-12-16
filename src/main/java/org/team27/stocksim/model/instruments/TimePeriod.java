@@ -43,10 +43,10 @@ public enum TimePeriod {
      */
     public int getMaxDisplayPoints() {
         return switch (this) {
-            case ONE_DAY -> 100; // Show more detail for short periods
-            case ONE_WEEK -> 80;
-            case ONE_MONTH -> 60;
-            case ONE_YEAR -> 50; // Show fewer points for long periods
+            case ONE_DAY -> 200; // Show more detail for short periods
+            case ONE_WEEK -> 160;
+            case ONE_MONTH -> 120;
+            case ONE_YEAR -> 100; // Show fewer points for long periods
         };
     }
 }

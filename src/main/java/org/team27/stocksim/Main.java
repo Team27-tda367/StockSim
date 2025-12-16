@@ -14,22 +14,55 @@ import javafx.application.Application;
 public class Main {
 
     public static void main(String[] args) {
-        // Initialize the model and controller
-        StockSim model = new StockSim();
+        // === WORKFLOW CONFIGURATION ===
+        // Set to false for fast headless simulation that generates and saves price data
+        // Set to true to load existing price data and view in UI
+        boolean loadExistingPrices = true;
+
+        // Simulation configuration
+        // int simulationSpeed = 3600; // 1 real second = 1 hour simulated time
+        int simulationSpeed = 5;
+        int tickInterval = 50; // Check for new simulation seconds every 50ms
+        int durationInRealSeconds = 10; // Run fast simulation for 10 seconds
+        int initialBotCount = 1000; // Number of trading bots
+
+        // Initialize the model with simulation configuration
+        StockSim model = new StockSim(simulationSpeed, tickInterval, durationInRealSeconds);
         ISimController controller = new SimController(model);
 
-        controller.setUpSimulation();
+        // Set up initial data (stocks, bots, positions)
+        SimSetup setup = new SimSetup(model, initialBotCount);
 
-        // Wait a moment to ensure setup is complete
-        System.out.println("Running simulation for 10 seconds...");
-        try {
-            Thread.sleep(10000); // 10 seconds
+        if (loadExistingPrices) {
+            // Load pre-generated price data from JSON
+            System.out.println("Loading existing price data...");
+            setup.startWithLoadedPrices();
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            // Launch the JavaFX UI
+            launchUI(args, model, controller);
+        } else {
+            setup.start();
+
+            // Run simulation to generate new price data
+            System.out.println("Running simulation to generate price data...");
+            // Sleep for duration to allow simulation to complete
+            try {
+                Thread.sleep((durationInRealSeconds + 1) * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // Save generated price data
+            model.saveStockPrices();
+            model.stopMarketSimulation();
+            System.out.println("Price data saved to JSON");
+            System.exit(0);
         }
 
-        // Pass to JavaFX application and launch
+    }
+
+    private static void launchUI(String[] args, StockSim model, ISimController controller) {// Pass to JavaFX
+                                                                                            // application and
+        // launch
         FXStockSimApp.setModelAndController(model, controller);
         Application.launch(FXStockSimApp.class, args);
     }

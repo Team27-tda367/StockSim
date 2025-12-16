@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.team27.stocksim.SimSetup;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.market.Order;
@@ -19,11 +18,6 @@ public class SimController implements ISimController {
 
     public SimController(StockSim model) {
         this.model = model;
-    }
-
-    public void setUpSimulation() {
-        SimSetup setup = new SimSetup(model);
-        setup.start();
     }
 
     public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {

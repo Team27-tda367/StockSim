@@ -21,8 +21,6 @@ public interface ISimController {
 
     HashMap<String, InstrumentDTO> getStocks(String category);
 
-    void setUpSimulation();
-
     User getUser();
 
     void buyStock(String stockSymbol, int quantity, BigDecimal price);

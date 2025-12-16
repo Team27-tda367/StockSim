@@ -1,5 +1,7 @@
 package org.team27.stocksim.model.market;
 
+import org.team27.stocksim.model.clock.ClockProvider;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ public class MatchingEngine {
         Trade trade = new Trade(
                 incomingOrder.isBuyOrder() ? incomingOrder.getOrderId() : matchingOrder.getOrderId(),
                 !incomingOrder.isBuyOrder() ? incomingOrder.getOrderId() : matchingOrder.getOrderId(),
-                incomingOrder.getSymbol(), matchingOrder.getPrice(), tradeQuantity, Instant.now());
+                incomingOrder.getSymbol(), matchingOrder.getPrice(), tradeQuantity, ClockProvider.getClock().instant());
         trades.add(trade);
     }
 
