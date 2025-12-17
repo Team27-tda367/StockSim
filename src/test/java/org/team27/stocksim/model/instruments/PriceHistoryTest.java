@@ -31,8 +31,9 @@ class PriceHistoryTest {
     @DisplayName("Should add price point")
     void testAddPricePoint() {
         BigDecimal price = money("150.00");
+        long timestamp = System.currentTimeMillis();
 
-        priceHistory.addPrice(price);
+        priceHistory.addPrice(price, timestamp);
 
         List<PricePoint> points = priceHistory.getPoints();
         assertEquals(1, points.size());
@@ -42,9 +43,10 @@ class PriceHistoryTest {
     @Test
     @DisplayName("Should add multiple price points")
     void testAddMultiplePricePoints() {
-        priceHistory.addPrice(money("150.00"));
-        priceHistory.addPrice(money("155.00"));
-        priceHistory.addPrice(money("160.00"));
+        long timestamp = System.currentTimeMillis();
+        priceHistory.addPrice(money("150.00"), timestamp);
+        priceHistory.addPrice(money("155.00"), timestamp + 1000);
+        priceHistory.addPrice(money("160.00"), timestamp + 2000);
 
         List<PricePoint> points = priceHistory.getPoints();
         assertEquals(3, points.size());
@@ -56,10 +58,11 @@ class PriceHistoryTest {
         BigDecimal price1 = money("150.00");
         BigDecimal price2 = money("155.00");
         BigDecimal price3 = money("160.00");
+        long timestamp = 1000000000000L;
 
-        priceHistory.addPrice(price1);
-        priceHistory.addPrice(price2);
-        priceHistory.addPrice(price3);
+        priceHistory.addPrice(price1, timestamp);
+        priceHistory.addPrice(price2, timestamp + 1000);
+        priceHistory.addPrice(price3, timestamp + 2000);
 
         List<PricePoint> points = priceHistory.getPoints();
         assertEquals(price1, points.get(0).getPrice());
@@ -70,19 +73,21 @@ class PriceHistoryTest {
     @Test
     @DisplayName("Should add timestamp to price point")
     void testPricePointTimestamp() {
-        priceHistory.addPrice(money("150.00"));
+        long timestamp = System.currentTimeMillis();
+        priceHistory.addPrice(money("150.00"), timestamp);
 
         List<PricePoint> points = priceHistory.getPoints();
-        assertNotNull(points.get(0).getTimestamp());
         assertTrue(points.get(0).getTimestamp() > 0);
     }
 
     @Test
     @DisplayName("Should have different timestamps for sequential additions")
     void testSequentialTimestamps() throws InterruptedException {
-        priceHistory.addPrice(money("150.00"));
+        long timestamp1 = System.currentTimeMillis();
+        priceHistory.addPrice(money("150.00"), timestamp1);
         Thread.sleep(10);
-        priceHistory.addPrice(money("155.00"));
+        long timestamp2 = System.currentTimeMillis();
+        priceHistory.addPrice(money("155.00"), timestamp2);
 
         List<PricePoint> points = priceHistory.getPoints();
         assertTrue(points.get(1).getTimestamp() >= points.get(0).getTimestamp());
@@ -91,7 +96,7 @@ class PriceHistoryTest {
     @Test
     @DisplayName("Should return copy of points list")
     void testGetPointsReturnsCopy() {
-        priceHistory.addPrice(money("150.00"));
+        priceHistory.addPrice(money("150.00"), System.currentTimeMillis());
 
         List<PricePoint> points1 = priceHistory.getPoints();
         List<PricePoint> points2 = priceHistory.getPoints();
@@ -103,7 +108,7 @@ class PriceHistoryTest {
     @Test
     @DisplayName("Should not affect original when modifying returned list")
     void testListEncapsulation() {
-        priceHistory.addPrice(money("150.00"));
+        priceHistory.addPrice(money("150.00"), System.currentTimeMillis());
 
         List<PricePoint> points = priceHistory.getPoints();
         int originalSize = points.size();
@@ -122,7 +127,7 @@ class PriceHistoryTest {
     @Test
     @DisplayName("Should handle zero price")
     void testZeroPrice() {
-        priceHistory.addPrice(BigDecimal.ZERO);
+        priceHistory.addPrice(BigDecimal.ZERO, System.currentTimeMillis());
 
         List<PricePoint> points = priceHistory.getPoints();
         assertEquals(1, points.size());
@@ -133,7 +138,7 @@ class PriceHistoryTest {
     @DisplayName("Should handle negative price")
     void testNegativePrice() {
         BigDecimal negativePrice = money("-10.00");
-        priceHistory.addPrice(negativePrice);
+        priceHistory.addPrice(negativePrice, System.currentTimeMillis());
 
         List<PricePoint> points = priceHistory.getPoints();
         assertEquals(1, points.size());
@@ -144,7 +149,7 @@ class PriceHistoryTest {
     @DisplayName("Should handle high precision prices")
     void testHighPrecisionPrices() {
         BigDecimal precisePrice = money("123.456789012345");
-        priceHistory.addPrice(precisePrice);
+        priceHistory.addPrice(precisePrice, System.currentTimeMillis());
 
         List<PricePoint> points = priceHistory.getPoints();
         assertEquals(precisePrice, points.get(0).getPrice());
@@ -154,7 +159,7 @@ class PriceHistoryTest {
     @DisplayName("Should handle very large prices")
     void testVeryLargePrices() {
         BigDecimal largePrice = money("999999999.99");
-        priceHistory.addPrice(largePrice);
+        priceHistory.addPrice(largePrice, System.currentTimeMillis());
 
         List<PricePoint> points = priceHistory.getPoints();
         assertEquals(largePrice, points.get(0).getPrice());
@@ -163,8 +168,9 @@ class PriceHistoryTest {
     @Test
     @DisplayName("Should track many price changes")
     void testManyPriceChanges() {
+        long timestamp = 1000000000000L;
         for (int i = 0; i < 1000; i++) {
-            priceHistory.addPrice(new BigDecimal(100 + i));
+            priceHistory.addPrice(new BigDecimal(100 + i), timestamp + i);
         }
 
         List<PricePoint> points = priceHistory.getPoints();
@@ -176,8 +182,9 @@ class PriceHistoryTest {
     @Test
     @DisplayName("Should handle rapid price updates")
     void testRapidPriceUpdates() {
+        long timestamp = System.currentTimeMillis();
         for (int i = 0; i < 100; i++) {
-            priceHistory.addPrice(new BigDecimal(150 + i * 0.01));
+            priceHistory.addPrice(new BigDecimal(150 + i * 0.01), timestamp + i);
         }
 
         assertEquals(100, priceHistory.getPoints().size());
@@ -187,10 +194,11 @@ class PriceHistoryTest {
     @DisplayName("Should handle duplicate prices")
     void testDuplicatePrices() {
         BigDecimal price = money("150.00");
+        long timestamp = 1000000000000L;
 
-        priceHistory.addPrice(price);
-        priceHistory.addPrice(price);
-        priceHistory.addPrice(price);
+        priceHistory.addPrice(price, timestamp);
+        priceHistory.addPrice(price, timestamp + 1000);
+        priceHistory.addPrice(price, timestamp + 2000);
 
         List<PricePoint> points = priceHistory.getPoints();
         assertEquals(3, points.size());
@@ -200,11 +208,12 @@ class PriceHistoryTest {
     @Test
     @DisplayName("Should track price volatility")
     void testPriceVolatility() {
-        priceHistory.addPrice(money("150.00"));
-        priceHistory.addPrice(money("155.00"));
-        priceHistory.addPrice(money("145.00"));
-        priceHistory.addPrice(money("160.00"));
-        priceHistory.addPrice(money("140.00"));
+        long timestamp = 1000000000000L;
+        priceHistory.addPrice(money("150.00"), timestamp);
+        priceHistory.addPrice(money("155.00"), timestamp + 1000);
+        priceHistory.addPrice(money("145.00"), timestamp + 2000);
+        priceHistory.addPrice(money("160.00"), timestamp + 3000);
+        priceHistory.addPrice(money("140.00"), timestamp + 4000);
 
         List<PricePoint> points = priceHistory.getPoints();
         assertEquals(5, points.size());
@@ -218,11 +227,12 @@ class PriceHistoryTest {
     @Test
     @DisplayName("Should calculate price range from history")
     void testPriceRange() {
-        priceHistory.addPrice(money("150.00"));
-        priceHistory.addPrice(money("155.00"));
-        priceHistory.addPrice(money("145.00"));
-        priceHistory.addPrice(money("160.00"));
-        priceHistory.addPrice(money("140.00"));
+        long timestamp = 1000000000000L;
+        priceHistory.addPrice(money("150.00"), timestamp);
+        priceHistory.addPrice(money("155.00"), timestamp + 1000);
+        priceHistory.addPrice(money("145.00"), timestamp + 2000);
+        priceHistory.addPrice(money("160.00"), timestamp + 3000);
+        priceHistory.addPrice(money("140.00"), timestamp + 4000);
 
         List<PricePoint> points = priceHistory.getPoints();
         BigDecimal min = points.stream()

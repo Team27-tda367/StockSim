@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.market.Trade;
-import org.team27.stocksim.model.instruments.Instrument;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.model.users.User;
 
 import java.math.BigDecimal;
@@ -36,7 +36,7 @@ class StockSimIntegrationTest {
     void testCreateAndRetrieveStock() {
         stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
 
-        Instrument stock = stockSim.getStocks().get("AAPL");
+        var stock = stockSim.getStocks().get("AAPL");
         assertNotNull(stock);
         assertEquals("AAPL", stock.getSymbol());
         assertEquals("Apple Inc.", stock.getName());
@@ -117,8 +117,8 @@ class StockSimIntegrationTest {
         stockSim.placeOrder(buyOrder);
 
         // Stock price should be updated to trade price
-        Instrument stock = stockSim.getStocks().get("AAPL");
-        assertEquals(tradePrice, stock.getCurrentPrice());
+        var stock = stockSim.getStocks().get("AAPL");
+        assertEquals(tradePrice, stock.getPrice());
     }
 
     @Test
@@ -229,7 +229,7 @@ class StockSimIntegrationTest {
 
         stockSim.addObserver(new org.team27.stocksim.observer.IModelObserver() {
             @Override
-            public void onPriceUpdate(java.util.HashMap<String, ? extends Instrument> stocks) {
+            public void onPriceUpdate(java.util.HashMap<String, ? extends InstrumentDTO> stocks) {
                 notificationCount.incrementAndGet();
             }
 
