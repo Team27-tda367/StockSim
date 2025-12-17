@@ -1,6 +1,8 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.PortfolioDTO;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.SelectedStockService;
@@ -23,10 +25,6 @@ import javafx.scene.layout.Region;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 
-import org.team27.stocksim.model.portfolio.Portfolio;
-import org.team27.stocksim.model.users.User;
-
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 public class MainViewController extends ViewControllerBase 
@@ -46,8 +44,8 @@ public class MainViewController extends ViewControllerBase
         HashMap<String, InstrumentDTO> stocks = modelController.getStocks("All");
         stockList.addAll(stocks.values());
 
-        User user = modelController.getUser();
-        Portfolio portfolio = user.getPortfolio();
+        UserDTO user = modelController.getUser();
+        PortfolioDTO portfolio = user.getPortfolio();
         BigDecimal balance = portfolio.getBalance();
         availableBalanceLabel.setText("Balance: $" + String.format("%.2f", balance));
 

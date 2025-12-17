@@ -13,6 +13,7 @@ import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.simulation.IMarketSimulator;
 import org.team27.stocksim.model.simulation.MarketSimulator;
 import org.team27.stocksim.model.users.*;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 import org.team27.stocksim.observer.IModelSubject;
 
@@ -103,7 +104,6 @@ public class StockSim implements IModelSubject {
         market.placeOrder(order, traderRegistry.getAllTraders(), instrumentRegistry.getAllInstruments());
     }
 
-
     public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {
         instrumentRegistry.createInstrument(symbol, stockName, tickSize, lotSize, category);
     }
@@ -158,6 +158,10 @@ public class StockSim implements IModelSubject {
         return traderRegistry.getUsers();
     }
 
+    public UserDTO getCurrentUserDto() {
+        return traderRegistry.getCurrentUserDto();
+    }
+
     public User getCurrentUser() {
         return traderRegistry.getCurrentUser();
     }
@@ -170,7 +174,6 @@ public class StockSim implements IModelSubject {
         return traderRegistry.getTrader(id) != null ?
                 traderRegistry.getTrader(id).getPortfolio() : null;
     }
-
 
     public void startMarketSimulation() {
         marketSimulator.start();

@@ -1,6 +1,8 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.PortfolioDTO;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.SelectedStockService;
@@ -465,8 +467,8 @@ public class StockViewController extends ViewControllerBase
 
     @Override
     public void onTradeSettled() {
-        User user = modelController.getUser();
-        Portfolio portfolio = user.getPortfolio();
+        UserDTO user = modelController.getUser();
+        PortfolioDTO portfolio = user.getPortfolio();
         BigDecimal balance = portfolio.getBalance();
         Platform.runLater(() -> {
             availableBalanceLabel.setText("Balance: $" + balance.toString());
@@ -479,8 +481,8 @@ public class StockViewController extends ViewControllerBase
         viewAdapter.addPriceUpdateListener(this);
         viewAdapter.addTradeSettledListener(this);
 
-        User user = modelController.getUser();
-        Portfolio portfolio = user.getPortfolio();
+        UserDTO user = modelController.getUser();
+        PortfolioDTO portfolio = user.getPortfolio();
         BigDecimal balance = portfolio.getBalance();
         availableBalanceLabel.setText("Balance: $" + balance.toString());
 

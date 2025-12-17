@@ -1,6 +1,5 @@
 package org.team27.stocksim.model.util.dto;
 
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.model.instruments.Instrument;
 
 public class StockMapper {

@@ -8,6 +8,7 @@ import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public interface ISimController {
@@ -23,7 +24,7 @@ public interface ISimController {
 
     void setUpSimulation();
 
-    User getUser();
+    UserDTO getUser();
 
     void buyStock(String stockSymbol, int quantity, BigDecimal price);
 

@@ -1,9 +1,9 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.model.market.Order;
-import org.team27.stocksim.model.portfolio.Portfolio;
-import org.team27.stocksim.model.portfolio.Position;
-import org.team27.stocksim.model.users.User;
+import org.team27.stocksim.model.util.dto.OrderDTO;
+import org.team27.stocksim.model.util.dto.PortfolioDTO;
+import org.team27.stocksim.model.util.dto.PositionDTO;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.view.fx.EView;
 
 import javafx.application.Platform;
@@ -18,6 +18,7 @@ import org.team27.stocksim.view.ViewAdapter;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PortfolioViewController extends ViewControllerBase 
         implements ViewAdapter.PortfolioChangedListener, ViewAdapter.TradeSettledListener {
@@ -39,8 +40,8 @@ public class PortfolioViewController extends ViewControllerBase
         // Register for portfolio change events
         viewAdapter.addPortfolioChangedListener(this);
         viewAdapter.addTradeSettledListener(this);
-        User user = modelController.getUser();
-        Portfolio portfolio = user.getPortfolio();
+        UserDTO user = modelController.getUser();
+        PortfolioDTO portfolio = user.getPortfolio();
         BigDecimal balance = portfolio.getBalance();
         availableBalanceLabel.setText("Balance: $" + balance.toString());
 
@@ -76,8 +77,8 @@ public class PortfolioViewController extends ViewControllerBase
      * orders
      */
     private void updatePortfolioDisplay() {
-        User user = modelController.getUser();
-        Portfolio portfolio = user.getPortfolio();
+        UserDTO user = modelController.getUser();
+        PortfolioDTO portfolio = user.getPortfolio();
 
         // Update balance
         BigDecimal balance = portfolio.getBalance();
@@ -93,8 +94,8 @@ public class PortfolioViewController extends ViewControllerBase
     /**
      * Updates the positions display with detailed information
      */
-    private void updatePositionsDisplay(Portfolio portfolio) {
-        Map<String, Position> positions = portfolio.getPositions();
+    private void updatePositionsDisplay(PortfolioDTO portfolio) {
+        Map<String, PositionDTO> positions = portfolio.getPositions();
 
         positionsList.clear();
 
@@ -116,8 +117,8 @@ public class PortfolioViewController extends ViewControllerBase
     /**
      * Updates the active orders display
      */
-    private void updateOrdersDisplay(User user) {
-        List<Order> activeOrders = user.getOrderHistory().getActiveOrders();
+    private void updateOrdersDisplay(UserDTO user) {
+        List<OrderDTO> activeOrders = user.getOrderHistory().getActiveOrders();
 
         ordersList.clear();
 
@@ -125,11 +126,11 @@ public class PortfolioViewController extends ViewControllerBase
             ordersList.add("No active orders");
         } else {
             activeOrders.forEach(order -> {
-                String side = order.getSide() == Order.Side.BUY ? "BUY" : "SELL";
+                String side = Objects.equals(order.getSide(), "BUY") ? "BUY" : "SELL";
                 String orderStr = String.format("%s %s: %d @ $%.2f [%s]",
                         side,
-                        order.getSymbol(),
-                        order.getRemainingQuantity(),
+                        order.getInstrumentSymbol(),
+                        order.getQuantity(),
                         order.getPrice(),
                         order.getStatus());
                 ordersList.add(orderStr);

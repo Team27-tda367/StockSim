@@ -1,4 +1,6 @@
 package org.team27.stocksim.model.users;
+import org.team27.stocksim.model.util.dto.UserDTO;
+
 import java.util.HashMap;
 
 public interface ITraderRegistry {
@@ -18,4 +20,6 @@ public interface ITraderRegistry {
     User getCurrentUser();
 
     void setCurrentUser(String userId);
+
+    UserDTO getCurrentUserDto();
 }

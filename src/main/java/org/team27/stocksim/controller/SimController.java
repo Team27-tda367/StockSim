@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 import org.team27.stocksim.SimSetup;
 import org.team27.stocksim.model.StockSim;
-import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public class SimController implements ISimController {
@@ -49,8 +49,8 @@ public class SimController implements ISimController {
     }
 
     @Override
-    public User getUser() {
-        return model.getCurrentUser();
+    public UserDTO getUser() {
+        return model.getCurrentUserDto();
     }
 
     @Override
@@ -64,12 +64,14 @@ public class SimController implements ISimController {
     @Override
     public void sellStock(String stockSymbol, int quantity, BigDecimal price) {
         User user = model.getCurrentUser();
-        int availableQuantity = user.getPortfolio().getStockQuantity(stockSymbol);
+        /*int availableQuantity = user.getPortfolio().getStockQuantity(stockSymbol);
 
         if (availableQuantity < quantity) {
             System.out.println("Insufficient stock quantity to sell.");
             quantity = availableQuantity;
-        }
+        }*/
+
+
 
         Order sellOrder = new Order(Order.Side.SELL, stockSymbol, price, quantity, user.getId());
         model.placeOrder(sellOrder);
