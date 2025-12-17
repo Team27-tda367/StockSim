@@ -19,10 +19,12 @@ public class Portfolio {
 
     private List<Instrument> instruments;
     private BigDecimal balance;
+    private final BigDecimal initialBalance;
     private Map<String, Position> positions; // symbol -> Position
 
     public Portfolio(BigDecimal traderBalance) {
         this.balance = traderBalance;
+        this.initialBalance = traderBalance;
         this.positions = new HashMap<>();
     }
 
@@ -191,11 +193,17 @@ public class Portfolio {
 
     /**
      * Calculates the unrealized gain/loss on all positions.
+     * When there are no positions, compares current balance to initial balance.
      * 
      * @param currentPrices map of symbol to current price
      * @return total unrealized profit/loss
      */
     public BigDecimal getTotalGainLoss(Map<String, BigDecimal> currentPrices) {
+        if (positions.isEmpty()) {
+            // No positions: compare current balance to initial balance
+            return balance.subtract(initialBalance);
+        }
+        // With positions: compare current position value to cost basis
         BigDecimal positionsValue = getPositionsValue(currentPrices);
         BigDecimal totalCost = getTotalCost();
         return positionsValue.subtract(totalCost);
@@ -203,19 +211,27 @@ public class Portfolio {
 
     /**
      * Calculates the unrealized gain/loss percentage on all positions.
+     * When there are no positions, compares current balance to initial balance.
      * 
      * @param currentPrices map of symbol to current price
      * @return gain/loss as a percentage, or ZERO if no cost basis
      */
     public BigDecimal getGainLossPercentage(Map<String, BigDecimal> currentPrices) {
-        BigDecimal totalCost = getTotalCost();
+        BigDecimal costBasis;
+        if (positions.isEmpty()) {
+            // No positions: use initial balance as cost basis
+            costBasis = initialBalance;
+        } else {
+            // With positions: use total cost of positions
+            costBasis = getTotalCost();
+        }
 
-        if (totalCost.compareTo(BigDecimal.ZERO) <= 0) {
+        if (costBasis.compareTo(BigDecimal.ZERO) <= 0) {
             return BigDecimal.ZERO;
         }
 
         BigDecimal totalGainLoss = getTotalGainLoss(currentPrices);
-        return totalGainLoss.divide(totalCost, 4, RoundingMode.HALF_UP)
+        return totalGainLoss.divide(costBasis, 4, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100));
     }
 
