@@ -33,6 +33,7 @@ public class StockSim implements IModelSubject {
     private final IInstrumentRegistry instrumentRegistry;
     private final ITraderRegistry traderRegistry;
     private final IMarketSimulator marketSimulator;
+    private final BotActionExecutor botActionExecutor;
 
     public StockSim() {
         this(3600, 50, 10);
@@ -45,6 +46,9 @@ public class StockSim implements IModelSubject {
 
         // Initialize market
         this.market = new Market();
+
+        // Initialize bot action executor
+        this.botActionExecutor = new BotActionExecutor();
 
         // Set up market callbacks
         market.setOnPriceUpdate(this::notifyPriceUpdate);
@@ -89,10 +93,8 @@ public class StockSim implements IModelSubject {
 
     private void onSimulationTick() {
         // Execute bot trading decisions
-        for (Trader bot : traderRegistry.getBots().values()) {
-            if (bot instanceof Bot) {
-                ((Bot) bot).decide(this);
-            }
+         for (Bot bot : traderRegistry.getBots().values()) {
+            bot.tick(this, botActionExecutor);
         }
         marketSimulator.setTotalTradesExecuted(market.getCompletedTrades().size());
     }
@@ -161,7 +163,7 @@ public class StockSim implements IModelSubject {
         return traderRegistry.getAllTraders();
     }
 
-    public HashMap<String, Trader> getBots() {
+    public HashMap<String, Bot> getBots() {
         return traderRegistry.getBots();
     }
 
@@ -191,6 +193,7 @@ public class StockSim implements IModelSubject {
 
     public void stopMarketSimulation() {
         marketSimulator.stop();
+        botActionExecutor.shutdown();
     }
 
     private void notifyPriceUpdate(Set<String> changedSymbols) {

@@ -13,7 +13,7 @@ public interface ITraderRegistry {
 
     HashMap<String, Trader> getAllTraders();
 
-    HashMap<String, Trader> getBots();
+    HashMap<String, Bot> getBots();
 
     HashMap<String, User> getUsers();
 

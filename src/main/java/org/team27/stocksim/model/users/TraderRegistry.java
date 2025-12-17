@@ -75,11 +75,11 @@ public class TraderRegistry implements ITraderRegistry {
     }
 
     @Override
-    public HashMap<String, Trader> getBots() {
-        HashMap<String, Trader> bots = new HashMap<>();
+    public HashMap<String, Bot> getBots() {
+        HashMap<String, Bot> bots = new HashMap<>();
         for (Map.Entry<String, Trader> entry : traders.entrySet()) {
             if (entry.getValue() instanceof Bot) {
-                bots.put(entry.getKey(), entry.getValue());
+                bots.put(entry.getKey(), (Bot)entry.getValue());
             }
         }
         return bots;

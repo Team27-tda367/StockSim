@@ -7,14 +7,15 @@ import org.team27.stocksim.model.instruments.Instrument;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class SettlementEngine implements ISettlementEngine {
 
-    private final HashMap<Integer, String> orderIdToTraderId;
+    private final ConcurrentHashMap<Integer, String> orderIdToTraderId;
     private final Consumer<Trade> onTradeSettled;
 
-    public SettlementEngine(HashMap<Integer, String> orderIdToTraderId, Consumer<Trade> onTradeSettled) {
+    public SettlementEngine(ConcurrentHashMap<Integer, String> orderIdToTraderId, Consumer<Trade> onTradeSettled) {
         this.orderIdToTraderId = orderIdToTraderId;
         this.onTradeSettled = onTradeSettled;
     }

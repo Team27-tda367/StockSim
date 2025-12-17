@@ -4,6 +4,7 @@ import org.team27.stocksim.model.clock.ClockProvider;
 import org.team27.stocksim.model.clock.GameClock;
 import org.team27.stocksim.model.clock.GameTicker;
 import org.team27.stocksim.model.market.MarketState;
+import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.Trader;
 
 import java.time.Instant;
@@ -21,15 +22,16 @@ public class MarketSimulator implements IMarketSimulator {
     private int totalTradesExecuted;
     private GameClock clock;
 
-    public MarketSimulator(Supplier<HashMap<String, Trader>> botsSupplier, Runnable onTick) {
+
+    public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick) {
         this(botsSupplier, onTick, null, 3600, 50, 10);
     }
 
-    public MarketSimulator(Supplier<HashMap<String, Trader>> botsSupplier, Runnable onTick, Runnable onSaveData) {
+    public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick, Runnable onSaveData) {
         this(botsSupplier, onTick, onSaveData, 3600, 50, 10);
     }
 
-    public MarketSimulator(Supplier<HashMap<String, Trader>> botsSupplier, Runnable onTick, Runnable onSaveData,
+    public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick, Runnable onSaveData,
             int speedupFactor, int tickInterval, int durationInRealSeconds) {
         this.state = MarketState.PAUSED;
         this.onTick = onTick;
