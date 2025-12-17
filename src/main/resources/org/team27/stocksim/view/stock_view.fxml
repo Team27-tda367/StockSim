@@ -10,6 +10,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ListView?>
+<?import java.lang.String?>
 
 
 
@@ -44,21 +46,23 @@
                 <BorderPane>
                     <left>
                         <VBox spacing="8" alignment="TOP_LEFT">
-                            <Label fx:id="symbolLabel" text="AAPL" styleClass="stock-title"/>
-                            <Label fx:id="nameLabel" text="Apple · Inc. · Listed on Stock Exchange" styleClass="stock-subtitle"/>
+                            <Label fx:id="symbolLabel" styleClass="stock-title"/>
+                            <Label fx:id="nameLabel" styleClass="stock-subtitle"/>
+                            
                             <HBox spacing="6">
-                                <Label text="Technology" styleClass="badge, badge-blue"/>
-                                <Label text="Growth" styleClass="badge, badge-green"/>
-                            </HBox>
+                                <Label fx:id="categoryLabel" styleClass="badge, badge-green"/>
+                                <!-- <Label text="Technology" styleClass="badge, badge-blue"/>
+                                <Label text="Growth" styleClass="badge, badge-green"/> -->
+                            </HBox> 
                         </VBox>
                     </left>
-                    <right>
+                    <!-- <right>
                         <Button fx:id="favoriteButton" styleClass="favorite-btn" onAction="#onToggleFavorite">
                             <graphic>
                                 <Label fx:id="favoriteIcon" text="☆" styleClass="favorite-icon"/>
                             </graphic>
                         </Button>
-                    </right>
+                    </right> -->
                 </BorderPane>
 
                 <!-- Price History Chart -->
@@ -66,12 +70,12 @@
                     <HBox alignment="CENTER_LEFT">
                         <Label text="Price History" styleClass="chart-title"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <HBox spacing="4">
+                        <!-- <HBox spacing="4">
                             <Button fx:id="btn1D" text="1D" styleClass="time-period-btn" onAction="#onTimePeriodClick"/>
                             <Button fx:id="btn1W" text="1W" styleClass="time-period-btn" onAction="#onTimePeriodClick"/>
                             <Button fx:id="btn1M" text="1M" styleClass="time-period-btn" onAction="#onTimePeriodClick"/>
                             <Button fx:id="btn1Y" text="1Y" styleClass="time-period-btn" onAction="#onTimePeriodClick"/>
-                        </HBox>
+                        </HBox> -->
                     </HBox>
                     <LineChart fx:id="priceChart" prefHeight="450" legendVisible="false" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                         <xAxis>
@@ -88,14 +92,37 @@
             <VBox prefWidth="300" spacing="8">
 
                 <!-- 🔹 TOP TRENDING PANEL -->
-                <VBox>
+                <!-- <VBox>
                     <HBox alignment="CENTER_LEFT" styleClass="panel-header">
                         <Label text="Top Trending Stocks" styleClass="panel-title"/>
                     </HBox>
                     <VBox fx:id="trendingStocksContainer" styleClass="panel-body" spacing="2">
-                        <!-- Trending stocks will be populated here dynamically -->
                     </VBox>
+                </VBox> -->
+                <!-- MY POSITIONS -->
+                <VBox>
+                    <HBox alignment="CENTER_LEFT" styleClass="panel-header">
+                        <Label text="My Positions" styleClass="panel-title"/>
+                    </HBox>
+                    <ListView fx:id="positionsListView" prefHeight="120" minHeight="120">
+                        <styleClass>
+                            <String fx:value="list-view-custom"/>
+                            <String fx:value="panel-body"/>
+                        </styleClass>
+                    </ListView>
                 </VBox>
+                <!-- MY ORDERS -->
+                <VBox>
+                    <HBox alignment="CENTER_LEFT" styleClass="panel-header">
+                        <Label text="My Orders" styleClass="panel-title"/>
+                    </HBox>
+                    <ListView fx:id="ordersListView" prefHeight="120" minHeight="120">
+                        <styleClass>
+                            <String fx:value="list-view-custom"/>
+                            <String fx:value="panel-body"/>
+                        </styleClass>
+                    </ListView>
+                </VBox> 
 
                 <!-- 🔹 RELATED STOCKS PANEL -->
                 <!-- <VBox>
@@ -175,7 +202,8 @@
                     </HBox>
 
                     <VBox>
-                        <Button text="Place market order" prefHeight="34" prefWidth="140" styleClass="buy-btn, btn-highlighted" onAction="#handleMarketOrder"/>
+                        <Button text="Buy market order" prefHeight="34" prefWidth="140" styleClass="buy-btn, btn-highlighted" onAction="#handleBuyMarketOrder"/>
+                        <Button text="Sell market order" prefHeight="34" prefWidth="140" styleClass="sell-btn, btn-secondary" onAction="#handleSellMarketOrder"/>
                     </VBox>
 
 

@@ -20,10 +20,10 @@ public class Main {
         boolean loadExistingPrices = true;
 
         // Simulation configuration
-        // int simulationSpeed = 3600; // 1 real second = 1 hour simulated time
+        // int simulationSpeed = 3600 * 24; // 1 real second = 1 day simulated time
         int simulationSpeed = 5;
         int tickInterval = 50; // Check for new simulation seconds every 50ms
-        int durationInRealSeconds = 10; // Run fast simulation for 10 seconds
+        int durationInRealSeconds = 365; // Run fast simulation for 365 seconds
         int initialBotCount = 1000; // Number of trading bots
 
         // Initialize the model with simulation configuration
@@ -47,7 +47,7 @@ public class Main {
             System.out.println("Running simulation to generate price data...");
             // Sleep for duration to allow simulation to complete
             try {
-                Thread.sleep((durationInRealSeconds + 1) * 1000);
+                Thread.sleep((durationInRealSeconds) * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

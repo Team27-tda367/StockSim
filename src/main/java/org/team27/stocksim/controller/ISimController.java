@@ -25,7 +25,9 @@ public interface ISimController {
 
     void buyStock(String stockSymbol, int quantity, BigDecimal price);
 
-    void placeMarketOrder(String stockSymbol, int quantity);
+    void placeMarketBuyOrder(String stockSymbol, int quantity);
+
+    void placeMarketSellOrder(String stockSymbol, int quantity);
 
     void sellStock(String stockSymbol, int quantity, BigDecimal price);
 

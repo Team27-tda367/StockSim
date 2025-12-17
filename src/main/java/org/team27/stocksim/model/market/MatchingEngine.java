@@ -32,11 +32,11 @@ public class MatchingEngine {
 
     public List<Trade> match(Order incomingOrder, OrderBook orderBook) {
         List<Trade> trades = new ArrayList<>();
-        if (incomingOrder.isBuyOrder()) { // TODO Maybe refactor to use enum method. isBuy() and separate to matchBuy
-                                          // and matchSell
+        
+        if (incomingOrder.isBuyOrder()) {
             while (!incomingOrder.isFilled()) {
                 Order bestAsk = orderBook.getBestAsk();
-                if (bestAsk != null && incomingOrder.getPrice().compareTo(bestAsk.getPrice()) >= 0) {
+                if (bestAsk != null && canMatch(incomingOrder, bestAsk)) {
                     executeTrade(incomingOrder, bestAsk, orderBook, trades);
                 } else {
                     break;
@@ -45,20 +45,37 @@ public class MatchingEngine {
         } else {
             while (!incomingOrder.isFilled()) {
                 Order bestBid = orderBook.getBestBid();
-                if (bestBid != null && incomingOrder.getPrice().compareTo(bestBid.getPrice()) <= 0) {
+                if (bestBid != null && canMatch(incomingOrder, bestBid)) {
                     executeTrade(incomingOrder, bestBid, orderBook, trades);
                 } else {
                     break;
                 }
             }
         }
-        if (incomingOrder.getRemainingQuantity() > 0) {
-            if (incomingOrder.isBuyOrder()) {
-                orderBook.add(incomingOrder); // TODO refactor addBid and addAsk to addOrder based on side
-            } else {
-                orderBook.add(incomingOrder);
-            }
+        
+        // Market orders should not rest in the book - only add if limit order with remaining quantity
+        if (incomingOrder.getRemainingQuantity() > 0 && !incomingOrder.isMarketOrder()) {
+            orderBook.add(incomingOrder);
         }
+        
         return trades;
+    }
+
+    /**
+     * Determines if an incoming order can match with a resting order.
+     * Market orders match at any price, limit orders only match when price is acceptable.
+     */
+    private boolean canMatch(Order incomingOrder, Order restingOrder) {
+        // Market orders always match if there's liquidity
+        if (incomingOrder.isMarketOrder()) {
+            return true;
+        }
+        
+        // Limit orders match based on price
+        if (incomingOrder.isBuyOrder()) {
+            return incomingOrder.getPrice().compareTo(restingOrder.getPrice()) >= 0;
+        } else {
+            return incomingOrder.getPrice().compareTo(restingOrder.getPrice()) <= 0;
+        }
     }
 }
