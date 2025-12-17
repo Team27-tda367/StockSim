@@ -69,7 +69,7 @@ public class BotPositionRepository {
                             BotData.PositionData posData = new BotData.PositionData();
                             posData.setSymbol(symbol);
                             posData.setQuantity(quantity);
-                            posData.setCostBasis(position.getAverageCost().toString());
+                            posData.setCostBasis(position.getAverageCost().doubleValue());
                             positions.add(posData);
                         }
                     }

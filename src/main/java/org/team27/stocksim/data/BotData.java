@@ -54,13 +54,13 @@ public class BotData {
     public static class PositionData {
         private String symbol;
         private int quantity;
-        private String costBasis;
+        private double costBasis;
 
         // Default constructor for JSON deserialization
         public PositionData() {
         }
 
-        public PositionData(String symbol, int quantity, String costBasis) {
+        public PositionData(String symbol, int quantity, double costBasis) {
             this.symbol = symbol;
             this.quantity = quantity;
             this.costBasis = costBasis;
@@ -82,11 +82,11 @@ public class BotData {
             this.quantity = quantity;
         }
 
-        public String getCostBasis() {
+        public double getCostBasis() {
             return costBasis;
         }
 
-        public void setCostBasis(String costBasis) {
+        public void setCostBasis(double costBasis) {
             this.costBasis = costBasis;
         }
     }
