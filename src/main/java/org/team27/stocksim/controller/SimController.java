@@ -3,13 +3,15 @@ package org.team27.stocksim.controller;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.market.Order;
-import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.OrderDTO;
+import org.team27.stocksim.model.util.dto.TradeDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public class SimController implements ISimController {
@@ -98,9 +100,15 @@ public class SimController implements ISimController {
     }
 
     @Override
-    public OrderHistory getOrderHistory() {
+    public List<OrderDTO> getOrderHistory() {
         User user = model.getCurrentUser();
-        return user != null ? user.getOrderHistory() : new OrderHistory();
+        return user != null ? user.getOrderHistory().getAllOrdersDTO() : new ArrayList<>();
+    }
+
+    @Override
+    public List<TradeDTO> getTradeHistory() {
+        User user = model.getCurrentUser();
+        return user != null ? user.getOrderHistory().getAllTradesDTO() : new ArrayList<>();
     }
 
     @Override

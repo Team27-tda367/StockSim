@@ -2,6 +2,10 @@ package org.team27.stocksim.model.users;
 
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.market.Trade;
+import org.team27.stocksim.model.util.dto.OrderDTO;
+import org.team27.stocksim.model.util.dto.OrderMapper;
+import org.team27.stocksim.model.util.dto.TradeDTO;
+import org.team27.stocksim.model.util.dto.TradeMapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Tracks a trader's order and trade history.
  * Maintains records of all orders placed and trades executed.
+ * Provides DTOs for external access to maintain encapsulation.
  */
 public class OrderHistory {
 
@@ -41,7 +46,105 @@ public class OrderHistory {
     }
 
     /**
-     * Get all orders.
+     * Get all orders as DTOs for external consumption.
+     * 
+     * @return List of order DTOs
+     */
+    public List<OrderDTO> getAllOrdersDTO() {
+        return orders.stream()
+                .map(OrderMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get all trades as DTOs for external consumption.
+     * 
+     * @return List of trade DTOs
+     */
+    public List<TradeDTO> getAllTradesDTO() {
+        return trades.stream()
+                .map(TradeMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get orders for a specific symbol as DTOs.
+     * 
+     * @param symbol The stock symbol
+     * @return List of order DTOs for the symbol
+     */
+    public List<OrderDTO> getOrdersBySymbolDTO(String symbol) {
+        return orders.stream()
+                .filter(order -> order.getSymbol().equals(symbol))
+                .map(OrderMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get trades for a specific symbol as DTOs.
+     * 
+     * @param symbol The stock symbol
+     * @return List of trade DTOs for the symbol
+     */
+    public List<TradeDTO> getTradesBySymbolDTO(String symbol) {
+        return trades.stream()
+                .filter(trade -> trade.getStockSymbol().equals(symbol))
+                .map(TradeMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get all buy orders as DTOs.
+     * 
+     * @return List of buy order DTOs
+     */
+    public List<OrderDTO> getBuyOrdersDTO() {
+        return orders.stream()
+                .filter(Order::isBuyOrder)
+                .map(OrderMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get all sell orders as DTOs.
+     * 
+     * @return List of sell order DTOs
+     */
+    public List<OrderDTO> getSellOrdersDTO() {
+        return orders.stream()
+                .filter(order -> !order.isBuyOrder())
+                .map(OrderMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get filled orders as DTOs.
+     * 
+     * @return List of filled order DTOs
+     */
+    public List<OrderDTO> getFilledOrdersDTO() {
+        return orders.stream()
+                .filter(Order::isFilled)
+                .map(OrderMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get active (non-filled, non-cancelled) orders as DTOs.
+     * 
+     * @return List of active order DTOs
+     */
+    public List<OrderDTO> getActiveOrdersDTO() {
+        return orders.stream()
+                .filter(order -> order.getStatus() != Order.Status.FILLED
+                        && order.getStatus() != Order.Status.CANCELLED)
+                .map(OrderMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Internal method: Get all orders (for model layer use only).
+     * External callers should use getAllOrdersDTO().
      * 
      * @return Unmodifiable list of all orders
      */
@@ -50,81 +153,13 @@ public class OrderHistory {
     }
 
     /**
-     * Get all trades.
+     * Internal method: Get all trades (for model layer use only).
+     * External callers should use getAllTradesDTO().
      * 
      * @return Unmodifiable list of all trades
      */
     public List<Trade> getAllTrades() {
         return Collections.unmodifiableList(trades);
-    }
-
-    /**
-     * Get orders for a specific symbol.
-     * 
-     * @param symbol The stock symbol
-     * @return List of orders for the symbol
-     */
-    public List<Order> getOrdersBySymbol(String symbol) {
-        return orders.stream()
-                .filter(order -> order.getSymbol().equals(symbol))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Get trades for a specific symbol.
-     * 
-     * @param symbol The stock symbol
-     * @return List of trades for the symbol
-     */
-    public List<Trade> getTradesBySymbol(String symbol) {
-        return trades.stream()
-                .filter(trade -> trade.getStockSymbol().equals(symbol))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Get all buy orders.
-     * 
-     * @return List of buy orders
-     */
-    public List<Order> getBuyOrders() {
-        return orders.stream()
-                .filter(Order::isBuyOrder)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Get all sell orders.
-     * 
-     * @return List of sell orders
-     */
-    public List<Order> getSellOrders() {
-        return orders.stream()
-                .filter(order -> !order.isBuyOrder())
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Get filled orders.
-     * 
-     * @return List of filled orders
-     */
-    public List<Order> getFilledOrders() {
-        return orders.stream()
-                .filter(Order::isFilled)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Get active (non-filled, non-cancelled) orders.
-     * 
-     * @return List of active orders
-     */
-    public List<Order> getActiveOrders() {
-        return orders.stream()
-                .filter(order -> order.getStatus() != Order.Status.FILLED
-                        && order.getStatus() != Order.Status.CANCELLED)
-                .collect(Collectors.toList());
     }
 
     /**

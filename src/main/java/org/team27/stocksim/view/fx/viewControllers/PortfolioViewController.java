@@ -1,9 +1,10 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.portfolio.Position;
 import org.team27.stocksim.model.users.User;
+import org.team27.stocksim.model.util.dto.OrderDTO;
+import org.team27.stocksim.model.util.dto.TradeDTO;
 import org.team27.stocksim.view.fx.EView;
 
 import javafx.application.Platform;
@@ -196,7 +197,7 @@ public class PortfolioViewController extends ViewControllerBase
      * Updates the active orders display
      */
     private void updateOrdersDisplay(User user) {
-        List<Order> activeOrders = user.getOrderHistory().getActiveOrders();
+        List<OrderDTO> activeOrders = user.getOrderHistory().getActiveOrdersDTO();
 
         ordersList.clear();
 
@@ -204,9 +205,8 @@ public class PortfolioViewController extends ViewControllerBase
             ordersList.add("No active orders");
         } else {
             activeOrders.forEach(order -> {
-                String side = order.getSide() == Order.Side.BUY ? "BUY" : "SELL";
                 String orderStr = String.format("%s %s: %d @ $%.2f [%s]",
-                        side,
+                        order.getSide(),
                         order.getSymbol(),
                         order.getRemainingQuantity(),
                         order.getPrice(),
