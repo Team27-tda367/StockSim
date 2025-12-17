@@ -1,0 +1,147 @@
+package org.team27.stocksim.model;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import org.team27.stocksim.data.BotData;
+import org.team27.stocksim.model.portfolio.Portfolio;
+import org.team27.stocksim.model.portfolio.Position;
+import org.team27.stocksim.model.users.Bot;
+import org.team27.stocksim.model.users.Trader;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Repository for persisting bot positions to JSON.
+ * Handles reading and writing bot position data to bot-positions.json.
+ */
+public class BotPositionRepository {
+
+    private static final String RESOURCE_PATH = "src/main/resources/db/bot-positions.json";
+    private final Gson gson;
+
+    public BotPositionRepository() {
+        this.gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+    }
+
+    /**
+     * Save all bot positions to JSON file.
+     * 
+     * @param traders Map of trader ID to trader object
+     */
+    public void saveBotPositions(Map<String, Trader> traders) {
+        try {
+            List<BotData> botDataList = new ArrayList<>();
+
+            for (Map.Entry<String, Trader> entry : traders.entrySet()) {
+                Trader trader = entry.getValue();
+
+                // Only save Bot positions, not human users
+                if (trader instanceof Bot) {
+                    Bot bot = (Bot) trader;
+
+                    BotData botData = new BotData();
+                    botData.setId(bot.getId());
+                    botData.setName(bot.getDisplayName());
+                    botData.setStrategy(bot.getStrategy().getClass().getSimpleName());
+
+                    // Convert portfolio positions to PositionData
+                    List<BotData.PositionData> positions = new ArrayList<>();
+                    Portfolio portfolio = bot.getPortfolio();
+
+                    for (Map.Entry<String, Integer> holding : portfolio.getStockHoldings().entrySet()) {
+                        String symbol = holding.getKey();
+                        int quantity = holding.getValue();
+                        Position position = portfolio.getPosition(symbol);
+
+                        if (position != null && quantity > 0) {
+                            BotData.PositionData posData = new BotData.PositionData();
+                            posData.setSymbol(symbol);
+                            posData.setQuantity(quantity);
+                            posData.setCostBasis(position.getAverageCost().toString());
+                            positions.add(posData);
+                        }
+                    }
+
+                    botData.setInitialPositions(positions);
+                    botDataList.add(botData);
+                }
+            }
+
+            // Write to file
+            try (FileWriter writer = new FileWriter(RESOURCE_PATH)) {
+                gson.toJson(botDataList, writer);
+            }
+
+            System.out.println("Bot positions saved to " + RESOURCE_PATH + " (" + botDataList.size() + " bots)");
+
+        } catch (IOException e) {
+            System.err.println("Error saving bot positions: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Load bot positions from JSON file.
+     * 
+     * @return List of bot data, or null if file doesn't exist or is empty
+     */
+    public List<BotData> loadBotPositions() {
+        try {
+            if (!Files.exists(Paths.get(RESOURCE_PATH))) {
+                System.out.println("Bot positions file not found at " + RESOURCE_PATH);
+                return null;
+            }
+
+            try (InputStreamReader reader = new InputStreamReader(
+                    Files.newInputStream(Paths.get(RESOURCE_PATH)))) {
+
+                Type type = new TypeToken<List<BotData>>() {
+                }.getType();
+                List<BotData> data = gson.fromJson(reader, type);
+
+                if (data == null || data.isEmpty()) {
+                    System.out.println("Bot positions file is empty");
+                    return null;
+                }
+
+                System.out.println("Loaded " + data.size() + " bot positions from " + RESOURCE_PATH);
+                return data;
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error loading bot positions: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Check if saved bot positions exist.
+     * 
+     * @return true if bot-positions.json exists and is not empty
+     */
+    public boolean hasSavedPositions() {
+        try {
+            if (!Files.exists(Paths.get(RESOURCE_PATH))) {
+                return false;
+            }
+
+            List<BotData> data = loadBotPositions();
+            return data != null && !data.isEmpty();
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+}

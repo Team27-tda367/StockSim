@@ -11,6 +11,7 @@ import org.team27.stocksim.data.StockDataLoader;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.StockPriceRepository;
+import org.team27.stocksim.model.BotPositionRepository;
 import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.bot.*;
 
@@ -58,8 +59,19 @@ public class SimSetup {
     }
 
     private void createBotsFromFile() {
-        BotDataLoader loader = new BotDataLoader();
-        List<BotData> bots = loader.loadDefaultBots();
+        BotPositionRepository positionRepo = new BotPositionRepository();
+        List<BotData> bots;
+        
+        // Try to load from saved positions first, fallback to defaults
+        bots = positionRepo.loadBotPositions();
+        
+        if (bots == null || bots.isEmpty()) {
+            System.out.println("Loading bots from default-bots.json");
+            BotDataLoader loader = new BotDataLoader();
+            bots = loader.loadDefaultBots();
+        } else {
+            System.out.println("Loading bots from bot-positions.json");
+        }
 
         for (BotData botData : bots) {
             // Create strategy first

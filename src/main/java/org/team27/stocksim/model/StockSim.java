@@ -234,6 +234,14 @@ public class StockSim implements IModelSubject {
     }
 
     /**
+     * Save all bot positions to JSON database.
+     */
+    public void saveBotPositions() {
+        BotPositionRepository repository = new BotPositionRepository();
+        repository.saveBotPositions(traderRegistry.getBots());
+    }
+
+    /**
      * Get instrument by symbol for direct access.
      * Used by setup classes to configure instruments.
      */

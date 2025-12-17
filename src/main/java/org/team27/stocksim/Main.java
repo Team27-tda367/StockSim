@@ -73,8 +73,9 @@ public class Main {
             }
             // Save generated price data
             model.saveStockPrices();
+            model.saveBotPositions();
             model.stopMarketSimulation();
-            System.out.println("Price data saved to JSON");
+            System.out.println("Price data and bot positions saved to JSON");
             System.exit(0);
         }
 
