@@ -11,11 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.portfolio.Position;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.OrderDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.chart.ChartDataService;
@@ -400,10 +400,10 @@ public class StockViewController extends ViewControllerBase
     private void updateOrdersDisplay(User user) {
         ordersList.clear();
 
-        List<Order> activeOrders = user.getOrderHistory().getActiveOrders();
+        List<OrderDTO> activeOrders = user.getOrderHistory().getActiveOrdersDTO();
         
         // Filter orders for the selected stock
-        List<Order> stockOrders = activeOrders.stream()
+        List<OrderDTO> stockOrders = activeOrders.stream()
                 .filter(order -> order.getSymbol().equals(stock.getSymbol()))
                 .toList();
 
@@ -411,9 +411,8 @@ public class StockViewController extends ViewControllerBase
             ordersList.add("No active orders for " + stock.getSymbol());
         } else {
             stockOrders.forEach(order -> {
-                String side = order.getSide() == Order.Side.BUY ? "BUY" : "SELL";
                 String orderStr = String.format("%s: %d @ $%.2f [%s]",
-                        side,
+                        order.getSide(),
                         order.getRemainingQuantity(),
                         order.getPrice(),
                         order.getStatus());

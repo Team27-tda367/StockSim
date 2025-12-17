@@ -3,11 +3,13 @@ package org.team27.stocksim.controller;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.team27.stocksim.model.instruments.Instrument;
-import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.OrderDTO;
+import org.team27.stocksim.model.util.dto.TradeDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public interface ISimController {
@@ -31,7 +33,9 @@ public interface ISimController {
 
     void sellStock(String stockSymbol, int quantity, BigDecimal price);
 
-    OrderHistory getOrderHistory();
+    List<OrderDTO> getOrderHistory();
+
+    List<TradeDTO> getTradeHistory();
 
     void setSelectedStock(InstrumentDTO stock);
 
