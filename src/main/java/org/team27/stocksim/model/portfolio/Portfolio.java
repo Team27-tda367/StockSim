@@ -1,6 +1,7 @@
 package org.team27.stocksim.model.portfolio;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,10 +46,10 @@ public class Portfolio {
     /**
      * Adds stock to the portfolio with price information (for buys).
      * 
-     * @param symbol the stock symbol
+     * @param symbol   the stock symbol
      * @param quantity the number of shares
-     * @param price the price per share
-     * @param trade optional trade object for history tracking
+     * @param price    the price per share
+     * @param trade    optional trade object for history tracking
      */
     public void addStock(String symbol, int quantity, BigDecimal price, Trade trade) {
         Position position = positions.computeIfAbsent(symbol, Position::new);
@@ -59,7 +60,7 @@ public class Portfolio {
      * Adds stock to the portfolio without price information (for initial setup).
      * Uses zero as the cost basis.
      * 
-     * @param symbol the stock symbol
+     * @param symbol   the stock symbol
      * @param quantity the number of shares
      */
     public void addStock(String symbol, int quantity) {
@@ -69,9 +70,9 @@ public class Portfolio {
     /**
      * Removes stock from the portfolio (for sells).
      * 
-     * @param symbol the stock symbol
+     * @param symbol   the stock symbol
      * @param quantity the number of shares
-     * @param trade optional trade object for history tracking
+     * @param trade    optional trade object for history tracking
      * @return true if successful, false if insufficient quantity
      */
     public boolean removeStock(String symbol, int quantity, Trade trade) {
@@ -79,7 +80,7 @@ public class Portfolio {
         if (position == null) {
             return false;
         }
-        
+
         boolean success = position.removeShares(quantity, trade);
         if (success && position.isEmpty()) {
             positions.remove(symbol);
@@ -90,7 +91,7 @@ public class Portfolio {
     /**
      * Removes stock from the portfolio without trade tracking.
      * 
-     * @param symbol the stock symbol
+     * @param symbol   the stock symbol
      * @param quantity the number of shares
      * @return true if successful, false if insufficient quantity
      */
@@ -123,7 +124,8 @@ public class Portfolio {
     }
 
     /**
-     * Gets stock holdings as a map of symbol to quantity (for backward compatibility).
+     * Gets stock holdings as a map of symbol to quantity (for backward
+     * compatibility).
      * 
      * @return map of symbol to quantity
      */
@@ -131,8 +133,7 @@ public class Portfolio {
         return positions.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        e -> e.getValue().getQuantity()
-                ));
+                        e -> e.getValue().getQuantity()));
     }
 
     public boolean isEmpty() {
@@ -141,6 +142,81 @@ public class Portfolio {
 
     public List<Instrument> getInstruments() {
         return instruments;
+    }
+
+    /**
+     * Calculates the total cost basis of all positions in the portfolio.
+     * 
+     * @return total cost of all positions
+     */
+    public BigDecimal getTotalCost() {
+        return positions.values().stream()
+                .map(Position::getTotalCost)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * Calculates the current market value of all positions based on current prices.
+     * 
+     * @param currentPrices map of symbol to current price
+     * @return total market value of all positions (excluding cash)
+     */
+    public BigDecimal getPositionsValue(Map<String, BigDecimal> currentPrices) {
+        BigDecimal totalValue = BigDecimal.ZERO;
+
+        for (Map.Entry<String, Position> entry : positions.entrySet()) {
+            String symbol = entry.getKey();
+            Position position = entry.getValue();
+            BigDecimal currentPrice = currentPrices.get(symbol);
+
+            if (currentPrice != null) {
+                BigDecimal positionValue = currentPrice.multiply(BigDecimal.valueOf(position.getQuantity()));
+                totalValue = totalValue.add(positionValue);
+            }
+        }
+
+        return totalValue;
+    }
+
+    /**
+     * Calculates the total portfolio value including cash balance and positions.
+     * 
+     * @param currentPrices map of symbol to current price
+     * @return total portfolio value (positions + cash)
+     */
+    public BigDecimal getTotalValue(Map<String, BigDecimal> currentPrices) {
+        BigDecimal positionsValue = getPositionsValue(currentPrices);
+        return positionsValue.add(balance);
+    }
+
+    /**
+     * Calculates the unrealized gain/loss on all positions.
+     * 
+     * @param currentPrices map of symbol to current price
+     * @return total unrealized profit/loss
+     */
+    public BigDecimal getTotalGainLoss(Map<String, BigDecimal> currentPrices) {
+        BigDecimal positionsValue = getPositionsValue(currentPrices);
+        BigDecimal totalCost = getTotalCost();
+        return positionsValue.subtract(totalCost);
+    }
+
+    /**
+     * Calculates the unrealized gain/loss percentage on all positions.
+     * 
+     * @param currentPrices map of symbol to current price
+     * @return gain/loss as a percentage, or ZERO if no cost basis
+     */
+    public BigDecimal getGainLossPercentage(Map<String, BigDecimal> currentPrices) {
+        BigDecimal totalCost = getTotalCost();
+
+        if (totalCost.compareTo(BigDecimal.ZERO) <= 0) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal totalGainLoss = getTotalGainLoss(currentPrices);
+        return totalGainLoss.divide(totalCost, 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
     }
 
 }

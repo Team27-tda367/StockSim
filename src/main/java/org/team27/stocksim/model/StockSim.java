@@ -10,6 +10,7 @@ import org.team27.stocksim.model.instruments.StockFactory;
 import org.team27.stocksim.model.market.IMarket;
 import org.team27.stocksim.model.market.Market;
 import org.team27.stocksim.model.market.Order;
+import org.team27.stocksim.model.market.Order.Side;
 import org.team27.stocksim.model.market.OrderBook;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.simulation.IMarketSimulator;

@@ -3,7 +3,6 @@ package org.team27.stocksim.view.fx.chart;
 import org.team27.stocksim.model.instruments.PriceHistory;
 import org.team27.stocksim.model.instruments.PriceHistoryService;
 import org.team27.stocksim.model.instruments.PricePoint;
-import org.team27.stocksim.model.instruments.TimePeriod;
 import javafx.scene.chart.XYChart;
 
 import java.util.List;
@@ -25,16 +24,13 @@ public class ChartDataService {
     }
 
     /**
-     * Prepare chart data series for a specific time period.
+     * Prepare chart data series.
      * Delegates data processing to model layer, then converts to JavaFX format.
      * 
      * @param priceHistory The complete price history of the stock
-     * @param timePeriod   The time period to display
      * @return XYChart.Series with filtered data points
      */
-    public XYChart.Series<Number, Number> prepareChartData(
-            PriceHistory priceHistory,
-            ChartTimePeriod timePeriod) {
+    public XYChart.Series<Number, Number> prepareChartData(PriceHistory priceHistory) {
 
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
 
@@ -43,8 +39,7 @@ public class ChartDataService {
         }
 
         // Delegate filtering to model service
-        TimePeriod modelTimePeriod = timePeriod.toModelTimePeriod();
-        List<PricePoint> filteredPoints = priceHistoryService.filterPriceData(priceHistory, modelTimePeriod);
+        List<PricePoint> filteredPoints = priceHistoryService.filterPriceData(priceHistory);
 
         // Convert to JavaFX chart format
         convertToChartSeries(filteredPoints, series);
@@ -59,14 +54,12 @@ public class ChartDataService {
      * 
      * @param series        The existing chart series to update
      * @param priceHistory  The complete price history
-     * @param timePeriod    The current time period filter
      * @param lastKnownSize The number of points that were previously added
      * @return The new size of the price history (for tracking)
      */
     public int updateChartData(
             XYChart.Series<Number, Number> series,
             PriceHistory priceHistory,
-            ChartTimePeriod timePeriod,
             int lastKnownSize) {
 
         if (series == null || priceHistory == null) {
@@ -74,10 +67,8 @@ public class ChartDataService {
         }
 
         // Delegate update logic to model service
-        TimePeriod modelTimePeriod = timePeriod.toModelTimePeriod();
         PriceHistoryService.FilterResult result = priceHistoryService.getIncrementalUpdate(
                 priceHistory,
-                modelTimePeriod,
                 lastKnownSize);
 
         if (result.needsFullRedraw()) {

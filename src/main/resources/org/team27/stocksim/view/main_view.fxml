@@ -34,7 +34,7 @@
         <Label text="Stocks" styleClass="title-large"/>
 
         <!-- Search Bar -->
-        <TextField fx:id="searchField" promptText="Search for a stock..." styleClass="input-field"/>
+        <!-- <TextField fx:id="searchField" promptText="Search for a stock..." styleClass="input-field"/> -->
 
         <!-- Filter Buttons -->
         <HBox fx:id="categoryBox" alignment="CENTER_LEFT" styleClass="spacing-medium">
@@ -43,19 +43,19 @@
             <!-- Enum-generated category buttons will be inserted here -->
 
             <Region HBox.hgrow="SOMETIMES"/>
-            <Button text="Show favorites only" styleClass="btn-secondary"/>
+            <!-- <Button text="Show favorites only" styleClass="btn-secondary"/> -->
         </HBox>
 
         <!-- Stock List Header -->
         <HBox styleClass="list-header, spacing-medium">
             <Label text="Name" prefWidth="180" styleClass="text-bold"/>
-            <Label text="Today" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
+            <!-- <Label text="Today" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
 
             <Label text="1 week" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
             <Label text="1 year" prefWidth="200" alignment="CENTER" styleClass="text-bold"/>
-            <Label text="Last price" prefWidth="190" alignment="CENTER_RIGHT" styleClass="text-bold"/>
+            <Label text="Last price" prefWidth="190" alignment="CENTER_RIGHT" styleClass="text-bold"/> -->
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="Watchlist" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
+            <Label text="Price" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
             <Label text="Trade" prefWidth="100" alignment="CENTER" styleClass="text-bold"/>
         </HBox>
 

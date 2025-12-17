@@ -55,23 +55,44 @@ public class SimController implements ISimController {
         model.placeOrder(buyOrder);
     }
 
-    public void placeMarketOrder(String stockSymbol, int quantity) {
-        // TODO: Handle market order price properly
-        Order marketOrder = new Order(Order.Side.BUY, stockSymbol, BigDecimal.valueOf(Double.MAX_VALUE), quantity,
-                model.getCurrentUser().getId());
-        model.placeOrder(marketOrder);
+    public void placeMarketBuyOrder(String stockSymbol, int quantity) {
+        Order order = new Order(Order.Side.BUY, Order.OrderType.MARKET,
+                stockSymbol, BigDecimal.ZERO, quantity, model.getCurrentUser().getId());
+        model.placeOrder(order);
     }
 
-    @Override
-    public void sellStock(String stockSymbol, int quantity, BigDecimal price) {
+    public void placeMarketSellOrder(String stockSymbol, int quantity) {
         User user = model.getCurrentUser();
+        quantity = getQuantity(user, quantity, stockSymbol);
+        if (quantity <= 0) {
+            return;
+        }
+
+        Order order = new Order(Order.Side.SELL, Order.OrderType.MARKET, stockSymbol, BigDecimal.ZERO, quantity,
+                model.getCurrentUser().getId());
+
+        model.placeOrder(order);
+    }
+
+    private int getQuantity(User user, int quantity, String stockSymbol) {
         int availableQuantity = user.getPortfolio().getStockQuantity(stockSymbol);
 
         if (availableQuantity < quantity) {
             System.out.println("Insufficient stock quantity to sell.");
             quantity = availableQuantity;
         }
+        return quantity;
 
+    }
+
+    @Override
+    public void sellStock(String stockSymbol, int quantity, BigDecimal price) {
+        User user = model.getCurrentUser();
+
+        quantity = getQuantity(user, quantity, stockSymbol);
+        if (quantity <= 0) {
+            return;
+        }
         Order sellOrder = new Order(Order.Side.SELL, stockSymbol, price, quantity, user.getId());
         model.placeOrder(sellOrder);
     }
