@@ -47,7 +47,6 @@ public class Market implements IMarket {
         Trader trader = traders.get(order.getTraderId());
         if (trader instanceof User) {
             ((User) trader).getOrderHistory().addOrder(order);
-            System.out.println(((User) trader).getOrderHistory().getAllOrders().size() + " orders in history");
         }
     }
 

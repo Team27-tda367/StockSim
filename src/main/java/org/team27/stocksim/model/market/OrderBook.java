@@ -8,9 +8,9 @@ import static java.util.Comparator.comparing;
 public class OrderBook {
     private final PriorityQueue<Order> bids = new PriorityQueue<>(comparing(Order::getPrice).reversed().thenComparing(Order::getTimeStamp));
     private final PriorityQueue<Order> asks = new PriorityQueue<>(comparing(Order::getPrice).thenComparing(Order::getTimeStamp));
-    private final String symbol;
+
     public OrderBook(String symbol) {
-        this.symbol = symbol;
+        // Symbol parameter kept for API compatibility but not stored
     }
 
     public void add(Order order) {

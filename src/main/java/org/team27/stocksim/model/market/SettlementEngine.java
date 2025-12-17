@@ -67,8 +67,6 @@ public class SettlementEngine implements ISettlementEngine {
     private void recordTradeInHistory(Trader trader, Trade trade) {
         if (trader instanceof User) {
             ((User) trader).getOrderHistory().addTrade(trade);
-            System.out.println(((User) trader).getOrderHistory().getAllTrades().size() + " trades in history for "
-                    + trader.getId());
         }
     }
 

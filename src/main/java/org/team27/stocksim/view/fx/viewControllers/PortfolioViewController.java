@@ -4,7 +4,6 @@ import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.portfolio.Position;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.model.util.dto.OrderDTO;
-import org.team27.stocksim.model.util.dto.TradeDTO;
 import org.team27.stocksim.view.fx.EView;
 
 import javafx.application.Platform;

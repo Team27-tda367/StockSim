@@ -13,12 +13,9 @@ import java.util.function.Supplier;
 
 public class MarketSimulator implements IMarketSimulator {
 
-    private final Supplier<HashMap<String, Trader>> botsSupplier;
     private final Runnable onTick;
-    private final Runnable onSaveData;
     private final int tickInterval;
     private final int speedupFactor;
-    private final int durationInRealSeconds;
     private MarketState state;
     private GameTicker ticker;
     private int totalTradesExecuted;
@@ -35,12 +32,9 @@ public class MarketSimulator implements IMarketSimulator {
     public MarketSimulator(Supplier<HashMap<String, Trader>> botsSupplier, Runnable onTick, Runnable onSaveData,
             int speedupFactor, int tickInterval, int durationInRealSeconds) {
         this.state = MarketState.PAUSED;
-        this.botsSupplier = botsSupplier;
         this.onTick = onTick;
-        this.onSaveData = onSaveData;
         this.speedupFactor = speedupFactor;
         this.tickInterval = tickInterval;
-        this.durationInRealSeconds = durationInRealSeconds;
         this.totalTradesExecuted = 0;
     }
 

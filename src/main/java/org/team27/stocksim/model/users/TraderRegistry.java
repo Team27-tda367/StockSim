@@ -29,7 +29,6 @@ public class TraderRegistry implements ITraderRegistry {
         String highId = id.toUpperCase();
 
         if (traders.containsKey(highId)) {
-            System.out.println("User ID already exists: " + highId);
             return false;
         }
 

@@ -32,7 +32,7 @@ public class Main {
             System.out.println(
                     "  mvn exec:java -Dexec.args=\"-sim\"       - Run headless simulation to generate price data");
             System.out.println("  mvn exec:java -Dexec.args=\"-display\"   - Load existing data and show JavaFX UI");
-            System.out.println("\nDefaulting to -sim mode...");
+
             displayMode = true;
         }
 
@@ -55,7 +55,6 @@ public class Main {
 
         if (displayMode) {
             // Load pre-generated price data from JSON
-            System.out.println("Loading existing price data and launching UI...");
             setup.startWithLoadedPrices();
 
             // Launch the JavaFX UI
@@ -64,18 +63,15 @@ public class Main {
             setup.start();
 
             // Run simulation to generate new price data
-            System.out.println("Running headless simulation to generate price data...");
-            // Sleep for duration to allow simulation to complete
             try {
                 Thread.sleep((durationInRealSeconds) * 1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Simulation interrupted: " + e.getMessage());
             }
             // Save generated price data
             model.saveStockPrices();
             model.saveBotPositions();
             model.stopMarketSimulation();
-            System.out.println("Price data and bot positions saved to JSON");
             System.exit(0);
         }
 

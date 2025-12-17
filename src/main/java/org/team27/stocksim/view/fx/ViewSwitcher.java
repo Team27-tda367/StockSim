@@ -45,7 +45,7 @@ public class ViewSwitcher {
             stage.show();
 
         } catch (Exception e) {
-            e.printStackTrace(); // TODO: Proper error handling
+            e.printStackTrace();
         }
     }
 

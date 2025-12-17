@@ -17,7 +17,6 @@ import org.team27.stocksim.model.market.Trade;
  */
 public class Portfolio {
 
-    private List<Instrument> instruments;
     private BigDecimal balance;
     private final BigDecimal initialBalance;
     private Map<String, Position> positions; // symbol -> Position
@@ -140,10 +139,6 @@ public class Portfolio {
 
     public boolean isEmpty() {
         return positions.isEmpty();
-    }
-
-    public List<Instrument> getInstruments() {
-        return instruments;
     }
 
     /**
