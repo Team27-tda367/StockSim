@@ -14,37 +14,57 @@ import javafx.application.Application;
 public class Main {
 
     public static void main(String[] args) {
-        // === WORKFLOW CONFIGURATION ===
-        // Set to false for fast headless simulation that generates and saves price data
-        // Set to true to load existing price data and view in UI
-        boolean loadExistingPrices = true;
+        // Parse command-line arguments
+        boolean simMode = false;
+        boolean displayMode = false;
 
+        for (String arg : args) {
+            if ("-sim".equals(arg)) {
+                simMode = true;
+            } else if ("-display".equals(arg)) {
+                displayMode = true;
+            }
+        }
+
+        // If no arguments provided, show usage
+        if (args.length == 0) {
+            System.out.println("Usage:");
+            System.out.println(
+                    "  mvn exec:java -Dexec.args=\"-sim\"       - Run headless simulation to generate price data");
+            System.out.println("  mvn exec:java -Dexec.args=\"-display\"   - Load existing data and show JavaFX UI");
+            System.out.println("\nDefaulting to -sim mode...");
+            displayMode = true;
+        }
+
+        int simulationSpeed;
         // Simulation configuration
-        // int simulationSpeed = 3600 * 24; // 1 real second = 1 day simulated time
-        int simulationSpeed = 5;
+        if (displayMode) {
+            simulationSpeed = 1; // 1 real second = 1 day simulated time
+        } else {
+            simulationSpeed = 3600;
+        }
         int tickInterval = 50; // Check for new simulation seconds every 50ms
-        int durationInRealSeconds = 365; // Run fast simulation for 365 seconds
-        int initialBotCount = 1000; // Number of trading bots
+        int durationInRealSeconds = 5; // Run fast simulation for 5 seconds
 
         // Initialize the model with simulation configuration
         StockSim model = new StockSim(simulationSpeed, tickInterval, durationInRealSeconds);
         ISimController controller = new SimController(model);
 
         // Set up initial data (stocks, bots, positions)
-        SimSetup setup = new SimSetup(model, initialBotCount);
+        SimSetup setup = new SimSetup(model);
 
-        if (loadExistingPrices) {
+        if (displayMode) {
             // Load pre-generated price data from JSON
-            System.out.println("Loading existing price data...");
+            System.out.println("Loading existing price data and launching UI...");
             setup.startWithLoadedPrices();
 
             // Launch the JavaFX UI
             launchUI(args, model, controller);
-        } else {
+        } else if (simMode) {
             setup.start();
 
             // Run simulation to generate new price data
-            System.out.println("Running simulation to generate price data...");
+            System.out.println("Running headless simulation to generate price data...");
             // Sleep for duration to allow simulation to complete
             try {
                 Thread.sleep((durationInRealSeconds) * 1000);

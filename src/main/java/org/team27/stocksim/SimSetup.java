@@ -3,24 +3,22 @@ package org.team27.stocksim;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
+import org.team27.stocksim.data.BotData;
+import org.team27.stocksim.data.BotDataLoader;
 import org.team27.stocksim.data.StockData;
 import org.team27.stocksim.data.StockDataLoader;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.StockPriceRepository;
 import org.team27.stocksim.model.users.Bot;
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.users.bot.*;
 
 public class SimSetup {
-    private final Random random = new Random();
     private final StockSim model;
-    private final int initialBotCount;
 
-    public SimSetup(StockSim model, int initialBotCount) {
+    public SimSetup(StockSim model) {
         this.model = model;
-        this.initialBotCount = initialBotCount;
     }
 
     public void start() {
@@ -33,10 +31,9 @@ public class SimSetup {
 
     private void start(boolean loadExistingPrices) {
         createDefaultStocks();
-        createBots(initialBotCount);
+        createBotsFromFile();
         model.createUser("user1", "Default User");
         model.setCurrentUser("user1");
-        initializeBotPositions();
 
         if (loadExistingPrices) {
             // Load existing prices
@@ -44,20 +41,6 @@ public class SimSetup {
         }
         // Start the market simulation
         model.startMarketSimulation();
-    }
-
-    private void initializeBotPositions() {
-        for (var trader : model.getTraders().values()) {
-            if (trader instanceof Bot) {
-                var bot = (Bot) trader;
-                for (InstrumentDTO stock : model.getStocks().values()) {
-                    int quantity = random.nextInt(151) + 50; // Random quantity between 50 and 200
-                    // Initialize with a random cost basis between 95 and 105
-                    BigDecimal initialCost = BigDecimal.valueOf(95 + random.nextInt(11));
-                    bot.getPortfolio().addStock(stock.getSymbol(), quantity, initialCost, null);
-                }
-            }
-        }
     }
 
     private void createDefaultStocks() {
@@ -74,11 +57,60 @@ public class SimSetup {
         }
     }
 
-    private void createBots(int numberOfBots) {
-        for (int i = 1; i <= numberOfBots; i++) {
-            String botId = "bot" + i;
-            String botName = "Bot " + i;
-            model.createBot(botId, botName);
+    private void createBotsFromFile() {
+        BotDataLoader loader = new BotDataLoader();
+        List<BotData> bots = loader.loadDefaultBots();
+
+        for (BotData botData : bots) {
+            // Create strategy first
+            IBotStrategy strategy = createStrategy(botData.getStrategy());
+
+            // Create the bot with strategy via constructor (DIP)
+            model.createBot(botData.getId(), botData.getName(), strategy);
+
+            // Get the created bot and initialize its positions (use uppercase ID)
+            var trader = model.getTraders().get(botData.getId().toUpperCase());
+            if (trader instanceof Bot) {
+                Bot bot = (Bot) trader;
+
+                // Initialize positions
+                for (BotData.PositionData position : botData.getInitialPositions()) {
+                    BigDecimal costBasis = new BigDecimal(position.getCostBasis());
+                    bot.getPortfolio().addStock(
+                            position.getSymbol(),
+                            position.getQuantity(),
+                            costBasis,
+                            null);
+                }
+            }
+        }
+    }
+
+    private IBotStrategy createStrategy(String strategyName) {
+        if (strategyName == null || strategyName.isEmpty()) {
+            return new RandomStrategy();
+        }
+
+        switch (strategyName) {
+            case "RandomStrategy":
+                return new RandomStrategy();
+            case "HodlerStrategy":
+                return new HodlerStrategy();
+            case "MomentumTraderStrategy":
+                return new MomentumTraderStrategy();
+            case "DayTraderStrategy":
+                return new DayTraderStrategy();
+            case "PanicSellerStrategy":
+                return new PanicSellerStrategy();
+            case "FocusedTraderStrategy":
+                return new FocusedTraderStrategy();
+            case "InstitutionalInvestorStrategy":
+                return new InstitutionalInvestorStrategy();
+            case "WSBstrategy":
+                return new WSBstrategy();
+            default:
+                System.out.println("Unknown strategy: " + strategyName + ", using RandomStrategy");
+                return new RandomStrategy();
         }
     }
 
