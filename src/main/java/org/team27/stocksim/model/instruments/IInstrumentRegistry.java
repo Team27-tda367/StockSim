@@ -1,7 +1,5 @@
 package org.team27.stocksim.model.instruments;
 
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 

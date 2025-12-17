@@ -7,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -242,7 +241,7 @@ public class StockViewController extends ViewControllerBase
                 modelController.sellStock(stock.getSymbol(), quantity, price);
             }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid quantity or price");
+            // Invalid input, do nothing
         }
     }
 

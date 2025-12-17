@@ -2,7 +2,6 @@ package org.team27.stocksim.model.market;
 
 import org.team27.stocksim.model.clock.ClockProvider;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 

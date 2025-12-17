@@ -4,12 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.team27.stocksim.model.instruments.Instrument;
-import org.team27.stocksim.model.instruments.PriceHistory;
 import org.team27.stocksim.model.instruments.PricePoint;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -25,7 +23,8 @@ import java.util.Map;
  */
 public class StockPriceRepository {
 
-    private static final String RESOURCE_PATH = "src/main/resources/db/stock_prices.json";
+    private static final String RESOURCE_PATH = "/db/stock_prices.json";
+    private static final String FILE_PATH = "src/main/resources/db/stock_prices.json";
     private final Gson gson;
 
     public StockPriceRepository() {
@@ -57,15 +56,12 @@ public class StockPriceRepository {
             }
 
             // Write to file
-            try (FileWriter writer = new FileWriter(RESOURCE_PATH)) {
+            try (FileWriter writer = new FileWriter(FILE_PATH)) {
                 gson.toJson(priceData, writer);
             }
 
-            System.out.println("Stock prices saved to " + RESOURCE_PATH);
-
         } catch (IOException e) {
             System.err.println("Error saving stock prices: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -76,24 +72,34 @@ public class StockPriceRepository {
      */
     public Map<String, StockPriceData> loadStockPrices() {
         try {
-            if (!Files.exists(Paths.get(RESOURCE_PATH))) {
-                System.out.println("Stock prices file not found, returning empty data");
-                return new HashMap<>();
+            // Try loading from classpath first (for JAR execution)
+            InputStreamReader reader = null;
+            try {
+                var stream = getClass().getResourceAsStream(RESOURCE_PATH);
+                if (stream != null) {
+                    reader = new InputStreamReader(stream);
+                }
+            } catch (Exception e) {
+                // Fall back to file system
             }
 
-            try (InputStreamReader reader = new InputStreamReader(
-                    Files.newInputStream(Paths.get(RESOURCE_PATH)))) {
+            // Fall back to file system (for development)
+            if (reader == null) {
+                if (!Files.exists(Paths.get(FILE_PATH))) {
+                    return new HashMap<>();
+                }
+                reader = new InputStreamReader(Files.newInputStream(Paths.get(FILE_PATH)));
+            }
 
+            try (InputStreamReader r = reader) {
                 Type type = new TypeToken<Map<String, StockPriceData>>() {
                 }.getType();
-                Map<String, StockPriceData> data = gson.fromJson(reader, type);
-
+                Map<String, StockPriceData> data = gson.fromJson(r, type);
                 return data != null ? data : new HashMap<>();
             }
 
         } catch (IOException e) {
             System.err.println("Error loading stock prices: " + e.getMessage());
-            e.printStackTrace();
             return new HashMap<>();
         }
     }

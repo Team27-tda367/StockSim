@@ -25,7 +25,8 @@ import java.util.Map;
  */
 public class BotPositionRepository {
 
-    private static final String RESOURCE_PATH = "src/main/resources/db/bot-positions.json";
+    private static final String RESOURCE_PATH = "/db/bot-positions.json";
+    private static final String FILE_PATH = "src/main/resources/db/bot-positions.json";
     private final Gson gson;
 
     public BotPositionRepository() {
@@ -79,15 +80,12 @@ public class BotPositionRepository {
             }
 
             // Write to file
-            try (FileWriter writer = new FileWriter(RESOURCE_PATH)) {
+            try (FileWriter writer = new FileWriter(FILE_PATH)) {
                 gson.toJson(botDataList, writer);
             }
 
-            System.out.println("Bot positions saved to " + RESOURCE_PATH + " (" + botDataList.size() + " bots)");
-
         } catch (IOException e) {
             System.err.println("Error saving bot positions: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -98,30 +96,34 @@ public class BotPositionRepository {
      */
     public List<BotData> loadBotPositions() {
         try {
-            if (!Files.exists(Paths.get(RESOURCE_PATH))) {
-                System.out.println("Bot positions file not found at " + RESOURCE_PATH);
-                return null;
+            // Try loading from classpath first (for JAR execution)
+            InputStreamReader reader = null;
+            try {
+                var stream = getClass().getResourceAsStream(RESOURCE_PATH);
+                if (stream != null) {
+                    reader = new InputStreamReader(stream);
+                }
+            } catch (Exception e) {
+                // Fall back to file system
             }
 
-            try (InputStreamReader reader = new InputStreamReader(
-                    Files.newInputStream(Paths.get(RESOURCE_PATH)))) {
-
-                Type type = new TypeToken<List<BotData>>() {
-                }.getType();
-                List<BotData> data = gson.fromJson(reader, type);
-
-                if (data == null || data.isEmpty()) {
-                    System.out.println("Bot positions file is empty");
+            // Fall back to file system (for development)
+            if (reader == null) {
+                if (!Files.exists(Paths.get(FILE_PATH))) {
                     return null;
                 }
+                reader = new InputStreamReader(Files.newInputStream(Paths.get(FILE_PATH)));
+            }
 
-                System.out.println("Loaded " + data.size() + " bot positions from " + RESOURCE_PATH);
-                return data;
+            try (InputStreamReader r = reader) {
+                Type type = new TypeToken<List<BotData>>() {
+                }.getType();
+                List<BotData> data = gson.fromJson(r, type);
+                return (data == null || data.isEmpty()) ? null : data;
             }
 
         } catch (IOException e) {
             System.err.println("Error loading bot positions: " + e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
@@ -133,7 +135,7 @@ public class BotPositionRepository {
      */
     public boolean hasSavedPositions() {
         try {
-            if (!Files.exists(Paths.get(RESOURCE_PATH))) {
+            if (!Files.exists(Paths.get(FILE_PATH))) {
                 return false;
             }
 

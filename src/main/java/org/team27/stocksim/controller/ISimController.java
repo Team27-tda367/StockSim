@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.model.util.dto.OrderDTO;

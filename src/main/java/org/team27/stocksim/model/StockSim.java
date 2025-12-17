@@ -22,7 +22,6 @@ import org.team27.stocksim.observer.IModelSubject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class StockSim implements IModelSubject {

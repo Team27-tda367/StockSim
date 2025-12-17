@@ -22,7 +22,6 @@ import org.team27.stocksim.model.market.Order;
 public class DayTraderStrategy extends AbstractBotStrategy {
 
     private final double tradeProbability;
-    private final double quickProfitThreshold;
 
     public DayTraderStrategy() {
         this(new Random(), 0.2, 0.025, 1, 10);
@@ -32,7 +31,6 @@ public class DayTraderStrategy extends AbstractBotStrategy {
             int minQuantity, int maxQuantity) {
         super(random, minQuantity, maxQuantity);
         this.tradeProbability = tradeProbability;
-        this.quickProfitThreshold = quickProfitThreshold;
     }
 
     @Override

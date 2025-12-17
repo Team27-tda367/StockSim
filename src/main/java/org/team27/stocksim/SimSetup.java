@@ -66,11 +66,8 @@ public class SimSetup {
         bots = positionRepo.loadBotPositions();
         
         if (bots == null || bots.isEmpty()) {
-            System.out.println("Loading bots from default-bots.json");
             BotDataLoader loader = new BotDataLoader();
             bots = loader.loadDefaultBots();
-        } else {
-            System.out.println("Loading bots from bot-positions.json");
         }
 
         for (BotData botData : bots) {
@@ -121,7 +118,6 @@ public class SimSetup {
             case "WSBstrategy":
                 return new WSBstrategy();
             default:
-                System.out.println("Unknown strategy: " + strategyName + ", using RandomStrategy");
                 return new RandomStrategy();
         }
     }
@@ -136,7 +132,6 @@ public class SimSetup {
         Map<String, StockPriceRepository.StockPriceData> priceData = repository.loadStockPrices();
 
         if (priceData.isEmpty()) {
-            System.out.println("No price data found to load");
             return;
         }
 
@@ -159,7 +154,5 @@ public class SimSetup {
                 }
             }
         }
-
-        System.out.println("Loaded price data for " + priceData.size() + " stocks");
     }
 }
