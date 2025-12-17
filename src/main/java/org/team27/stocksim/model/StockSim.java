@@ -154,6 +154,10 @@ public class StockSim implements IModelSubject {
         traderRegistry.createBot(id, name);
     }
 
+    public void createBot(String id, String name, org.team27.stocksim.model.users.bot.IBotStrategy strategy) {
+        traderRegistry.createBot(id, name, strategy);
+    }
+
     public HashMap<String, Trader> getTraders() {
         return traderRegistry.getAllTraders();
     }
@@ -227,6 +231,14 @@ public class StockSim implements IModelSubject {
     public void saveStockPrices() {
         StockPriceRepository repository = new StockPriceRepository();
         repository.saveStockPrices(instrumentRegistry.getAllInstruments());
+    }
+
+    /**
+     * Save all bot positions to JSON database.
+     */
+    public void saveBotPositions() {
+        BotPositionRepository repository = new BotPositionRepository();
+        repository.saveBotPositions(traderRegistry.getBots());
     }
 
     /**

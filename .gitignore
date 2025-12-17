@@ -104,4 +104,4 @@ nb-configuration.xml
 output/
 *.puml
 
-*.json
+db

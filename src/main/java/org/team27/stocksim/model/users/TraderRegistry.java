@@ -6,9 +6,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
+import org.team27.stocksim.model.users.bot.IBotStrategy;
 import static org.team27.stocksim.model.util.MoneyUtils.money;
-
 
 public class TraderRegistry implements ITraderRegistry {
 
@@ -40,13 +39,10 @@ public class TraderRegistry implements ITraderRegistry {
         return true;
     }
 
-
     @Override
     public boolean createBot(String id, String name) {
         String highId = id.toUpperCase();
-
-        if (traders.containsKey(highId)) {
-            System.out.println("Bot ID already exists: " + highId);
+        if (checkDuplicateId(highId)) {
             return false;
         }
 
@@ -56,14 +52,28 @@ public class TraderRegistry implements ITraderRegistry {
         return true;
     }
 
+    private boolean checkDuplicateId(String id) {
+        return traders.containsKey(id);
+    }
 
+    @Override
+    public boolean createBot(String id, String name, IBotStrategy strategy) {
+        String highId = id.toUpperCase();
+
+        if (checkDuplicateId(highId)) {
+            return false;
+        }
+
+        Portfolio portfolio = portfolioFactory.apply(highId);
+        Trader bot = new Bot(highId, name, portfolio, strategy);
+        traders.put(highId, bot);
+        return true;
+    }
 
     @Override
     public HashMap<String, Trader> getAllTraders() {
         return traders;
     }
-
-
 
     @Override
     public HashMap<String, Trader> getBots() {
@@ -76,7 +86,6 @@ public class TraderRegistry implements ITraderRegistry {
         return bots;
     }
 
-
     @Override
     public HashMap<String, User> getUsers() {
         HashMap<String, User> users = new HashMap<>();
@@ -88,18 +97,15 @@ public class TraderRegistry implements ITraderRegistry {
         return users;
     }
 
-
     @Override
     public Trader getTrader(String id) {
         return traders.get(id.toUpperCase());
     }
 
-
     @Override
     public User getCurrentUser() {
         return currentUser;
     }
-
 
     @Override
     public void setCurrentUser(String userId) {

@@ -2,117 +2,96 @@ package org.team27.stocksim.model.users.bot;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.StockSim;
-import org.team27.stocksim.model.users.Bot;
+import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.users.Bot;
 
-public class RandomStrategy implements IBotStrategy {
+public class RandomStrategy extends AbstractBotStrategy {
 
     private enum Action {
         BUY, SELL, NONE
     }
 
-    private final Random random;
-
-    // Configuration parameters
-    private final double doSomethingProbability; // probability of buying or selling
-    private final double buyProbability = 0.51; // Buy vs Sell probability
-    private final int minQuantity; // minimum quantity to buy
-    private final int maxQuantity; // maximum quantity to buy
+    private final double doSomethingProbability;
+    private final double buyProbability = 0.51;
 
     public RandomStrategy() {
         this(new Random(), 0.01, 1, 10);
     }
 
     public RandomStrategy(Random random, double doSomethingProbability, int minQuantity, int maxQuantity) {
-        this.random = random;
+        super(random, minQuantity, maxQuantity);
         this.doSomethingProbability = doSomethingProbability;
-        this.minQuantity = minQuantity;
-        this.maxQuantity = maxQuantity;
     }
 
     @Override
     public List<Order> decide(StockSim model, Bot bot) {
+        List<Order> orders = new ArrayList<>();
         // Determine if we should buy or sell anything in this tick
         Action action = randomAction();
 
         if (action == Action.NONE) {
-            return Collections.emptyList();
-        }
-        if (action == Action.SELL) {
-            return sell(model, bot);
-        } else if (action == Action.BUY) {
-            return buy(model, bot);
+            return orders;
         }
 
-        return Collections.emptyList();
+        Order order = null;
+        if (action == Action.SELL) {
+            order = sell(model, bot);
+        } else if (action == Action.BUY) {
+            order = buy(model, bot);
+        }
+
+        if (order != null) {
+            orders.add(order);
+        }
+
+        return orders;
     }
 
-    private List<Order> sell(StockSim model, Bot bot) {
-        // Check if the bot owns any stocks
+    private Order sell(StockSim model, Bot bot) {
         if (bot.getPortfolio().isEmpty()) {
-            return Collections.emptyList();
+            return null;
         }
 
-        // Get the stocks the bot owns
-        HashMap<String, Integer> holdings = new HashMap<>(bot.getPortfolio().getStockHoldings());
-        if (holdings.isEmpty()) {
-            return Collections.emptyList();
+        String symbol = pickRandomHolding(bot);
+        if (symbol == null) {
+            return null;
         }
 
-        // Pick a random stock from the bot's holdings
-        List<String> ownedSymbols = new ArrayList<>(holdings.keySet());
-        String symbol = ownedSymbols.get(random.nextInt(ownedSymbols.size()));
-
-        // Get the instrument from the market
         InstrumentDTO stock = model.getStocks().get(symbol);
         if (stock == null) {
-            return Collections.emptyList();
+            return null;
         }
 
-        // Get the maximum quantity the bot can sell
-        int maxAvailableQuantity = holdings.get(symbol);
-        if (maxAvailableQuantity <= 0) {
-            return Collections.emptyList();
-        }
-
-        // Determine quantity to sell (can't sell more than owned)
-        int quantity = Math.min(randomQuantity(), maxAvailableQuantity);
+        int maxAvailable = bot.getPortfolio().getStockQuantity(symbol);
+        int quantity = Math.min(randomQuantity(), maxAvailable);
         BigDecimal price = randomPrice(stock.getPrice());
 
-        Order sellOrder = new Order(Order.Side.SELL, stock.getSymbol(), price, quantity, bot.getId());
-        return Collections.singletonList(sellOrder);
+        return createSellOrder(model, bot, symbol, quantity, price);
     }
 
-    private List<Order> buy(StockSim model, Bot bot) {
-        // Choose a random instrument in market
+    private Order buy(StockSim model, Bot bot) {
         InstrumentDTO stock = pickRandomStock(model);
         if (stock == null) {
-            return Collections.emptyList();
+            return null;
         }
 
         int quantity = randomQuantity();
-
         BigDecimal price = randomPrice(stock.getPrice());
 
-        Order buyOrder = new Order(Order.Side.BUY, stock.getSymbol(), price, quantity, bot.getId());
-        return Collections.singletonList(buyOrder);
+        return createBuyOrder(model, bot, stock, quantity, price);
     }
 
     private BigDecimal randomPrice(BigDecimal basePrice) {
         // Create a variation using normal distribution (mean=0, std dev=0.5%)
-        // This gives approximately 95% of prices within ±1% of base price
         double variationPercent = random.nextGaussian() * 0.005;
         BigDecimal variation = basePrice.multiply(BigDecimal.valueOf(variationPercent));
         BigDecimal newPrice = basePrice.add(variation);
 
-        // Ensure price is positive and round to 2 decimal places
         if (newPrice.compareTo(BigDecimal.ONE) < 0) {
             newPrice = BigDecimal.ONE;
         }
@@ -120,26 +99,7 @@ public class RandomStrategy implements IBotStrategy {
     }
 
     private boolean shouldDoSomething() {
-        // Simple probability check
         return random.nextDouble() < doSomethingProbability;
-    }
-
-    private InstrumentDTO pickRandomStock(StockSim model) {
-        HashMap<String, InstrumentDTO> stocks = model.getStocks();
-        if (stocks == null || stocks.isEmpty()) {
-            return null;
-        }
-        List<InstrumentDTO> instruments = new ArrayList<>(stocks.values());
-        int index = random.nextInt(instruments.size());
-        return instruments.get(index);
-    }
-
-    private int randomQuantity() {
-        if (maxQuantity <= minQuantity) {
-            return minQuantity;
-        }
-        int bound = maxQuantity - minQuantity + 1;
-        return minQuantity + random.nextInt(bound);
     }
 
     private Action randomAction() {
