@@ -1,4 +1,4 @@
-package org.team27.stocksim.model;
+package org.team27.stocksim.repository;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

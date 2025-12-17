@@ -16,6 +16,8 @@ import org.team27.stocksim.model.simulation.MarketSimulator;
 import org.team27.stocksim.model.users.*;
 import org.team27.stocksim.observer.IModelObserver;
 import org.team27.stocksim.observer.IModelSubject;
+import org.team27.stocksim.repository.BotPositionRepository;
+import org.team27.stocksim.repository.StockPriceRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;

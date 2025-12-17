@@ -10,10 +10,10 @@ import org.team27.stocksim.data.StockData;
 import org.team27.stocksim.data.StockDataLoader;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.instruments.Instrument;
-import org.team27.stocksim.model.StockPriceRepository;
-import org.team27.stocksim.model.BotPositionRepository;
 import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.bot.*;
+import org.team27.stocksim.repository.BotPositionRepository;
+import org.team27.stocksim.repository.StockPriceRepository;
 
 public class SimSetup {
     private final StockSim model;
@@ -61,10 +61,10 @@ public class SimSetup {
     private void createBotsFromFile() {
         BotPositionRepository positionRepo = new BotPositionRepository();
         List<BotData> bots;
-        
+
         // Try to load from saved positions first, fallback to defaults
         bots = positionRepo.loadBotPositions();
-        
+
         if (bots == null || bots.isEmpty()) {
             BotDataLoader loader = new BotDataLoader();
             bots = loader.loadDefaultBots();
