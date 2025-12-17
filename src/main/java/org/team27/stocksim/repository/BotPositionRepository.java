@@ -24,8 +24,8 @@ import java.util.Map;
  */
 public class BotPositionRepository {
 
-    private static final String RESOURCE_PATH = "/db/bot-positions.json";
-    private static final String FILE_PATH = "src/main/resources/db/bot-positions.json";
+    private static final String RESOURCE_PATH = "/data/bot-positions.json";
+    private static final String FILE_PATH = "src/main/resources/data/bot-positions.json";
     private final Gson gson;
 
     public BotPositionRepository() {
@@ -47,7 +47,6 @@ public class BotPositionRepository {
                 Bot bot = entry.getValue();
 
                 // Only save Bot positions, not human users
-
 
                 BotData botData = new BotData();
                 botData.setId(bot.getId());
@@ -75,7 +74,6 @@ public class BotPositionRepository {
                 botData.setInitialPositions(positions);
                 botDataList.add(botData);
             }
-
 
             // Write to file
             try (FileWriter writer = new FileWriter(FILE_PATH)) {

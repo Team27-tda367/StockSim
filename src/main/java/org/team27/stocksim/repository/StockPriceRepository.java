@@ -23,8 +23,8 @@ import java.util.Map;
  */
 public class StockPriceRepository {
 
-    private static final String RESOURCE_PATH = "/db/stock_prices.json";
-    private static final String FILE_PATH = "src/main/resources/db/stock_prices.json";
+    private static final String RESOURCE_PATH = "/data/stock_prices.json";
+    private static final String FILE_PATH = "src/main/resources/data/stock_prices.json";
     private final Gson gson;
 
     public StockPriceRepository() {
