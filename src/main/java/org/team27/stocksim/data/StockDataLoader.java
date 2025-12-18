@@ -14,7 +14,7 @@ import java.util.List;
  * Loads stock data from JSON resources.
  */
 public class StockDataLoader {
-    private static final String DEFAULT_STOCKS_FILE = "/data/default-stocks.json";
+    private static final String DEFAULT_STOCKS_FILE = "/config/stocks-config.json";
     private final Gson gson;
 
     public StockDataLoader() {

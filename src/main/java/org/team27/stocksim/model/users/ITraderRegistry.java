@@ -1,4 +1,5 @@
 package org.team27.stocksim.model.users;
+
 import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.model.users.bot.IBotStrategy;
 import java.util.HashMap;
@@ -10,6 +11,8 @@ public interface ITraderRegistry {
     boolean createBot(String id, String name);
 
     boolean createBot(String id, String name, IBotStrategy strategy);
+
+    boolean createBot(String id, String name, IBotStrategy strategy, int startingBalance);
 
     HashMap<String, Trader> getAllTraders();
 

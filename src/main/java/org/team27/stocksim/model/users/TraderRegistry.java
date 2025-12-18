@@ -42,7 +42,7 @@ public class TraderRegistry implements ITraderRegistry {
             return false;
         }
 
-        Portfolio portfolio = portfolioFactory.apply(highId);
+        Portfolio portfolio = portfolioFactory.apply("100000"); // default starting balance
         Trader user = userFactory.createTrader(highId, name, portfolio);
         traders.put(highId, user);
         return true;
@@ -55,7 +55,7 @@ public class TraderRegistry implements ITraderRegistry {
             return false;
         }
 
-        Portfolio portfolio = portfolioFactory.apply(highId);
+        Portfolio portfolio = portfolioFactory.apply("100000"); // default starting balance
         Trader bot = botFactory.createTrader(highId, name, portfolio);
         traders.put(highId, bot);
         return true;
@@ -73,7 +73,20 @@ public class TraderRegistry implements ITraderRegistry {
             return false;
         }
 
-        Portfolio portfolio = portfolioFactory.apply(highId);
+        Portfolio portfolio = portfolioFactory.apply("100000"); // default starting balance
+        Trader bot = new Bot(highId, name, portfolio, strategy);
+        traders.put(highId, bot);
+        return true;
+    }
+
+    public boolean createBot(String id, String name, IBotStrategy strategy, int startingBalance) {
+        String highId = id.toUpperCase();
+
+        if (checkDuplicateId(highId)) {
+            return false;
+        }
+
+        Portfolio portfolio = portfolioFactory.apply(Integer.toString(startingBalance));
         Trader bot = new Bot(highId, name, portfolio, strategy);
         traders.put(highId, bot);
         return true;
@@ -89,7 +102,7 @@ public class TraderRegistry implements ITraderRegistry {
         HashMap<String, Bot> bots = new HashMap<>();
         for (Map.Entry<String, Trader> entry : traders.entrySet()) {
             if (entry.getValue() instanceof Bot) {
-                bots.put(entry.getKey(), (Bot)entry.getValue());
+                bots.put(entry.getKey(), (Bot) entry.getValue());
             }
         }
         return bots;
@@ -126,8 +139,8 @@ public class TraderRegistry implements ITraderRegistry {
         }
     }
 
-    private Portfolio createDefaultPortfolio(String id) {
-        BigDecimal startingBalance = money("10000");
-        return new Portfolio(startingBalance);
+    private Portfolio createDefaultPortfolio(String startingBalance) {
+        BigDecimal startingBalanceDecimal = money(startingBalance);
+        return new Portfolio(startingBalanceDecimal);
     }
 }

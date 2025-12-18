@@ -22,10 +22,6 @@ public class SimController implements ISimController {
         this.model = model;
     }
 
-    public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {
-        model.createStock(symbol, stockName, tickSize, lotSize, category);
-    }
-
     public void addObserver(IModelObserver obs) {
         model.addObserver(obs);
     }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.team27.stocksim.data.BotData;
 import org.team27.stocksim.data.BotDataLoader;
+import org.team27.stocksim.data.PositionData;
 import org.team27.stocksim.data.StockData;
 import org.team27.stocksim.data.StockDataLoader;
 import org.team27.stocksim.model.StockSim;
@@ -32,7 +33,7 @@ public class SimSetup {
 
     private void start(boolean loadExistingPrices) {
         createDefaultStocks();
-        createBotsFromFile();
+        createBotsFromFile(loadExistingPrices);
         model.createUser("user1", "Default User");
         model.setCurrentUser("user1");
 
@@ -54,16 +55,20 @@ public class SimSetup {
                     stock.getName(),
                     stock.getTickSize(),
                     stock.getLotSize(),
-                    stock.getCategory());
+                    stock.getCategory(),
+                    stock.getInitialPrice());
         }
     }
 
-    private void createBotsFromFile() {
+    private void createBotsFromFile(boolean loadExistingPrices) {
         BotPositionRepository positionRepo = new BotPositionRepository();
         List<BotData> bots;
 
-        // Try to load from saved positions first, fallback to defaults
-        bots = positionRepo.loadBotPositions();
+        if (loadExistingPrices) {
+            bots = positionRepo.loadBotPositions();
+        } else {
+            bots = null;
+        }
 
         if (bots == null || bots.isEmpty()) {
             BotDataLoader loader = new BotDataLoader();
@@ -83,7 +88,7 @@ public class SimSetup {
                 Bot bot = (Bot) trader;
 
                 // Initialize positions
-                for (BotData.PositionData position : botData.getInitialPositions()) {
+                for (PositionData position : botData.getPositions()) {
                     BigDecimal costBasis = new BigDecimal(position.getCostBasis());
                     bot.getPortfolio().addStock(
                             position.getSymbol(),
@@ -95,6 +100,7 @@ public class SimSetup {
         }
     }
 
+    // TODO refactor to factory pattern if more strategies are added
     private IBotStrategy createStrategy(String strategyName) {
         if (strategyName == null || strategyName.isEmpty()) {
             return new RandomStrategy();

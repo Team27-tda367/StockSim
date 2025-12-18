@@ -4,6 +4,7 @@
     "name": "Apple Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "1",
     "category": "Technology"
   },
   {
@@ -11,6 +12,7 @@
     "name": "Alphabet Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Technology"
   },
   {
@@ -18,6 +20,7 @@
     "name": "Microsoft Corp.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Technology"
   },
   {
@@ -25,6 +28,7 @@
     "name": "Tesla Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Consumer"
   },
   {
@@ -32,6 +36,7 @@
     "name": "Amazon.com Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Consumer"
   },
   {
@@ -39,6 +44,7 @@
     "name": "Meta Platforms Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Entertainment"
   },
   {
@@ -46,6 +52,7 @@
     "name": "NVIDIA Corporation",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Semiconductors"
   },
   {
@@ -53,6 +60,7 @@
     "name": "JPMorgan Chase & Co.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Finance"
   },
   {
@@ -60,6 +68,7 @@
     "name": "Visa Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Finance"
   },
   {
@@ -67,6 +76,7 @@
     "name": "Walmart Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Consumer"
   },
   {
@@ -74,6 +84,7 @@
     "name": "The Walt Disney Company",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Entertainment"
   },
   {
@@ -81,6 +92,7 @@
     "name": "Netflix Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Entertainment"
   },
   {
@@ -88,6 +100,7 @@
     "name": "PayPal Holdings Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Finance"
   },
   {
@@ -95,6 +108,7 @@
     "name": "Intel Corporation",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Semiconductors"
   },
   {
@@ -102,6 +116,7 @@
     "name": "Cisco Systems Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Technology"
   },
   {
@@ -109,6 +124,7 @@
     "name": "PepsiCo Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Consumer"
   },
   {
@@ -116,6 +132,7 @@
     "name": "The Coca-Cola Company",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Consumer"
   },
   {
@@ -123,6 +140,7 @@
     "name": "Nike Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Consumer"
   },
   {
@@ -130,6 +148,7 @@
     "name": "The Boeing Company",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Aviation"
   },
   {
@@ -137,6 +156,23 @@
     "name": "Advanced Micro Devices Inc.",
     "tickSize": "0.01",
     "lotSize": "100",
+    "initialPrice": "100",
     "category": "Semiconductors"
+  },
+  {
+    "symbol": "OLLE",
+    "name": "Olles inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "initialPrice": "100",
+    "category": "Consumer"
+  },
+  {
+    "symbol": "ACKE",
+    "name": "Ackebjers AB",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "initialPrice": "100",
+    "category": "Technology"
   }
 ]

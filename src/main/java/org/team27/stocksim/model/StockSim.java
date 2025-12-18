@@ -68,7 +68,8 @@ public class StockSim implements IModelSubject {
         });
 
         // Initialize simulator with configuration
-        this.marketSimulator = new MarketSimulator(traderRegistry::getBots, this::onSimulationTick, this::saveStockPrices, simulationSpeed, tickInterval, durationInRealSeconds);
+        this.marketSimulator = new MarketSimulator(traderRegistry::getBots, this::onSimulationTick,
+                this::saveStockPrices, simulationSpeed, tickInterval, durationInRealSeconds);
 
         System.out.println("Successfully created Sim-model");
     }
@@ -109,8 +110,9 @@ public class StockSim implements IModelSubject {
         market.placeOrder(order, traderRegistry.getAllTraders(), instrumentRegistry.getAllInstruments());
     }
 
-    public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {
-        instrumentRegistry.createInstrument(symbol, stockName, tickSize, lotSize, category);
+    public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category,
+            String initialPrice) {
+        instrumentRegistry.createInstrument(symbol, stockName, tickSize, lotSize, category, initialPrice);
     }
 
     public ArrayList<String> getCategories() {

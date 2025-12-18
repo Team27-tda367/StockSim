@@ -6,9 +6,10 @@ public class BotData {
     private String id;
     private String name;
     private String strategy;
+
+    // Om du vill att output-JSON ska ha "initialPositions" som i exemplet:
     private List<PositionData> initialPositions;
 
-    // Default constructor for JSON deserialization
     public BotData() {
     }
 
@@ -51,43 +52,11 @@ public class BotData {
         this.initialPositions = initialPositions;
     }
 
-    public static class PositionData {
-        private String symbol;
-        private int quantity;
-        private double costBasis;
+    public List<PositionData> getPositions() {
+        return initialPositions;
+    }
 
-        // Default constructor for JSON deserialization
-        public PositionData() {
-        }
-
-        public PositionData(String symbol, int quantity, double costBasis) {
-            this.symbol = symbol;
-            this.quantity = quantity;
-            this.costBasis = costBasis;
-        }
-
-        public String getSymbol() {
-            return symbol;
-        }
-
-        public void setSymbol(String symbol) {
-            this.symbol = symbol;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
-
-        public double getCostBasis() {
-            return costBasis;
-        }
-
-        public void setCostBasis(double costBasis) {
-            this.costBasis = costBasis;
-        }
+    public void setPositions(List<PositionData> positions) {
+        this.initialPositions = positions;
     }
 }
