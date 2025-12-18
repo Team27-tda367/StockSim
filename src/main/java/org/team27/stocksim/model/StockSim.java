@@ -1,7 +1,5 @@
 package org.team27.stocksim.model;
 
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
-import org.team27.stocksim.model.util.dto.StockMapper;
 import org.team27.stocksim.model.instruments.IInstrumentRegistry;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.instruments.InstrumentRegistry;
@@ -14,6 +12,9 @@ import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.simulation.IMarketSimulator;
 import org.team27.stocksim.model.simulation.MarketSimulator;
 import org.team27.stocksim.model.users.*;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.StockMapper;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 import org.team27.stocksim.observer.IModelSubject;
 import org.team27.stocksim.repository.BotPositionRepository;
@@ -67,13 +68,7 @@ public class StockSim implements IModelSubject {
         });
 
         // Initialize simulator with configuration
-        this.marketSimulator = new MarketSimulator(
-                traderRegistry::getBots,
-                this::onSimulationTick,
-                this::saveStockPrices,
-                simulationSpeed,
-                tickInterval,
-                durationInRealSeconds);
+        this.marketSimulator = new MarketSimulator(traderRegistry::getBots, this::onSimulationTick, this::saveStockPrices, simulationSpeed, tickInterval, durationInRealSeconds);
 
         System.out.println("Successfully created Sim-model");
     }
@@ -82,8 +77,7 @@ public class StockSim implements IModelSubject {
         // This is a workaround - ideally we'd have better order tracking
         for (Trader trader : traderRegistry.getAllTraders().values()) {
             if (trader instanceof User user) {
-                if (user.getOrderHistory().getAllOrders().stream()
-                        .anyMatch(o -> o.getOrderId() == orderId)) {
+                if (user.getOrderHistory().getAllOrders().stream().anyMatch(o -> o.getOrderId() == orderId)) {
                     return trader.getId();
                 }
             }
@@ -93,7 +87,7 @@ public class StockSim implements IModelSubject {
 
     private void onSimulationTick() {
         // Execute bot trading decisions
-         for (Bot bot : traderRegistry.getBots().values()) {
+        for (Bot bot : traderRegistry.getBots().values()) {
             bot.tick(this, botActionExecutor);
         }
         marketSimulator.setTotalTradesExecuted(market.getCompletedTrades().size());
@@ -127,9 +121,7 @@ public class StockSim implements IModelSubject {
         HashMap<String, InstrumentDTO> result = new HashMap<>();
 
         for (var entry : instrumentRegistry.getAllInstruments().entrySet()) {
-            result.put(
-                    entry.getKey(),
-                    StockMapper.toDto(entry.getValue()));
+            result.put(entry.getKey(), StockMapper.toDto(entry.getValue()));
         }
 
         return result;
@@ -139,9 +131,7 @@ public class StockSim implements IModelSubject {
         HashMap<String, InstrumentDTO> result = new HashMap<>();
 
         for (var entry : instrumentRegistry.getInstrumentsByCategory(category).entrySet()) {
-            result.put(
-                    entry.getKey(),
-                    StockMapper.toDto(entry.getValue()));
+            result.put(entry.getKey(), StockMapper.toDto(entry.getValue()));
         }
 
         return result;
@@ -169,6 +159,10 @@ public class StockSim implements IModelSubject {
 
     public HashMap<String, User> getUsers() {
         return traderRegistry.getUsers();
+    }
+
+    public UserDTO getCurrentUserDto() {
+        return traderRegistry.getCurrentUserDto();
     }
 
     public User getCurrentUser() {

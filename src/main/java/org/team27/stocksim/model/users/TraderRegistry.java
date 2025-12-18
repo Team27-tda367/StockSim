@@ -1,6 +1,7 @@
 package org.team27.stocksim.model.users;
 
 import org.team27.stocksim.model.portfolio.Portfolio;
+import org.team27.stocksim.model.util.dto.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -22,6 +23,15 @@ public class TraderRegistry implements ITraderRegistry {
         this.userFactory = userFactory;
         this.botFactory = botFactory;
         this.portfolioFactory = this::createDefaultPortfolio;
+    }
+
+    @Override
+    public UserDTO getCurrentUserDto() {
+        PortfolioDTO userPortfolioDTO = PortfolioMapper.toDto(currentUser.getPortfolio());
+        OrderHistoryDTO userOrderHistoryDTO = OrderHistoryMapper.toDto(currentUser.getOrderHistory());
+        UserDTO userDTO = UserMapper.toDto(currentUser, userPortfolioDTO, userOrderHistoryDTO);
+
+        return userDTO;
     }
 
     @Override

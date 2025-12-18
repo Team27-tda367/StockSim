@@ -11,6 +11,7 @@ import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.model.util.dto.OrderDTO;
 import org.team27.stocksim.model.util.dto.TradeDTO;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public class SimController implements ISimController {
@@ -44,8 +45,8 @@ public class SimController implements ISimController {
     }
 
     @Override
-    public User getUser() {
-        return model.getCurrentUser();
+    public UserDTO getUser() {
+        return model.getCurrentUserDto();
     }
 
     @Override

@@ -3,11 +3,6 @@ package org.team27.stocksim.model.util.dto;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-/**
- * Data Transfer Object for Order information.
- * Immutable representation for view layer and external communication.
- * Prevents view layer from accessing mutable domain Order objects.
- */
 public class OrderDTO {
     private final int orderId;
     private final String side;           // "BUY" or "SELL"

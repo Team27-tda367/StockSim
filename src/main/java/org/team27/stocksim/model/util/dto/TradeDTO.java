@@ -1,12 +1,9 @@
 package org.team27.stocksim.model.util.dto;
 
+
 import java.math.BigDecimal;
 import java.time.Instant;
 
-/**
- * Data Transfer Object for Trade information.
- * Immutable representation for view layer and external communication.
- */
 public class TradeDTO {
     private final int buyOrderId;
     private final int sellOrderId;

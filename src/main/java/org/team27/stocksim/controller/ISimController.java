@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.team27.stocksim.model.users.User;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.model.util.dto.OrderDTO;
 import org.team27.stocksim.model.util.dto.TradeDTO;
 import org.team27.stocksim.observer.IModelObserver;
@@ -22,7 +23,7 @@ public interface ISimController {
 
     HashMap<String, InstrumentDTO> getStocks(String category);
 
-    User getUser();
+    UserDTO getUser();
 
     void buyStock(String stockSymbol, int quantity, BigDecimal price);
 

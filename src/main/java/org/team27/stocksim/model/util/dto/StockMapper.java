@@ -25,15 +25,27 @@ public class StockMapper {
     // Convert InstrumentDTO to Instrument
     /*
      * public static Instrument toEntity(InstrumentDTO dto) {
-     * 
+     *
      * if (dto == null) return null;
      * Instrument stock = new Stock();
      * stock.setSymbol(dto.getSymbol());
      * stock.setName(dto.getName());
      * stock.setCategory(dto.getCategory());
-     * 
+     *
      * return user;
      * }
      */
+
+     /*public static Instrument toEntity(InstrumentDTO dto) {
+
+        if (dto == null) return null;
+        Instrument stock = new Stock();
+        stock.setSymbol(dto.getSymbol());
+        stock.setName(dto.getName());
+        stock.setCategory(dto.getCategory());
+
+        return user;
+     }*/
+
 
 }

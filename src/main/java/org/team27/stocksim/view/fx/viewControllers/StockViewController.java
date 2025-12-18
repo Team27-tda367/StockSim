@@ -1,5 +1,10 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
+import org.team27.stocksim.model.util.dto.*;
+import org.team27.stocksim.view.ViewAdapter;
+import org.team27.stocksim.view.fx.EView;
+import org.team27.stocksim.view.fx.chart.ChartDataService;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,11 +15,15 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import org.team27.stocksim.model.portfolio.Portfolio;
-import org.team27.stocksim.model.portfolio.Position;
-import org.team27.stocksim.model.users.User;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
+import javafx.geometry.Pos;
+
+
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
-import org.team27.stocksim.model.util.dto.OrderDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.chart.ChartDataService;
@@ -97,7 +106,7 @@ public class StockViewController extends ViewControllerBase
     }
 
     private void updateBalanceDisplay() {
-        Portfolio portfolio = modelController.getUser().getPortfolio();
+        PortfolioDTO portfolio = modelController.getUser().getPortfolio();
         availableBalanceLabel.setText("Balance: $" + portfolio.getBalance().toString());
     }
 
@@ -362,8 +371,8 @@ public class StockViewController extends ViewControllerBase
             return;
         }
 
-        User user = modelController.getUser();
-        Portfolio portfolio = user.getPortfolio();
+        UserDTO user = modelController.getUser();
+        PortfolioDTO portfolio = user.getPortfolio();
 
         // Update position for this stock
         updatePositionDisplay(portfolio);
@@ -375,11 +384,11 @@ public class StockViewController extends ViewControllerBase
     /**
      * Updates the position display for the selected stock
      */
-    private void updatePositionDisplay(Portfolio portfolio) {
+    private void updatePositionDisplay(PortfolioDTO portfolio) {
         positionsList.clear();
 
-        Position position = portfolio.getPosition(stock.getSymbol());
-        
+        PositionDTO position = portfolio.getPosition(stock.getSymbol());
+
         if (position == null || position.getQuantity() == 0) {
             positionsList.add("No position in " + stock.getSymbol());
         } else {
@@ -396,11 +405,11 @@ public class StockViewController extends ViewControllerBase
     /**
      * Updates the active orders display for the selected stock
      */
-    private void updateOrdersDisplay(User user) {
+    private void updateOrdersDisplay(UserDTO user) {
         ordersList.clear();
 
         List<OrderDTO> activeOrders = user.getOrderHistory().getActiveOrdersDTO();
-        
+
         // Filter orders for the selected stock
         List<OrderDTO> stockOrders = activeOrders.stream()
                 .filter(order -> order.getSymbol().equals(stock.getSymbol()))

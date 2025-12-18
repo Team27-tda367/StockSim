@@ -2,17 +2,7 @@ package org.team27.stocksim.model.util.dto;
 
 import org.team27.stocksim.model.market.Order;
 
-/**
- * Mapper to convert between Order domain objects and OrderDTO.
- */
 public class OrderMapper {
-
-    /**
-     * Convert a domain Order to an OrderDTO.
-     *
-     * @param order The domain order object
-     * @return OrderDTO for view layer consumption
-     */
     public static OrderDTO toDto(Order order) {
         if (order == null) {
             return null;
@@ -31,4 +21,5 @@ public class OrderMapper {
                 order.getTraderId()
         );
     }
+
 }

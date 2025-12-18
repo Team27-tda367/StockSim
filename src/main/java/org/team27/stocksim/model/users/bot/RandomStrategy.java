@@ -10,6 +10,7 @@ import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.model.users.Bot;
 
+
 public class RandomStrategy extends AbstractBotStrategy {
 
     private enum Action {

@@ -1,9 +1,6 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.model.portfolio.Portfolio;
-import org.team27.stocksim.model.portfolio.Position;
-import org.team27.stocksim.model.users.User;
-import org.team27.stocksim.model.util.dto.OrderDTO;
+import org.team27.stocksim.model.util.dto.*;
 import org.team27.stocksim.view.fx.EView;
 
 import javafx.application.Platform;
@@ -20,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
 
 public class PortfolioViewController extends ViewControllerBase
         implements ViewAdapter.PortfolioChangedListener, ViewAdapter.TradeSettledListener {
@@ -51,8 +47,8 @@ public class PortfolioViewController extends ViewControllerBase
         // Register for portfolio change events
         viewAdapter.addPortfolioChangedListener(this);
         viewAdapter.addTradeSettledListener(this);
-        User user = modelController.getUser();
-        Portfolio portfolio = user.getPortfolio();
+        UserDTO user = modelController.getUser();
+        PortfolioDTO portfolio = user.getPortfolio();
         BigDecimal balance = portfolio.getBalance();
         availableBalanceLabel.setText("Balance: $" + balance.toString());
 
@@ -88,8 +84,8 @@ public class PortfolioViewController extends ViewControllerBase
      * orders
      */
     private void updatePortfolioDisplay() {
-        User user = modelController.getUser();
-        Portfolio portfolio = user.getPortfolio();
+        UserDTO user = modelController.getUser();
+        PortfolioDTO portfolio = user.getPortfolio();
 
         // Update balance
         BigDecimal balance = portfolio.getBalance();
@@ -109,7 +105,7 @@ public class PortfolioViewController extends ViewControllerBase
      * Updates the total value and gain/loss labels based on current portfolio
      * positions
      */
-    private void updateTotalValueAndGainLoss(Portfolio portfolio) {
+    private void updateTotalValueAndGainLoss(PortfolioDTO portfolio) {
         // Get current stock prices from model
         Map<String, BigDecimal> currentPrices = getCurrentPrices();
 
@@ -154,7 +150,7 @@ public class PortfolioViewController extends ViewControllerBase
 
     /**
      * Gets current prices for all stocks from the model.
-     * 
+     *
      * @return map of symbol to current price
      */
     private Map<String, BigDecimal> getCurrentPrices() {
@@ -172,8 +168,8 @@ public class PortfolioViewController extends ViewControllerBase
     /**
      * Updates the positions display with detailed information
      */
-    private void updatePositionsDisplay(Portfolio portfolio) {
-        Map<String, Position> positions = portfolio.getPositions();
+    private void updatePositionsDisplay(PortfolioDTO portfolio) {
+        Map<String, PositionDTO> positions = portfolio.getPositions();
 
         positionsList.clear();
 
@@ -195,8 +191,8 @@ public class PortfolioViewController extends ViewControllerBase
     /**
      * Updates the active orders display
      */
-    private void updateOrdersDisplay(User user) {
-        List<OrderDTO> activeOrders = user.getOrderHistory().getActiveOrdersDTO();
+    private void updateOrdersDisplay(UserDTO user) {
+        List<OrderDTO> activeOrders = user.getOrderHistory().getActiveOrders();
 
         ordersList.clear();
 
