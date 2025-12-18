@@ -10,18 +10,24 @@ public class GameTicker {
 
     private final GameClock clock;
     private final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+    private final long tickIntervalMillis;
 
     private long lastSecond;
     private Consumer<Instant> onSecondHandler;
 
     public GameTicker(GameClock clock, Consumer<Instant> onSecondHandler) {
+        this(clock, onSecondHandler, 200);
+    }
+
+    public GameTicker(GameClock clock, Consumer<Instant> onSecondHandler, long tickIntervalMillis) {
         this.clock = clock;
         this.onSecondHandler = onSecondHandler;
+        this.tickIntervalMillis = tickIntervalMillis;
     }
 
     public void start() {
         lastSecond = clock.instant().getEpochSecond();
-        exec.scheduleAtFixedRate(this::tick, 0, 200, TimeUnit.MILLISECONDS);
+        exec.scheduleAtFixedRate(this::tick, 0, tickIntervalMillis, TimeUnit.MILLISECONDS);
     }
 
     private void tick() {

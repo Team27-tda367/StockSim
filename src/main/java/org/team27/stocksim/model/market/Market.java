@@ -4,28 +4,28 @@ import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.Trader;
 import org.team27.stocksim.model.users.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 
 public class Market implements IMarket {
 
-    private final HashMap<String, OrderBook> orderBooks;
+    private final ConcurrentHashMap<String, OrderBook> orderBooks;
     private final MatchingEngine matchingEngine;
     private final SettlementEngine settlementEngine;
     private final List<Trade> completedTrades;
-    private final HashMap<Integer, String> orderIdToTraderId;
+    private final ConcurrentHashMap<Integer, String> orderIdToTraderId;
 
-    private Consumer<Void> onPriceUpdate;
+    private Consumer<Set<String>> onPriceUpdate;
     private Consumer<Trade> onTradeSettled;
 
     public Market() {
-        this.orderBooks = new HashMap<>();
+        this.orderBooks = new ConcurrentHashMap<>();
         this.matchingEngine = new MatchingEngine();
-        this.completedTrades = new ArrayList<>();
-        this.orderIdToTraderId = new HashMap<>();
+        this.completedTrades = new CopyOnWriteArrayList<>();
+        this.orderIdToTraderId = new ConcurrentHashMap<>();
         this.settlementEngine = new SettlementEngine(orderIdToTraderId, this::handleTradeSettled);
     }
 
@@ -45,25 +45,28 @@ public class Market implements IMarket {
         Trader trader = traders.get(order.getTraderId());
         if (trader instanceof User) {
             ((User) trader).getOrderHistory().addOrder(order);
-            System.out.println(((User) trader).getOrderHistory().getAllOrders().size() + " orders in history");
         }
     }
 
     private void processOrder(Order order, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks) {
         OrderBook orderBook = getOrderBook(order.getSymbol());
-        List<Trade> trades = matchingEngine.match(order, orderBook);
 
-        boolean priceChanged = false;
-        for (Trade trade : trades) {
-            completedTrades.add(trade);
-            boolean settled = settlementEngine.settleTrade(trade, traders, stocks);
-            if (settled) {
-                priceChanged = true;
+        // Synchronize at the orderBook level to ensure atomic matching and settlement
+        synchronized (orderBook) {
+            List<Trade> trades = matchingEngine.match(order, orderBook);
+
+            Set<String> affectedSymbols = new HashSet<>();
+            for (Trade trade : trades) {
+                completedTrades.add(trade);
+                boolean settled = settlementEngine.settleTrade(trade, traders, stocks);
+                if (settled) {
+                    affectedSymbols.add(trade.getStockSymbol());
+                }
             }
-        }
 
-        if (priceChanged && onPriceUpdate != null) {
-            onPriceUpdate.accept(null);
+            if (!affectedSymbols.isEmpty() && onPriceUpdate != null) {
+                onPriceUpdate.accept(affectedSymbols);
+            }
         }
     }
 
@@ -94,7 +97,7 @@ public class Market implements IMarket {
     }
 
     @Override
-    public void setOnPriceUpdate(Consumer<Void> callback) {
+    public void setOnPriceUpdate(Consumer<Set<String>> callback) {
         this.onPriceUpdate = callback;
     }
 

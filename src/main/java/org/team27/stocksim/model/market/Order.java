@@ -1,12 +1,15 @@
 package org.team27.stocksim.model.market;
 
+import org.team27.stocksim.model.clock.ClockProvider;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 
 public class Order {
     private static int nextOrderId = 1;
-    
+
     private final Side side;
+    private final OrderType orderType;
     private final int orderId;
     private final BigDecimal price;
     private final int totalQuantity;
@@ -17,7 +20,13 @@ public class Order {
     private int remainingQuantity;
 
     public Order(Side side, String instrumentSymbol, BigDecimal price, int quantity, String traderId) {
+        this(side, OrderType.LIMIT, instrumentSymbol, price, quantity, traderId);
+    }
+
+    public Order(Side side, OrderType orderType, String instrumentSymbol, BigDecimal price, int quantity,
+            String traderId) {
         this.side = side;
+        this.orderType = orderType;
         this.instrumentSymbol = instrumentSymbol;
         this.orderId = generateOrderId();
         this.price = price;
@@ -25,9 +34,9 @@ public class Order {
         this.remainingQuantity = quantity;
         this.traderId = traderId;
 
-        this.timeStamp = Instant.now(); // Using java.time before deciding on our time implementation
+        this.timeStamp = ClockProvider.getClock().instant();
     }
-    
+
     private static synchronized int generateOrderId() {
         return nextOrderId++;
     }
@@ -69,6 +78,14 @@ public class Order {
         return traderId;
     }
 
+    public OrderType getOrderType() {
+        return orderType;
+    }
+
+    public boolean isMarketOrder() {
+        return orderType == OrderType.MARKET;
+    }
+
     public void cancel() {// TODO
         status = Status.CANCELLED;
     }
@@ -101,6 +118,10 @@ public class Order {
 
     public enum Status {
         NEW, PARTIALLY_FILLED, FILLED, CANCELLED
+    }
+
+    public enum OrderType {
+        LIMIT, MARKET
     }
 
 }

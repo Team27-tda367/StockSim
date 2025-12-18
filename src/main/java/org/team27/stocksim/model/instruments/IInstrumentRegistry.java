@@ -1,4 +1,5 @@
 package org.team27.stocksim.model.instruments;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

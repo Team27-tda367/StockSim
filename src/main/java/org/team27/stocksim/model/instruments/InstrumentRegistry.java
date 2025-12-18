@@ -20,7 +20,6 @@ public class InstrumentRegistry implements IInstrumentRegistry {
         String highSymbol = symbol.toUpperCase();
 
         if (instruments.containsKey(highSymbol)) {
-            System.out.println("Stock symbol already exists: " + highSymbol);
             return false;
         }
 

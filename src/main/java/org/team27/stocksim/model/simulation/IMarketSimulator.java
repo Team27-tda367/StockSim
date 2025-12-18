@@ -1,4 +1,5 @@
 package org.team27.stocksim.model.simulation;
+
 import org.team27.stocksim.model.market.MarketState;
 
 public interface IMarketSimulator {

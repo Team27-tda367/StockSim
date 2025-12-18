@@ -3,13 +3,15 @@ package org.team27.stocksim.controller;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import org.team27.stocksim.SimSetup;
 import org.team27.stocksim.model.StockSim;
-import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.market.Order;
-import org.team27.stocksim.model.users.OrderHistory;
 import org.team27.stocksim.model.users.User;
+import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.model.util.dto.OrderDTO;
+import org.team27.stocksim.model.util.dto.TradeDTO;
+import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public class SimController implements ISimController {
@@ -18,11 +20,6 @@ public class SimController implements ISimController {
 
     public SimController(StockSim model) {
         this.model = model;
-    }
-
-    public void setUpSimulation() {
-        SimSetup setup = new SimSetup(model);
-        setup.start();
     }
 
     public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {
@@ -43,13 +40,13 @@ public class SimController implements ISimController {
     }
 
     @Override
-    public HashMap<String, Instrument> getStocks(String category) {
+    public HashMap<String, InstrumentDTO> getStocks(String category) {
         return model.getStocks(category);
     }
 
     @Override
-    public User getUser() {
-        return model.getCurrentUser();
+    public UserDTO getUser() {
+        return model.getCurrentUserDto();
     }
 
     @Override
@@ -60,24 +57,67 @@ public class SimController implements ISimController {
         model.placeOrder(buyOrder);
     }
 
-    @Override
-    public void sellStock(String stockSymbol, int quantity, BigDecimal price) {
+    public void placeMarketBuyOrder(String stockSymbol, int quantity) {
+        Order order = new Order(Order.Side.BUY, Order.OrderType.MARKET,
+                stockSymbol, BigDecimal.ZERO, quantity, model.getCurrentUser().getId());
+        model.placeOrder(order);
+    }
+
+    public void placeMarketSellOrder(String stockSymbol, int quantity) {
         User user = model.getCurrentUser();
+        quantity = getQuantity(user, quantity, stockSymbol);
+        if (quantity <= 0) {
+            return;
+        }
+
+        Order order = new Order(Order.Side.SELL, Order.OrderType.MARKET, stockSymbol, BigDecimal.ZERO, quantity,
+                model.getCurrentUser().getId());
+
+        model.placeOrder(order);
+    }
+
+    private int getQuantity(User user, int quantity, String stockSymbol) {
         int availableQuantity = user.getPortfolio().getStockQuantity(stockSymbol);
 
         if (availableQuantity < quantity) {
             System.out.println("Insufficient stock quantity to sell.");
             quantity = availableQuantity;
         }
+        return quantity;
 
+    }
+
+    @Override
+    public void sellStock(String stockSymbol, int quantity, BigDecimal price) {
+        User user = model.getCurrentUser();
+
+        quantity = getQuantity(user, quantity, stockSymbol);
+        if (quantity <= 0) {
+            return;
+        }
         Order sellOrder = new Order(Order.Side.SELL, stockSymbol, price, quantity, user.getId());
         model.placeOrder(sellOrder);
     }
 
     @Override
-    public OrderHistory getOrderHistory() {
+    public List<OrderDTO> getOrderHistory() {
         User user = model.getCurrentUser();
-        return user != null ? user.getOrderHistory() : new OrderHistory();
+        return user != null ? user.getOrderHistory().getAllOrdersDTO() : new ArrayList<>();
     }
 
+    @Override
+    public List<TradeDTO> getTradeHistory() {
+        User user = model.getCurrentUser();
+        return user != null ? user.getOrderHistory().getAllTradesDTO() : new ArrayList<>();
+    }
+
+    @Override
+    public void setSelectedStock(InstrumentDTO stock) {
+        model.getSelectionManager().setSelectedStock(stock);
+    }
+
+    @Override
+    public InstrumentDTO getSelectedStock() {
+        return model.getSelectionManager().getSelectedStock();
+    }
 }

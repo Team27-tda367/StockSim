@@ -3,6 +3,7 @@ import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.users.Trader;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public interface IMarket {
@@ -17,7 +18,7 @@ public interface IMarket {
 
     List<Trade> getCompletedTrades();
 
-    void setOnPriceUpdate(Consumer<Void> callback);
+    void setOnPriceUpdate(Consumer<Set<String>> callback);
 
     void setOnTradeSettled(Consumer<Trade> callback);
 }

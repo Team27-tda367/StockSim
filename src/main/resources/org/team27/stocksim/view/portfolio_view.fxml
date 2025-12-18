@@ -43,7 +43,7 @@
                      <children>
                         <VBox>
                            <children>
-                                <Label prefHeight="33.0" prefWidth="126.0" styleClass="title-large" text="Portfolio" />
+                                <Label prefHeight="33.0" prefWidth="200.0" styleClass="title-large" text="Portfolio" />
                            </children>
                         </VBox>
                         <Label alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" prefHeight="36.0" prefWidth="244.0" styleClass="title-medium" text="Pending Orders">
@@ -75,7 +75,7 @@
                               
                                  <!-- Gain/Loss Card -->
                               <VBox prefWidth="250">
-                                  <Label prefWidth="79.0" styleClass="text-small, text-muted" text="Total Gain/Loss" />
+                                  <Label prefWidth="100" styleClass="text-small, text-muted" text="Total Gain/Loss" />
                                   <Label fx:id="totalGainLossLabel" prefHeight="88.0" prefWidth="158.0" styleClass="title-medium" />
                                   <Label fx:id="totalGainLossPercentLabel" prefHeight="15.0" prefWidth="145.0" styleClass="text-small" />
                               <styleClass>
@@ -204,7 +204,7 @@
                      </styleClass>
                     </VBox>
                 </VBox>
-               <VBox alignment="CENTER" prefHeight="717.0" prefWidth="632.0" styleClass="axis" stylesheets="@../css/main.css" HBox.hgrow="ALWAYS">
+               <!-- <VBox alignment="CENTER" prefHeight="717.0" prefWidth="632.0" styleClass="axis" stylesheets="@../css/main.css" HBox.hgrow="ALWAYS">
                   <children>
                      <HBox>
                         <children>
@@ -261,7 +261,7 @@
                         </VBox.margin>
                      </VBox>
                   </children>
-               </VBox>
+               </VBox> -->
             </children>
             <opaqueInsets>
                <Insets right="20.0" />

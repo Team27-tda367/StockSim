@@ -6,7 +6,7 @@ public abstract class Trader {
 
     private final String id;
     private final String displayName;
-    private Portfolio portfolio;
+    private final Portfolio portfolio;
 
     Trader(String id, String name, Portfolio portfolio) {
         this.id = id;

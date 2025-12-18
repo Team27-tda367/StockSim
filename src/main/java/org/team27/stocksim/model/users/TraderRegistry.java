@@ -1,14 +1,14 @@
 package org.team27.stocksim.model.users;
 
 import org.team27.stocksim.model.portfolio.Portfolio;
+import org.team27.stocksim.model.util.dto.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
+import org.team27.stocksim.model.users.bot.IBotStrategy;
 import static org.team27.stocksim.model.util.MoneyUtils.money;
-
 
 public class TraderRegistry implements ITraderRegistry {
 
@@ -26,11 +26,19 @@ public class TraderRegistry implements ITraderRegistry {
     }
 
     @Override
+    public UserDTO getCurrentUserDto() {
+        PortfolioDTO userPortfolioDTO = PortfolioMapper.toDto(currentUser.getPortfolio());
+        OrderHistoryDTO userOrderHistoryDTO = OrderHistoryMapper.toDto(currentUser.getOrderHistory());
+        UserDTO userDTO = UserMapper.toDto(currentUser, userPortfolioDTO, userOrderHistoryDTO);
+
+        return userDTO;
+    }
+
+    @Override
     public boolean createUser(String id, String name) {
         String highId = id.toUpperCase();
 
         if (traders.containsKey(highId)) {
-            System.out.println("User ID already exists: " + highId);
             return false;
         }
 
@@ -40,13 +48,10 @@ public class TraderRegistry implements ITraderRegistry {
         return true;
     }
 
-
     @Override
     public boolean createBot(String id, String name) {
         String highId = id.toUpperCase();
-
-        if (traders.containsKey(highId)) {
-            System.out.println("Bot ID already exists: " + highId);
+        if (checkDuplicateId(highId)) {
             return false;
         }
 
@@ -56,26 +61,39 @@ public class TraderRegistry implements ITraderRegistry {
         return true;
     }
 
+    private boolean checkDuplicateId(String id) {
+        return traders.containsKey(id);
+    }
 
+    @Override
+    public boolean createBot(String id, String name, IBotStrategy strategy) {
+        String highId = id.toUpperCase();
+
+        if (checkDuplicateId(highId)) {
+            return false;
+        }
+
+        Portfolio portfolio = portfolioFactory.apply(highId);
+        Trader bot = new Bot(highId, name, portfolio, strategy);
+        traders.put(highId, bot);
+        return true;
+    }
 
     @Override
     public HashMap<String, Trader> getAllTraders() {
         return traders;
     }
 
-
-
     @Override
-    public HashMap<String, Trader> getBots() {
-        HashMap<String, Trader> bots = new HashMap<>();
+    public HashMap<String, Bot> getBots() {
+        HashMap<String, Bot> bots = new HashMap<>();
         for (Map.Entry<String, Trader> entry : traders.entrySet()) {
             if (entry.getValue() instanceof Bot) {
-                bots.put(entry.getKey(), entry.getValue());
+                bots.put(entry.getKey(), (Bot)entry.getValue());
             }
         }
         return bots;
     }
-
 
     @Override
     public HashMap<String, User> getUsers() {
@@ -88,18 +106,15 @@ public class TraderRegistry implements ITraderRegistry {
         return users;
     }
 
-
     @Override
     public Trader getTrader(String id) {
         return traders.get(id.toUpperCase());
     }
 
-
     @Override
     public User getCurrentUser() {
         return currentUser;
     }
-
 
     @Override
     public void setCurrentUser(String userId) {

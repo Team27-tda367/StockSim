@@ -9,11 +9,12 @@ public class OrderBook {
     private final PriorityQueue<Order> bids = new PriorityQueue<>(comparing(Order::getPrice).reversed().thenComparing(Order::getTimeStamp));
     private final PriorityQueue<Order> asks = new PriorityQueue<>(comparing(Order::getPrice).thenComparing(Order::getTimeStamp));
     private final String symbol;
+
     public OrderBook(String symbol) {
         this.symbol = symbol;
     }
 
-    public void add(Order order) {
+    public synchronized void add(Order order) {
         if (order.isBuyOrder()) {
             bids.add(order);
         } else {
@@ -21,7 +22,7 @@ public class OrderBook {
         }
     }
 
-    public void remove(Order order) {
+    public synchronized void remove(Order order) {
         if (order.isBuyOrder()) {
             bids.remove(order);
         } else {
@@ -29,22 +30,22 @@ public class OrderBook {
         }
     }
 
-    public Order getBestBid() {
+    public synchronized Order getBestBid() {
         return bids.peek();
     }
 
-    public Order getBestAsk() {
+    public synchronized Order getBestAsk() {
         return asks.peek();
     }
 
-    public ArrayList<Order> getOrders() {
+    public synchronized ArrayList<Order> getOrders() {
         ArrayList<Order> orders = new ArrayList<>();
         orders.addAll(bids);
         orders.addAll(asks);
         return orders;
     }
 
-    public void fillOrder(Order order, int quantity) {
+    public synchronized void fillOrder(Order order, int quantity) {
         order.fill(quantity);
     }
 }

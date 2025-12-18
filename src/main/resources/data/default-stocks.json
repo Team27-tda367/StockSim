@@ -1,0 +1,142 @@
+[
+  {
+    "symbol": "AAPL",
+    "name": "Apple Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Technology"
+  },
+  {
+    "symbol": "GOOGL",
+    "name": "Alphabet Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Technology"
+  },
+  {
+    "symbol": "MSFT",
+    "name": "Microsoft Corp.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Technology"
+  },
+  {
+    "symbol": "TSLA",
+    "name": "Tesla Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Consumer"
+  },
+  {
+    "symbol": "AMZN",
+    "name": "Amazon.com Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Consumer"
+  },
+  {
+    "symbol": "META",
+    "name": "Meta Platforms Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Entertainment"
+  },
+  {
+    "symbol": "NVDA",
+    "name": "NVIDIA Corporation",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Semiconductors"
+  },
+  {
+    "symbol": "JPM",
+    "name": "JPMorgan Chase & Co.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Finance"
+  },
+  {
+    "symbol": "V",
+    "name": "Visa Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Finance"
+  },
+  {
+    "symbol": "WMT",
+    "name": "Walmart Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Consumer"
+  },
+  {
+    "symbol": "DIS",
+    "name": "The Walt Disney Company",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Entertainment"
+  },
+  {
+    "symbol": "NFLX",
+    "name": "Netflix Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Entertainment"
+  },
+  {
+    "symbol": "PYPL",
+    "name": "PayPal Holdings Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Finance"
+  },
+  {
+    "symbol": "INTC",
+    "name": "Intel Corporation",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Semiconductors"
+  },
+  {
+    "symbol": "CSCO",
+    "name": "Cisco Systems Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Technology"
+  },
+  {
+    "symbol": "PEP",
+    "name": "PepsiCo Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Consumer"
+  },
+  {
+    "symbol": "KO",
+    "name": "The Coca-Cola Company",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Consumer"
+  },
+  {
+    "symbol": "NKE",
+    "name": "Nike Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Consumer"
+  },
+  {
+    "symbol": "BA",
+    "name": "The Boeing Company",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Aviation"
+  },
+  {
+    "symbol": "AMD",
+    "name": "Advanced Micro Devices Inc.",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "category": "Semiconductors"
+  }
+]

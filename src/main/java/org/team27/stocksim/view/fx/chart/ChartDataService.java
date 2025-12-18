@@ -1,28 +1,36 @@
 package org.team27.stocksim.view.fx.chart;
 
 import org.team27.stocksim.model.instruments.PriceHistory;
+import org.team27.stocksim.model.instruments.PriceHistoryService;
 import org.team27.stocksim.model.instruments.PricePoint;
 import javafx.scene.chart.XYChart;
 
 import java.util.List;
 
 /**
- * Service class responsible for filtering and preparing chart data
- * based on different time periods. This class encapsulates the logic
- * for data aggregation, sampling, and filtering.
+ * View-layer service responsible for converting domain model price data
+ * into JavaFX chart series. This class handles only UI-specific concerns.
+ * Business logic for data filtering and sampling is delegated to
+ * PriceHistoryService.
+ * 
+ * Follows Single Responsibility Principle - only handles JavaFX conversion.
  */
 public class ChartDataService {
 
+    private final PriceHistoryService priceHistoryService;
+
+    public ChartDataService() {
+        this.priceHistoryService = new PriceHistoryService();
+    }
+
     /**
-     * Prepare chart data series for a specific time period.
+     * Prepare chart data series.
+     * Delegates data processing to model layer, then converts to JavaFX format.
      * 
      * @param priceHistory The complete price history of the stock
-     * @param timePeriod   The time period to display
      * @return XYChart.Series with filtered data points
      */
-    public XYChart.Series<Number, Number> prepareChartData(
-            PriceHistory priceHistory,
-            ChartTimePeriod timePeriod) {
+    public XYChart.Series<Number, Number> prepareChartData(PriceHistory priceHistory) {
 
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
 
@@ -30,53 +38,13 @@ public class ChartDataService {
             return series;
         }
 
-        List<PricePoint> allPoints = priceHistory.getPoints();
+        // Delegate filtering to model service
+        List<PricePoint> filteredPoints = priceHistoryService.filterPriceData(priceHistory);
 
-        if (allPoints.isEmpty()) {
-            return series;
-        }
-
-        // Calculate how many points to display
-        int pointsToDisplay = timePeriod.calculatePointsToDisplay(allPoints.size());
-
-        // Get the most recent points
-        int startIndex = Math.max(0, allPoints.size() - pointsToDisplay);
-
-        // Calculate sampling interval to avoid overcrowding
-        int samplingInterval = calculateSamplingInterval(pointsToDisplay, timePeriod);
-
-        // Add sampled data points to the series
-        int xIndex = 0;
-        for (int i = startIndex; i < allPoints.size(); i += samplingInterval) {
-            PricePoint point = allPoints.get(i);
-            series.getData().add(
-                    new XYChart.Data<>(xIndex++, point.getPrice().doubleValue()));
-        }
+        // Convert to JavaFX chart format
+        convertToChartSeries(filteredPoints, series);
 
         return series;
-    }
-
-    /**
-     * Calculate sampling interval based on time period to prevent overcrowding.
-     * Larger time periods will have fewer points displayed.
-     * 
-     * @param totalPoints Total number of points in the range
-     * @param timePeriod  The time period being displayed
-     * @return The interval at which to sample points (1 = every point, 2 = every
-     *         other point, etc.)
-     */
-    private int calculateSamplingInterval(int totalPoints, ChartTimePeriod timePeriod) {
-        // Target maximum points to display on chart for good visibility
-        int maxDisplayPoints = switch (timePeriod) {
-            case ONE_DAY -> 100; // Show more detail for short periods
-            case ONE_WEEK -> 80;
-            case ONE_MONTH -> 60;
-            case ONE_YEAR -> 50; // Show fewer points for long periods
-        };
-
-        // Calculate interval needed to reduce points to target
-        int interval = Math.max(1, totalPoints / maxDisplayPoints);
-        return interval;
     }
 
     /**
@@ -86,71 +54,51 @@ public class ChartDataService {
      * 
      * @param series        The existing chart series to update
      * @param priceHistory  The complete price history
-     * @param timePeriod    The current time period filter
      * @param lastKnownSize The number of points that were previously added
      * @return The new size of the price history (for tracking)
      */
     public int updateChartData(
             XYChart.Series<Number, Number> series,
             PriceHistory priceHistory,
-            ChartTimePeriod timePeriod,
             int lastKnownSize) {
 
         if (series == null || priceHistory == null) {
             return lastKnownSize;
         }
 
-        List<PricePoint> allPoints = priceHistory.getPoints();
-        int currentSize = allPoints.size();
+        // Delegate update logic to model service
+        PriceHistoryService.FilterResult result = priceHistoryService.getIncrementalUpdate(
+                priceHistory,
+                lastKnownSize);
 
-        // If history was reset or reduced, redraw everything
-        if (currentSize < lastKnownSize) {
+        if (result.needsFullRedraw()) {
+            // Clear and redraw entire chart
             series.getData().clear();
-            XYChart.Series<Number, Number> newSeries = prepareChartData(priceHistory, timePeriod);
-            series.getData().addAll(newSeries.getData());
-            return currentSize;
-        }
-
-        // Add only new points
-        if (currentSize > lastKnownSize) {
-            int pointsToDisplay = timePeriod.calculatePointsToDisplay(currentSize);
-            int startIndex = Math.max(0, currentSize - pointsToDisplay);
-
-            // Check if we need to redraw (if period changes or we're showing a window)
-            if (startIndex > lastKnownSize) {
-                // We've moved past our window, redraw
-                series.getData().clear();
-                XYChart.Series<Number, Number> newSeries = prepareChartData(priceHistory, timePeriod);
-                series.getData().addAll(newSeries.getData());
-            } else {
-                // Just add new points
-                int seriesOffset = series.getData().size();
-                for (int i = lastKnownSize; i < currentSize; i++) {
-                    if (i >= startIndex) {
-                        PricePoint point = allPoints.get(i);
-                        series.getData().add(
-                                new XYChart.Data<>(seriesOffset++, point.getPrice().doubleValue()));
-                    }
-                }
+            convertToChartSeries(result.getPoints(), series);
+        } else if (!result.getPoints().isEmpty()) {
+            // Just add new points
+            int seriesOffset = series.getData().size();
+            for (PricePoint point : result.getPoints()) {
+                series.getData().add(
+                        new XYChart.Data<>(seriesOffset++, point.getPrice().doubleValue()));
             }
         }
 
-        return currentSize;
+        return result.getNewSize();
     }
 
     /**
-     * Calculate appropriate time axis labels based on the time period.
-     * This can be extended to provide meaningful time labels.
+     * Convert a list of PricePoints to JavaFX chart data format.
+     * This is pure view-layer conversion logic.
      * 
-     * @param timePeriod The time period being displayed
-     * @return A label for the time axis
+     * @param points The price points to convert
+     * @param series The series to populate
      */
-    public String getTimeAxisLabel(ChartTimePeriod timePeriod) {
-        return switch (timePeriod) {
-            case ONE_DAY -> "Hours";
-            case ONE_WEEK -> "Days";
-            case ONE_MONTH -> "Days";
-            case ONE_YEAR -> "Months";
-        };
+    private void convertToChartSeries(List<PricePoint> points, XYChart.Series<Number, Number> series) {
+        int xIndex = 0;
+        for (PricePoint point : points) {
+            series.getData().add(
+                    new XYChart.Data<>(xIndex++, point.getPrice().doubleValue()));
+        }
     }
 }
