@@ -11,13 +11,12 @@ public class UserMapper {
         if (user == null) {
             return null;
         }
-        UserDTO dto = new UserDTO();
-        dto.setId(user.getId());
-        dto.setName(user.getDisplayName());
-        dto.setPortfolio(portfolio);
-        dto.setOrderHistory(orderHistory);
-
-        return dto;
+        return new UserDTO(
+                user.getId(),
+                user.getDisplayName(),
+                portfolio,
+                orderHistory
+        );
     }
 
 }

@@ -11,13 +11,13 @@ public class StockMapper {
         if (instrument == null) {
             return null;
         }
-        InstrumentDTO dto = new InstrumentDTO();
-        dto.setSymbol(instrument.getSymbol());
-        dto.setName(instrument.getName());
-        dto.setCategory(instrument.getCategory());
-        dto.setPrice(instrument.getCurrentPrice());
-        dto.setPriceHistory(instrument.getPriceHistory());
-        return dto;
+        return new InstrumentDTO(
+                instrument.getSymbol(),
+                instrument.getName(),
+                instrument.getCategory(),
+                instrument.getCurrentPrice(),
+                instrument.getPriceHistory()
+        );
     }
 
     // Can be implemented for creating stocks from DTOs in the future

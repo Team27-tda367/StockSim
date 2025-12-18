@@ -8,14 +8,14 @@ public class OrderHistoryMapper {
         if (orderHistory == null) {
             return null;
         }
-        OrderHistoryDTO dto = new OrderHistoryDTO();
-        dto.setOrders(orderHistory.getAllOrders().stream()
-                .map(OrderMapper::toDto)
-                .toList());
-        dto.setTrades(orderHistory.getAllTrades().stream()
-                .map(TradeMapper::toDto)
-                .toList());
-        return dto;
+        return new OrderHistoryDTO(
+                orderHistory.getAllOrders().stream()
+                        .map(OrderMapper::toDto)
+                        .toList(),
+                orderHistory.getAllTrades().stream()
+                        .map(TradeMapper::toDto)
+                        .toList()
+        );
     }
 
 }

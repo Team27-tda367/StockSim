@@ -8,11 +8,11 @@ public class PositionMapper {
         if (position == null) {
             return null;
         }
-        PositionDTO dto = new PositionDTO();
-        dto.setSymbol(position.getSymbol());
-        dto.setQuantity(position.getQuantity());
-        dto.setAverageCost(position.getAverageCost());
-        return dto;
+        return new PositionDTO(
+                position.getSymbol(),
+                position.getQuantity(),
+                position.getAverageCost()
+        );
     }
 
 }

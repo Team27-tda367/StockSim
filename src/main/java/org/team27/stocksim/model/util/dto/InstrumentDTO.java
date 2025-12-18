@@ -6,15 +6,11 @@ import java.math.BigDecimal;
 
 public class InstrumentDTO {
 
-    private String symbol;
-    private String name;
-    private String category;
-    private BigDecimal price;
-    private PriceHistory priceHistory;
-
-    // Empty constructor for serialization/deserialization
-    public InstrumentDTO() {
-    }
+    private final String symbol;
+    private final String name;
+    private final String category;
+    private final BigDecimal price;
+    private final PriceHistory priceHistory;
 
     public InstrumentDTO(String symbol, String name, String category, BigDecimal price, PriceHistory priceHistory) {
         this.symbol = symbol;
@@ -24,7 +20,7 @@ public class InstrumentDTO {
         this.priceHistory = priceHistory;
     }
 
-    // Getters and Setters
+    // Getters only (immutable)
     public String getSymbol() {
         return symbol;
     }
@@ -43,25 +39,5 @@ public class InstrumentDTO {
 
     public PriceHistory getPriceHistory() {
         return priceHistory;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public void setPriceHistory(PriceHistory priceHistory) {
-        this.priceHistory = priceHistory;
     }
 }

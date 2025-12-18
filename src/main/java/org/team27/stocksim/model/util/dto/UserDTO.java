@@ -1,16 +1,11 @@
 package org.team27.stocksim.model.util.dto;
 
-import org.team27.stocksim.model.users.OrderHistory;
-
 public class UserDTO {
 
-    private String id;
-    private String name;
-    private PortfolioDTO portfolio;
-    private OrderHistoryDTO orderHistory;
-
-    // Empty constructor for serialization/deserialization
-    public UserDTO() {}
+    private final String id;
+    private final String name;
+    private final PortfolioDTO portfolio;
+    private final OrderHistoryDTO orderHistory;
 
     public UserDTO(String id, String name, PortfolioDTO portfolio, OrderHistoryDTO orderHistory) {
         this.id = id;
@@ -19,8 +14,7 @@ public class UserDTO {
         this.orderHistory = orderHistory;
     }
 
-    // Getters and Setters
-
+    // Getters only (immutable)
     public String getId() {
         return id;
     }
@@ -35,21 +29,5 @@ public class UserDTO {
 
     public OrderHistoryDTO getOrderHistory() {
         return orderHistory;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPortfolio(PortfolioDTO portfolio) {
-        this.portfolio = portfolio;
-    }
-
-    public void setOrderHistory(OrderHistoryDTO orderHistory) {
-        this.orderHistory = orderHistory;
     }
 }
