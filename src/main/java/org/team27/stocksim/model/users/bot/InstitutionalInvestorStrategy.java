@@ -1,8 +1,8 @@
 package org.team27.stocksim.model.users.bot;
 
+import org.team27.stocksim.dto.InstrumentDTO;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.users.Bot;
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

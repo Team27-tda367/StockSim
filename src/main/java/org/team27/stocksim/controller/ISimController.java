@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
-import org.team27.stocksim.model.util.dto.UserDTO;
-import org.team27.stocksim.model.util.dto.OrderDTO;
-import org.team27.stocksim.model.util.dto.TradeDTO;
+import org.team27.stocksim.dto.InstrumentDTO;
+import org.team27.stocksim.dto.OrderDTO;
+import org.team27.stocksim.dto.TradeDTO;
+import org.team27.stocksim.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public interface ISimController {

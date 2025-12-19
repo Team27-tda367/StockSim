@@ -1,6 +1,6 @@
 package org.team27.stocksim.model;
 
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.dto.InstrumentDTO;
 
 /**
  * Manages the currently selected stock in the application.

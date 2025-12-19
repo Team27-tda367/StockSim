@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.util.dto;
+package org.team27.stocksim.dto;
 
 import org.team27.stocksim.model.instruments.PriceHistory;
 

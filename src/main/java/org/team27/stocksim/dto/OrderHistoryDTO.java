@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.util.dto;
+package org.team27.stocksim.dto;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +23,6 @@ public class OrderHistoryDTO {
     public List<TradeDTO> getTrades() {
         return trades;
     }
-
 
     public List<OrderDTO> getActiveOrders() {
         return orders.stream()

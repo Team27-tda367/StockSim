@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.util.dto;
+package org.team27.stocksim.dto;
 
 import org.team27.stocksim.model.users.User;
 
@@ -15,8 +15,7 @@ public class UserMapper {
                 user.getId(),
                 user.getDisplayName(),
                 portfolio,
-                orderHistory
-        );
+                orderHistory);
     }
 
 }

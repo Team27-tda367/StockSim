@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.util.dto;
+package org.team27.stocksim.dto;
 
 import org.team27.stocksim.model.users.OrderHistory;
 
@@ -14,8 +14,7 @@ public class OrderHistoryMapper {
                         .toList(),
                 orderHistory.getAllTrades().stream()
                         .map(TradeMapper::toDto)
-                        .toList()
-        );
+                        .toList());
     }
 
 }

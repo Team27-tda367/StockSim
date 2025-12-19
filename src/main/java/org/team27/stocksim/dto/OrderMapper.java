@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.util.dto;
+package org.team27.stocksim.dto;
 
 import org.team27.stocksim.model.market.Order;
 
@@ -18,8 +18,7 @@ public class OrderMapper {
                 order.getRemainingQuantity(),
                 order.getStatus().name(),
                 order.getTimeStamp(),
-                order.getTraderId()
-        );
+                order.getTraderId());
     }
 
 }

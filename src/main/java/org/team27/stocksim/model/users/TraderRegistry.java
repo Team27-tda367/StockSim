@@ -1,7 +1,7 @@
 package org.team27.stocksim.model.users;
 
+import org.team27.stocksim.dto.*;
 import org.team27.stocksim.model.portfolio.Portfolio;
-import org.team27.stocksim.model.util.dto.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -71,7 +71,7 @@ public class TraderRegistry implements ITraderRegistry {
         }
 
         Portfolio portfolio = portfolioFactory.apply(startingBalance);
-        Trader bot = new Bot(highId, name, portfolio, strategy); //TODO
+        Trader bot = new Bot(highId, name, portfolio, strategy); // TODO
         traders.put(highId, bot);
         return true;
     }

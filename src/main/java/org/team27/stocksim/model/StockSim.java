@@ -1,5 +1,8 @@
 package org.team27.stocksim.model;
 
+import org.team27.stocksim.dto.InstrumentDTO;
+import org.team27.stocksim.dto.StockMapper;
+import org.team27.stocksim.dto.UserDTO;
 import org.team27.stocksim.model.instruments.IInstrumentRegistry;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.instruments.InstrumentRegistry;
@@ -12,9 +15,6 @@ import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.simulation.IMarketSimulator;
 import org.team27.stocksim.model.simulation.MarketSimulator;
 import org.team27.stocksim.model.users.*;
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
-import org.team27.stocksim.model.util.dto.StockMapper;
-import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 import org.team27.stocksim.observer.IModelSubject;
 import org.team27.stocksim.repository.BotPositionRepository;

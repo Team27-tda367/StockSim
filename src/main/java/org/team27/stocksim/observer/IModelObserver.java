@@ -1,8 +1,8 @@
 package org.team27.stocksim.observer;
 
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
-
 import java.util.HashMap;
+
+import org.team27.stocksim.dto.InstrumentDTO;
 
 public interface IModelObserver {
 

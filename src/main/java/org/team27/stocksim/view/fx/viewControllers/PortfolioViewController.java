@@ -1,6 +1,5 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.model.util.dto.*;
 import org.team27.stocksim.view.fx.EView;
 
 import javafx.application.Platform;
@@ -10,13 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+
+import org.team27.stocksim.dto.*;
 import org.team27.stocksim.view.ViewAdapter;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 public class PortfolioViewController extends ViewControllerBase
         implements ViewAdapter.PortfolioChangedListener, ViewAdapter.TradeSettledListener {

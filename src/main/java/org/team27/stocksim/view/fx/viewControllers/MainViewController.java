@@ -1,8 +1,5 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
-import org.team27.stocksim.model.util.dto.PortfolioDTO;
-import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 
@@ -24,6 +21,9 @@ import javafx.scene.layout.Region;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 
+import org.team27.stocksim.dto.InstrumentDTO;
+import org.team27.stocksim.dto.PortfolioDTO;
+import org.team27.stocksim.dto.UserDTO;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.User;
 

@@ -1,11 +1,11 @@
 package org.team27.stocksim.model.users;
 
+import org.team27.stocksim.dto.OrderDTO;
+import org.team27.stocksim.dto.OrderMapper;
+import org.team27.stocksim.dto.TradeDTO;
+import org.team27.stocksim.dto.TradeMapper;
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.market.Trade;
-import org.team27.stocksim.model.util.dto.OrderDTO;
-import org.team27.stocksim.model.util.dto.OrderMapper;
-import org.team27.stocksim.model.util.dto.TradeDTO;
-import org.team27.stocksim.model.util.dto.TradeMapper;
 
 import java.util.ArrayList;
 import java.util.Collections;

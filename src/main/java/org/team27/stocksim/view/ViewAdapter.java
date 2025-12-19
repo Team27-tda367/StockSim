@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.dto.InstrumentDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 /**

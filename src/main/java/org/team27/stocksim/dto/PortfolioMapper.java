@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.util.dto;
+package org.team27.stocksim.dto;
 
 import org.team27.stocksim.model.portfolio.Portfolio;
 
@@ -16,20 +16,17 @@ public class PortfolioMapper {
             return null;
         }
 
-
         // Null-safe positions
         Map<String, PositionDTO> positions = portfolio.getPositions() == null
                 ? Collections.emptyMap()
                 : portfolio.getPositions().entrySet().stream()
-                .collect(Collectors.toMap(
-                        java.util.Map.Entry::getKey,
-                        entry -> PositionMapper.toDto(entry.getValue())
-                ));
+                        .collect(Collectors.toMap(
+                                java.util.Map.Entry::getKey,
+                                entry -> PositionMapper.toDto(entry.getValue())));
 
         return new PortfolioDTO(
                 portfolio.getBalance(),
-                positions
-        );
+                positions);
     }
 
 }

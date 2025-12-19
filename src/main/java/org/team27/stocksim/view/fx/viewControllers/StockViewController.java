@@ -1,6 +1,6 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.model.util.dto.*;
+import org.team27.stocksim.dto.*;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.chart.ChartDataService;
@@ -22,7 +22,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 import javafx.geometry.Pos;
 
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
 import org.team27.stocksim.view.fx.chart.ChartDataService;

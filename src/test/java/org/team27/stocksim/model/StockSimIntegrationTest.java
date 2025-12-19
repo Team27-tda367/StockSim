@@ -3,9 +3,9 @@ package org.team27.stocksim.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.team27.stocksim.dto.InstrumentDTO;
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.market.Trade;
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.model.users.User;
 
 import java.math.BigDecimal;
@@ -234,13 +234,16 @@ class StockSimIntegrationTest {
             }
 
             @Override
-            public void onStocksChanged(Object payload) {}
+            public void onStocksChanged(Object payload) {
+            }
 
             @Override
-            public void onPortfolioChanged() {}
+            public void onPortfolioChanged() {
+            }
 
             @Override
-            public void onTradeSettled() {}
+            public void onTradeSettled() {
+            }
         });
 
         User seller = (User) stockSim.getTraders().get("SELLER");
@@ -341,4 +344,3 @@ class StockSimIntegrationTest {
         assertEquals(1, financeStocks.size());
     }
 }
-
