@@ -1,6 +1,7 @@
 package org.team27.stocksim;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -157,5 +158,34 @@ public class SimSetup {
                 }
             }
         }
+    }
+
+    /**
+     * Determine the earliest timestamp from saved price data.
+     * Returns Instant.EPOCH if no saved data exists.
+     * Use this to set the initial timestamp when loading existing price data.
+     */
+    public static Instant getEarliestTimestampFromSavedData() {
+        StockPriceRepository repository = new StockPriceRepository();
+        Map<String, StockPriceRepository.StockPriceData> priceData = repository.loadStockPrices();
+
+        if (priceData.isEmpty()) {
+            return Instant.EPOCH;
+        }
+
+        Instant earliest = null;
+
+        for (StockPriceRepository.StockPriceData data : priceData.values()) {
+            if (data.priceHistory != null && !data.priceHistory.isEmpty()) {
+                long firstTimestamp = data.priceHistory.get(0).getTimestamp();
+                Instant timestamp = Instant.ofEpochSecond(firstTimestamp);
+
+                if (earliest == null || timestamp.isBefore(earliest)) {
+                    earliest = timestamp;
+                }
+            }
+        }
+
+        return earliest != null ? earliest : Instant.EPOCH;
     }
 }

@@ -5,6 +5,7 @@ import java.time.Instant;
 import org.team27.stocksim.controller.ISimController;
 import org.team27.stocksim.controller.SimController;
 import org.team27.stocksim.model.StockSim;
+import org.team27.stocksim.model.simulation.SimulationConfig;
 import org.team27.stocksim.view.fx.FXStockSimApp;
 
 import javafx.application.Application;
@@ -53,8 +54,25 @@ public class Main {
                     + simulationSpeed + "...");
         }
 
+        // Determine initial timestamp from saved data if in display mode
+        Instant initialTimestamp = Instant.EPOCH;
+        if (displayMode) {
+            initialTimestamp = SimSetup.getEarliestTimestampFromSavedData();
+            if (!initialTimestamp.equals(Instant.EPOCH)) {
+                System.out.println("Loading saved data with initial timestamp: " + initialTimestamp);
+            }
+        }
+
+        // Build simulation configuration
+        SimulationConfig config = SimulationConfig.builder()
+                .speedupFactor(simulationSpeed)
+                .tickInterval(tickInterval)
+                .durationInRealSeconds(durationInRealSeconds)
+                .initialTimestamp(initialTimestamp)
+                .build();
+
         // Initialize the model with simulation configuration
-        StockSim model = new StockSim(simulationSpeed, tickInterval, durationInRealSeconds, Instant.EPOCH);
+        StockSim model = new StockSim(config);
         ISimController controller = new SimController(model);
 
         // Set up initial data (stocks, bots, positions)

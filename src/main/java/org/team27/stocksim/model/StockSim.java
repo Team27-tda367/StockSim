@@ -14,6 +14,7 @@ import org.team27.stocksim.model.market.OrderBook;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.simulation.IMarketSimulator;
 import org.team27.stocksim.model.simulation.MarketSimulator;
+import org.team27.stocksim.model.simulation.SimulationConfig;
 import org.team27.stocksim.model.users.*;
 import org.team27.stocksim.observer.IModelObserver;
 import org.team27.stocksim.observer.IModelSubject;
@@ -38,10 +39,10 @@ public class StockSim implements IModelSubject {
     private final BotActionExecutor botActionExecutor;
 
     public StockSim() {
-        this(3600, 50, 10, Instant.EPOCH);
+        this(SimulationConfig.createDefault());
     }
 
-    public StockSim(int simulationSpeed, int tickInterval, int durationInRealSeconds, Instant initialTimeStamp) {
+    public StockSim(SimulationConfig config) {
         // Initialize registries
         this.instrumentRegistry = new InstrumentRegistry(new StockFactory());
         this.traderRegistry = new TraderRegistry(new UserFactory(), new BotFactory());
@@ -69,8 +70,14 @@ public class StockSim implements IModelSubject {
         });
 
         // Initialize simulator with configuration
-        this.marketSimulator = new MarketSimulator(traderRegistry::getBots, this::onSimulationTick,
-                this::saveStockPrices, simulationSpeed, tickInterval, durationInRealSeconds, initialTimeStamp);
+        this.marketSimulator = new MarketSimulator(
+                traderRegistry::getBots,
+                this::onSimulationTick,
+                this::saveStockPrices,
+                config.getSpeedupFactor(),
+                config.getTickInterval(),
+                config.getDurationInRealSeconds(),
+                config.getInitialTimestamp());
     }
 
     private String getTraderIdForOrder(int orderId) {
