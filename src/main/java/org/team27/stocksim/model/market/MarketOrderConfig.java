@@ -101,11 +101,5 @@ public class MarketOrderConfig {
     public boolean isAllowPartialFills() {
         return allowPartialFills;
     }
-
-    @Override
-    public String toString() {
-        return "MarketOrderConfig{maxDeviation=" + maxPriceDeviation +
-               ", allowPartialFills=" + allowPartialFills + "}";
-    }
 }
 
