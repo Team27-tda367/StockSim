@@ -201,10 +201,10 @@
                         <Button text="Sell" prefHeight="34" prefWidth="140" styleClass="sell-btn, btn-secondary" onAction="#handleSell"/>
                     </HBox>
 
-                    <VBox>
+                    <HBox>
                         <Button text="Buy market order" prefHeight="34" prefWidth="140" styleClass="buy-btn, btn-highlighted" onAction="#handleBuyMarketOrder"/>
                         <Button text="Sell market order" prefHeight="34" prefWidth="140" styleClass="sell-btn, btn-secondary" onAction="#handleSellMarketOrder"/>
-                    </VBox>
+                    </HBox>
 
 
 
