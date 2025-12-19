@@ -10,9 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Loads stock data from JSON resources.
- */
+
 public class StockDataLoader {
     private static final String DEFAULT_STOCKS_FILE = "/config/stocks-config.json";
     private final Gson gson;
@@ -21,23 +19,11 @@ public class StockDataLoader {
         this.gson = new Gson();
     }
 
-    /**
-     * Load default stocks from the bundled JSON resource.
-     * 
-     * @return List of stock data
-     * @throws RuntimeException if the file cannot be loaded
-     */
+
     public List<StockData> loadDefaultStocks() {
         return loadStocksFromResource(DEFAULT_STOCKS_FILE);
     }
 
-    /**
-     * Load stocks from a specific resource path.
-     * 
-     * @param resourcePath Path to JSON file in resources folder
-     * @return List of stock data
-     * @throws RuntimeException if the file cannot be loaded
-     */
     public List<StockData> loadStocksFromResource(String resourcePath) {
         try (InputStream inputStream = getClass().getResourceAsStream(resourcePath)) {
             if (inputStream == null) {

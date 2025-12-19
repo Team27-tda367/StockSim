@@ -16,12 +16,14 @@ import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.bot.*;
 import org.team27.stocksim.repository.BotPositionRepository;
 import org.team27.stocksim.repository.StockPriceRepository;
+import org.team27.stocksim.model.users.bot.BotStrategyRegistry;
 
 public class SimSetup {
     private final StockSim model;
-
+    private final BotStrategyRegistry strategyRegistry;
     public SimSetup(StockSim model) {
         this.model = model;
+        this.strategyRegistry = new BotStrategyRegistry();
     }
 
     public void start() {
@@ -100,30 +102,14 @@ public class SimSetup {
         }
     }
 
-    // TODO refactor to factory pattern if more strategies are added
+    /**
+     * Creates a strategy instance using the registry.
+     *
+     * @param strategyName The name of the strategy to create
+     * @return A new instance of the requested strategy
+     */
     private IBotStrategy createStrategy(String strategyName) {
-        if (strategyName == null || strategyName.isEmpty()) {
-            return new RandomStrategy();
-        }
-
-        switch (strategyName) {
-            case "RandomStrategy":
-                return new RandomStrategy();
-            case "HodlerStrategy":
-                return new HodlerStrategy();
-            case "MomentumTraderStrategy":
-                return new MomentumTraderStrategy();
-            case "DayTraderStrategy":
-                return new DayTraderStrategy();
-            case "PanicSellerStrategy":
-                return new PanicSellerStrategy();
-            case "FocusedTraderStrategy":
-                return new FocusedTraderStrategy();
-            case "InstitutionalInvestorStrategy":
-                return new InstitutionalInvestorStrategy();
-            default:
-                return new RandomStrategy();
-        }
+        return strategyRegistry.create(strategyName);
     }
 
     /**

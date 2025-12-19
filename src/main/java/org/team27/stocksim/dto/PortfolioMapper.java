@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class PortfolioMapper {
 
-    // Convert Portfolio to PortfolioDTO
+
 
     public static PortfolioDTO toDto(Portfolio portfolio) {
 
@@ -16,7 +16,7 @@ public class PortfolioMapper {
             return null;
         }
 
-        // Null-safe positions
+
         Map<String, PositionDTO> positions = portfolio.getPositions() == null
                 ? Collections.emptyMap()
                 : portfolio.getPositions().entrySet().stream()

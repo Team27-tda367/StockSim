@@ -10,10 +10,7 @@ import org.team27.stocksim.view.fx.FXStockSimApp;
 
 import javafx.application.Application;
 
-/**
- * Main entry point for the StockSim application.
- * Initializes the model and controller, then launches the JavaFX application.
- */
+
 public class Main {
 
     public static void main(String[] args) {

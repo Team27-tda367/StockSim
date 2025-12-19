@@ -31,12 +31,7 @@ public class OrderHistoryDTO {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get active (non-filled, non-cancelled) orders as DTOs.
-     * This is an alias for getActiveOrders() for backward compatibility.
-     *
-     * @return List of active order DTOs
-     */
+
     public List<OrderDTO> getActiveOrdersDTO() {
         return getActiveOrders();
     }

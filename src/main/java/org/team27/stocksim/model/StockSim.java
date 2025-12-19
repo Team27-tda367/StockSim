@@ -229,26 +229,19 @@ public class StockSim implements IModelSubject {
         return selectionManager;
     }
 
-    /**
-     * Save all stock price histories to JSON database.
-     */
+
     public void saveStockPrices() {
         StockPriceRepository repository = new StockPriceRepository();
         repository.saveStockPrices(instrumentRegistry.getAllInstruments());
     }
 
-    /**
-     * Save all bot positions to JSON database.
-     */
+
     public void saveBotPositions() {
         BotPositionRepository repository = new BotPositionRepository();
         repository.saveBotPositions(traderRegistry.getBots());
     }
 
-    /**
-     * Get instrument by symbol for direct access.
-     * Used by setup classes to configure instruments.
-     */
+
     public Instrument getInstrument(String symbol) {
         return instrumentRegistry.getAllInstruments().get(symbol);
     }
