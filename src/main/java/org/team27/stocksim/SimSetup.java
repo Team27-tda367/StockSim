@@ -121,8 +121,6 @@ public class SimSetup {
                 return new FocusedTraderStrategy();
             case "InstitutionalInvestorStrategy":
                 return new InstitutionalInvestorStrategy();
-            case "WSBstrategy":
-                return new WSBstrategy();
             default:
                 return new RandomStrategy();
         }

@@ -7,8 +7,7 @@
     "DayTraderStrategy",
     "PanicSellerStrategy",
     "FocusedTraderStrategy",
-    "InstitutionalInvestorStrategy",
-    "WSBstrategy"
+    "InstitutionalInvestorStrategy"
   ],
   "positionsPerBot": 3,
   "balanceMin": 1000,

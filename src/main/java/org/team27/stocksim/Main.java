@@ -44,7 +44,7 @@ public class Main {
             simulationSpeed = 3600;
         }
         int tickInterval = 50; // Check for new simulation seconds every 50ms
-        int durationInRealSeconds = 5; // Run fast simulation for 5 seconds
+        int durationInRealSeconds = 8; // Run fast simulation for 8 seconds
 
         if (simMode) {
             System.out.println("Running simulation for " + durationInRealSeconds + " real seconds at speedup factor "
