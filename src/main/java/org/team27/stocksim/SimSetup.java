@@ -1,11 +1,13 @@
 package org.team27.stocksim;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
 import org.team27.stocksim.data.BotData;
 import org.team27.stocksim.data.BotDataLoader;
+import org.team27.stocksim.data.PositionData;
 import org.team27.stocksim.data.StockData;
 import org.team27.stocksim.data.StockDataLoader;
 import org.team27.stocksim.model.StockSim;
@@ -14,12 +16,14 @@ import org.team27.stocksim.model.users.Bot;
 import org.team27.stocksim.model.users.bot.*;
 import org.team27.stocksim.repository.BotPositionRepository;
 import org.team27.stocksim.repository.StockPriceRepository;
+import org.team27.stocksim.model.users.bot.BotStrategyRegistry;
 
 public class SimSetup {
     private final StockSim model;
-
+    private final BotStrategyRegistry strategyRegistry;
     public SimSetup(StockSim model) {
         this.model = model;
+        this.strategyRegistry = new BotStrategyRegistry();
     }
 
     public void start() {
@@ -32,15 +36,14 @@ public class SimSetup {
 
     private void start(boolean loadExistingPrices) {
         createDefaultStocks();
-        createBotsFromFile();
-        model.createUser("user1", "Default User");
+        createBotsFromFile(loadExistingPrices);
+        model.createUser("user1", "Default User", 1000000);
         model.setCurrentUser("user1");
 
         if (loadExistingPrices) {
             // Load existing prices
             loadStockPrices();
         }
-        // Start the market simulation
         model.startMarketSimulation();
     }
 
@@ -54,16 +57,20 @@ public class SimSetup {
                     stock.getName(),
                     stock.getTickSize(),
                     stock.getLotSize(),
-                    stock.getCategory());
+                    stock.getCategory(),
+                    stock.getInitialPrice());
         }
     }
 
-    private void createBotsFromFile() {
+    private void createBotsFromFile(boolean loadExistingPrices) {
         BotPositionRepository positionRepo = new BotPositionRepository();
         List<BotData> bots;
 
-        // Try to load from saved positions first, fallback to defaults
-        bots = positionRepo.loadBotPositions();
+        if (loadExistingPrices) {
+            bots = positionRepo.loadBotPositions();
+        } else {
+            bots = null;
+        }
 
         if (bots == null || bots.isEmpty()) {
             BotDataLoader loader = new BotDataLoader();
@@ -83,7 +90,7 @@ public class SimSetup {
                 Bot bot = (Bot) trader;
 
                 // Initialize positions
-                for (BotData.PositionData position : botData.getInitialPositions()) {
+                for (PositionData position : botData.getPositions()) {
                     BigDecimal costBasis = new BigDecimal(position.getCostBasis());
                     bot.getPortfolio().addStock(
                             position.getSymbol(),
@@ -95,31 +102,14 @@ public class SimSetup {
         }
     }
 
+    /**
+     * Creates a strategy instance using the registry.
+     *
+     * @param strategyName The name of the strategy to create
+     * @return A new instance of the requested strategy
+     */
     private IBotStrategy createStrategy(String strategyName) {
-        if (strategyName == null || strategyName.isEmpty()) {
-            return new RandomStrategy();
-        }
-
-        switch (strategyName) {
-            case "RandomStrategy":
-                return new RandomStrategy();
-            case "HodlerStrategy":
-                return new HodlerStrategy();
-            case "MomentumTraderStrategy":
-                return new MomentumTraderStrategy();
-            case "DayTraderStrategy":
-                return new DayTraderStrategy();
-            case "PanicSellerStrategy":
-                return new PanicSellerStrategy();
-            case "FocusedTraderStrategy":
-                return new FocusedTraderStrategy();
-            case "InstitutionalInvestorStrategy":
-                return new InstitutionalInvestorStrategy();
-            case "WSBstrategy":
-                return new WSBstrategy();
-            default:
-                return new RandomStrategy();
-        }
+        return strategyRegistry.create(strategyName);
     }
 
     /**
@@ -154,5 +144,34 @@ public class SimSetup {
                 }
             }
         }
+    }
+
+    /**
+     * Determine the earliest timestamp from saved price data.
+     * Returns Instant.EPOCH if no saved data exists.
+     * Use this to set the initial timestamp when loading existing price data.
+     */
+    public static Instant getEarliestTimestampFromSavedData() {
+        StockPriceRepository repository = new StockPriceRepository();
+        Map<String, StockPriceRepository.StockPriceData> priceData = repository.loadStockPrices();
+
+        if (priceData.isEmpty()) {
+            return Instant.EPOCH;
+        }
+
+        Instant earliest = null;
+
+        for (StockPriceRepository.StockPriceData data : priceData.values()) {
+            if (data.priceHistory != null && !data.priceHistory.isEmpty()) {
+                long firstTimestamp = data.priceHistory.get(0).getTimestamp();
+                Instant timestamp = Instant.ofEpochSecond(firstTimestamp);
+
+                if (earliest == null || timestamp.isBefore(earliest)) {
+                    earliest = timestamp;
+                }
+            }
+        }
+
+        return earliest != null ? earliest : Instant.EPOCH;
     }
 }

@@ -4,15 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
+import org.team27.stocksim.dto.InstrumentDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
-/**
- * ViewAdapter acts as a hub between the model and view controllers.
- * It implements ModelObserver to receive events from the model,
- * and broadcasts them to registered view listeners.
- */
+
 public class ViewAdapter implements IModelObserver {
 
     // Listener interfaces for view controllers

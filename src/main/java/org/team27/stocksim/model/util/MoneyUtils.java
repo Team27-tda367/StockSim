@@ -19,6 +19,5 @@ public class MoneyUtils {
         } catch (ParseException e) {
             throw new RuntimeException("Failed to parse money amount: " + amount, e);
         }
-
     }
 }

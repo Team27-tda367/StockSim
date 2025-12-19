@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.team27.stocksim.dto.InstrumentDTO;
+import org.team27.stocksim.dto.OrderDTO;
+import org.team27.stocksim.dto.TradeDTO;
+import org.team27.stocksim.dto.UserDTO;
 import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.users.User;
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
-import org.team27.stocksim.model.util.dto.OrderDTO;
-import org.team27.stocksim.model.util.dto.TradeDTO;
-import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public class SimController implements ISimController {
@@ -20,10 +20,6 @@ public class SimController implements ISimController {
 
     public SimController(StockSim model) {
         this.model = model;
-    }
-
-    public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {
-        model.createStock(symbol, stockName, tickSize, lotSize, category);
     }
 
     public void addObserver(IModelObserver obs) {
@@ -80,7 +76,6 @@ public class SimController implements ISimController {
         int availableQuantity = user.getPortfolio().getStockQuantity(stockSymbol);
 
         if (availableQuantity < quantity) {
-            System.out.println("Insufficient stock quantity to sell.");
             quantity = availableQuantity;
         }
         return quantity;
@@ -119,5 +114,10 @@ public class SimController implements ISimController {
     @Override
     public InstrumentDTO getSelectedStock() {
         return model.getSelectionManager().getSelectedStock();
+    }
+
+    @Override
+    public void cancelOrder(int orderId) {
+        model.cancelOrder(orderId);
     }
 }

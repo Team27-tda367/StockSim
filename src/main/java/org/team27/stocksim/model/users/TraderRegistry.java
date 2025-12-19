@@ -1,21 +1,21 @@
 package org.team27.stocksim.model.users;
 
+import org.team27.stocksim.dto.*;
 import org.team27.stocksim.model.portfolio.Portfolio;
-import org.team27.stocksim.model.util.dto.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import org.team27.stocksim.model.users.bot.IBotStrategy;
-import static org.team27.stocksim.model.util.MoneyUtils.money;
+import org.team27.stocksim.model.users.bot.RandomStrategy;
 
 public class TraderRegistry implements ITraderRegistry {
 
     private final HashMap<String, Trader> traders;
     private final ITraderFactory userFactory;
     private final ITraderFactory botFactory;
-    private final Function<String, Portfolio> portfolioFactory;
+    private final Function<Integer, Portfolio> portfolioFactory;
     private User currentUser;
 
     public TraderRegistry(ITraderFactory userFactory, ITraderFactory botFactory) {
@@ -36,13 +36,18 @@ public class TraderRegistry implements ITraderRegistry {
 
     @Override
     public boolean createUser(String id, String name) {
+        return createUser(id, name, 10000);
+    }
+
+    @Override
+    public boolean createUser(String id, String name, int balance) {
         String highId = id.toUpperCase();
 
-        if (traders.containsKey(highId)) {
+        if (checkDuplicateId(highId)) {
             return false;
         }
 
-        Portfolio portfolio = portfolioFactory.apply(highId);
+        Portfolio portfolio = portfolioFactory.apply(balance); // default starting balance
         Trader user = userFactory.createTrader(highId, name, portfolio);
         traders.put(highId, user);
         return true;
@@ -50,33 +55,29 @@ public class TraderRegistry implements ITraderRegistry {
 
     @Override
     public boolean createBot(String id, String name) {
+        return createBot(id, name, new RandomStrategy());
+    }
+
+    @Override
+    public boolean createBot(String id, String name, IBotStrategy strategy) {
+        return createBot(id, name, strategy, 10000);
+    }
+
+    public boolean createBot(String id, String name, IBotStrategy strategy, int startingBalance) {
         String highId = id.toUpperCase();
+
         if (checkDuplicateId(highId)) {
             return false;
         }
 
-        Portfolio portfolio = portfolioFactory.apply(highId);
-        Trader bot = botFactory.createTrader(highId, name, portfolio);
+        Portfolio portfolio = portfolioFactory.apply(startingBalance);
+        Trader bot = new Bot(highId, name, portfolio, strategy); // TODO
         traders.put(highId, bot);
         return true;
     }
 
     private boolean checkDuplicateId(String id) {
         return traders.containsKey(id);
-    }
-
-    @Override
-    public boolean createBot(String id, String name, IBotStrategy strategy) {
-        String highId = id.toUpperCase();
-
-        if (checkDuplicateId(highId)) {
-            return false;
-        }
-
-        Portfolio portfolio = portfolioFactory.apply(highId);
-        Trader bot = new Bot(highId, name, portfolio, strategy);
-        traders.put(highId, bot);
-        return true;
     }
 
     @Override
@@ -89,7 +90,7 @@ public class TraderRegistry implements ITraderRegistry {
         HashMap<String, Bot> bots = new HashMap<>();
         for (Map.Entry<String, Trader> entry : traders.entrySet()) {
             if (entry.getValue() instanceof Bot) {
-                bots.put(entry.getKey(), (Bot)entry.getValue());
+                bots.put(entry.getKey(), (Bot) entry.getValue());
             }
         }
         return bots;
@@ -126,8 +127,9 @@ public class TraderRegistry implements ITraderRegistry {
         }
     }
 
-    private Portfolio createDefaultPortfolio(String id) {
-        BigDecimal startingBalance = money("10000");
-        return new Portfolio(startingBalance);
+    private Portfolio createDefaultPortfolio(int startingBalance) {
+        BigDecimal startingBalanceDecimal = new BigDecimal(startingBalance);
+        return new Portfolio(startingBalanceDecimal);
     }
+
 }

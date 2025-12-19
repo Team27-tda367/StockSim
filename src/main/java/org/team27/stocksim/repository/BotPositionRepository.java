@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.team27.stocksim.data.BotData;
+import org.team27.stocksim.data.PositionData;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.portfolio.Position;
 import org.team27.stocksim.model.users.Bot;
@@ -12,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -52,9 +54,10 @@ public class BotPositionRepository {
                 botData.setId(bot.getId());
                 botData.setName(bot.getDisplayName());
                 botData.setStrategy(bot.getStrategy().getClass().getSimpleName());
+                botData.setBalance(bot.getBalance().intValue());
 
                 // Convert portfolio positions to PositionData
-                List<BotData.PositionData> positions = new ArrayList<>();
+                List<PositionData> positions = new ArrayList<>();
                 Portfolio portfolio = bot.getPortfolio();
 
                 for (Map.Entry<String, Integer> holding : portfolio.getStockHoldings().entrySet()) {
@@ -63,7 +66,7 @@ public class BotPositionRepository {
                     Position position = portfolio.getPosition(symbol);
 
                     if (position != null && quantity > 0) {
-                        BotData.PositionData posData = new BotData.PositionData();
+                        PositionData posData = new PositionData();
                         posData.setSymbol(symbol);
                         posData.setQuantity(quantity);
                         posData.setCostBasis(position.getAverageCost().doubleValue());
@@ -71,7 +74,7 @@ public class BotPositionRepository {
                     }
                 }
 
-                botData.setInitialPositions(positions);
+                botData.setPositions(positions);
                 botDataList.add(botData);
             }
 

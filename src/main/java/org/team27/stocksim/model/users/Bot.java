@@ -6,6 +6,7 @@ import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.users.bot.IBotStrategy;
 import org.team27.stocksim.model.users.bot.RandomStrategy;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class Bot extends Trader {
@@ -48,6 +49,10 @@ public class Bot extends Trader {
             return true;
         }
         return false;
+    }
+
+    public BigDecimal getBalance() {
+        return this.getPortfolio().getBalance();
     }
 
     synchronized void returnToIdle() {

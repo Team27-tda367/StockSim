@@ -1,5 +1,4 @@
-package org.team27.stocksim.model.util.dto;
-
+package org.team27.stocksim.dto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -13,7 +12,7 @@ public class TradeDTO {
     private final Instant timestamp;
 
     public TradeDTO(int buyOrderId, int sellOrderId, String symbol,
-                    BigDecimal price, int quantity, Instant timestamp) {
+            BigDecimal price, int quantity, Instant timestamp) {
         this.buyOrderId = buyOrderId;
         this.sellOrderId = sellOrderId;
         this.symbol = symbol;

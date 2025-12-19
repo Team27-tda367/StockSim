@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.team27.stocksim.model.users.User;
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
-import org.team27.stocksim.model.util.dto.UserDTO;
-import org.team27.stocksim.model.util.dto.OrderDTO;
-import org.team27.stocksim.model.util.dto.TradeDTO;
+import org.team27.stocksim.dto.InstrumentDTO;
+import org.team27.stocksim.dto.OrderDTO;
+import org.team27.stocksim.dto.TradeDTO;
+import org.team27.stocksim.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 
 public interface ISimController {
-    void createStock(String symbol, String stockName, String tickSize, String lotSize, String category);
 
     void addObserver(IModelObserver obs);
 
@@ -40,4 +38,6 @@ public interface ISimController {
     void setSelectedStock(InstrumentDTO stock);
 
     InstrumentDTO getSelectedStock();
+
+    void cancelOrder(int orderId);
 }

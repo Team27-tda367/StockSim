@@ -1,16 +1,16 @@
 package org.team27.stocksim;
 
+import java.time.Instant;
+
 import org.team27.stocksim.controller.ISimController;
 import org.team27.stocksim.controller.SimController;
 import org.team27.stocksim.model.StockSim;
+import org.team27.stocksim.model.simulation.SimulationConfig;
 import org.team27.stocksim.view.fx.FXStockSimApp;
 
 import javafx.application.Application;
 
-/**
- * Main entry point for the StockSim application.
- * Initializes the model and controller, then launches the JavaFX application.
- */
+
 public class Main {
 
     public static void main(String[] args) {
@@ -44,10 +44,32 @@ public class Main {
             simulationSpeed = 3600;
         }
         int tickInterval = 50; // Check for new simulation seconds every 50ms
-        int durationInRealSeconds = 5; // Run fast simulation for 5 seconds
+        int durationInRealSeconds = 8; // Run fast simulation for 8 seconds
+
+        if (simMode) {
+            System.out.println("Running simulation for " + durationInRealSeconds + " real seconds at speedup factor "
+                    + simulationSpeed + "...");
+        }
+
+        // Determine initial timestamp from saved data if in display mode
+        Instant initialTimestamp = Instant.EPOCH;
+        if (displayMode) {
+            initialTimestamp = SimSetup.getEarliestTimestampFromSavedData();
+            if (!initialTimestamp.equals(Instant.EPOCH)) {
+                System.out.println("Loading saved data with initial timestamp: " + initialTimestamp);
+            }
+        }
+
+        // Build simulation configuration
+        SimulationConfig config = SimulationConfig.builder()
+                .speedupFactor(simulationSpeed)
+                .tickInterval(tickInterval)
+                .durationInRealSeconds(durationInRealSeconds)
+                .initialTimestamp(initialTimestamp)
+                .build();
 
         // Initialize the model with simulation configuration
-        StockSim model = new StockSim(simulationSpeed, tickInterval, durationInRealSeconds);
+        StockSim model = new StockSim(config);
         ISimController controller = new SimController(model);
 
         // Set up initial data (stocks, bots, positions)
@@ -72,6 +94,7 @@ public class Main {
             model.saveStockPrices();
             model.saveBotPositions();
             model.stopMarketSimulation();
+            System.out.println("Simulation completed. Price data and bot positions saved.");
             System.exit(0);
         }
 

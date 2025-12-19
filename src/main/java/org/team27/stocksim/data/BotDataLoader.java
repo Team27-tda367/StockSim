@@ -1,61 +1,55 @@
 package org.team27.stocksim.data;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Loads bot data from JSON resources.
- */
+
 public class BotDataLoader {
-    private static final String DEFAULT_BOTS_FILE = "/data/default-bots.json";
+    private static final String CONFIG_BOT_FILE = "/config/bot-config.json";
+    private static final String CONFIG_STOCK_FILE = "/config/stocks-config.json";
     private final Gson gson;
 
     public BotDataLoader() {
         this.gson = new Gson();
     }
 
-    /**
-     * Load default bots from the bundled JSON resource.
-     * 
-     * @return List of bot data
-     * @throws RuntimeException if the file cannot be loaded
-     */
+
     public List<BotData> loadDefaultBots() {
-        return loadBotsFromResource(DEFAULT_BOTS_FILE);
+        // Call script and load from config file, then return loaded bots
+
+        return createBotsFromConfigFile(CONFIG_BOT_FILE);
     }
 
-    /**
-     * Load bots from a specific resource path.
-     * 
-     * @param resourcePath Path to JSON file in resources folder
-     * @return List of bot data
-     * @throws RuntimeException if the file cannot be loaded
-     */
-    public List<BotData> loadBotsFromResource(String resourcePath) {
+    private List<BotData> createBotsFromConfigFile(String resourcePath) {
         try (InputStream inputStream = getClass().getResourceAsStream(resourcePath)) {
             if (inputStream == null) {
                 throw new RuntimeException("Could not find resource: " + resourcePath);
             }
 
             InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-            Type listType = new TypeToken<ArrayList<BotData>>() {
-            }.getType();
-            List<BotData> bots = gson.fromJson(reader, listType);
+            BotConfig config = gson.fromJson(reader, BotConfig.class);
+            StockDataLoader stockLoader = new StockDataLoader();
+            List<StockData> stocks = stockLoader.loadStocksFromResource(CONFIG_STOCK_FILE);
 
-            if (bots == null || bots.isEmpty()) {
-                throw new RuntimeException("No bots loaded from: " + resourcePath);
-            }
+            BotDataGenerator generator = new BotDataGenerator(
+                    config.getBotCount(),
+                    config.getStrategies(),
+                    config.getQuantityMin(),
+                    config.getQuantityMax(),
+                    config.getBalanceMin(),
+                    config.getBalanceMax(),
+                    config.getCostBasisMin(),
+                    config.getCostBasisMax(),
+                    stocks.stream().map(StockData::getSymbol).toList());
 
-            return bots;
+            return generator.generateBots();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load bots from " + resourcePath, e);
+            throw new RuntimeException("Failed to create bots from config " + resourcePath, e);
         }
     }
+
 }

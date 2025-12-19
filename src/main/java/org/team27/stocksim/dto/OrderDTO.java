@@ -1,23 +1,23 @@
-package org.team27.stocksim.model.util.dto;
+package org.team27.stocksim.dto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 public class OrderDTO {
     private final int orderId;
-    private final String side;           // "BUY" or "SELL"
-    private final String orderType;      // "LIMIT" or "MARKET"
+    private final String side; // "BUY" or "SELL"
+    private final String orderType; // "LIMIT" or "MARKET"
     private final String symbol;
     private final BigDecimal price;
     private final int totalQuantity;
     private final int remainingQuantity;
-    private final String status;         // "NEW", "PARTIALLY_FILLED", "FILLED", "CANCELLED"
+    private final String status; // "NEW", "PARTIALLY_FILLED", "FILLED", "CANCELLED"
     private final Instant timestamp;
     private final String traderId;
 
     public OrderDTO(int orderId, String side, String orderType, String symbol,
-                    BigDecimal price, int totalQuantity, int remainingQuantity,
-                    String status, Instant timestamp, String traderId) {
+            BigDecimal price, int totalQuantity, int remainingQuantity,
+            String status, Instant timestamp, String traderId) {
         this.orderId = orderId;
         this.side = side;
         this.orderType = orderType;

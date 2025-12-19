@@ -104,5 +104,4 @@ nb-configuration.xml
 output/
 *.puml
 
-src/main/resources/data/bot-positions.json
-src/main/resources/data/stock_prices.json
+src/main/resources/data/*

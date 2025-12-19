@@ -6,17 +6,20 @@ public class StockData {
     private String tickSize;
     private String lotSize;
     private String category;
+    private String initialPrice;
 
-    // Default constructor for JSON deserialization
+
     public StockData() {
     }
 
-    public StockData(String symbol, String name, String tickSize, String lotSize, String category) {
+    public StockData(String symbol, String name, String tickSize, String lotSize, String category,
+            String initialPrice) {
         this.symbol = symbol;
         this.name = name;
         this.tickSize = tickSize;
         this.lotSize = lotSize;
         this.category = category;
+        this.initialPrice = initialPrice;
     }
 
     public String getSymbol() {
@@ -57,5 +60,13 @@ public class StockData {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getInitialPrice() {
+        return initialPrice;
+    }
+
+    public void setInitialPrice(String initialPrice) {
+        this.initialPrice = initialPrice;
     }
 }

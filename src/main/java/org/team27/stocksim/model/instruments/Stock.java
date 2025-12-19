@@ -8,9 +8,9 @@ public class Stock extends Instrument {
     private BigDecimal price;
     private PriceHistory priceHistory;
 
-    Stock(String symbol, String name, BigDecimal tickSize, int lotSize, String category) {
+    Stock(String symbol, String name, BigDecimal tickSize, int lotSize, String category, BigDecimal initialPrice) {
         super(symbol, name, tickSize, lotSize, category);
-        this.price = new BigDecimal(100);
+        this.price = initialPrice;
         this.priceHistory = new PriceHistory();
     }
 

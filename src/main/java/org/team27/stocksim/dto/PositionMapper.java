@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.util.dto;
+package org.team27.stocksim.dto;
 
 import org.team27.stocksim.model.portfolio.Position;
 
@@ -11,8 +11,7 @@ public class PositionMapper {
         return new PositionDTO(
                 position.getSymbol(),
                 position.getQuantity(),
-                position.getAverageCost()
-        );
+                position.getAverageCost());
     }
 
 }

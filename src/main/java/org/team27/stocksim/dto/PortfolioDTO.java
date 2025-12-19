@@ -1,4 +1,4 @@
-package org.team27.stocksim.model.util.dto;
+package org.team27.stocksim.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,22 +25,12 @@ public class PortfolioDTO {
         return positions;
     }
 
-    /**
-     * Gets a position for a specific stock.
-     *
-     * @param symbol the stock symbol
-     * @return the Position DTO, or null if not found
-     */
+
     public PositionDTO getPosition(String symbol) {
         return positions.get(symbol);
     }
 
-    /**
-     * Calculates the current market value of all positions based on current prices.
-     *
-     * @param currentPrices map of symbol to current price
-     * @return total market value of all positions (excluding cash)
-     */
+
     public BigDecimal getPositionsValue(Map<String, BigDecimal> currentPrices) {
         BigDecimal totalValue = BigDecimal.ZERO;
 
@@ -58,34 +48,20 @@ public class PortfolioDTO {
         return totalValue;
     }
 
-    /**
-     * Calculates the total portfolio value including cash balance and positions.
-     *
-     * @param currentPrices map of symbol to current price
-     * @return total portfolio value (positions + cash)
-     */
+
     public BigDecimal getTotalValue(Map<String, BigDecimal> currentPrices) {
         BigDecimal positionsValue = getPositionsValue(currentPrices);
         return positionsValue.add(balance);
     }
 
-    /**
-     * Calculates the total cost basis of all positions in the portfolio.
-     *
-     * @return total cost of all positions
-     */
+
     public BigDecimal getTotalCost() {
         return positions.values().stream()
                 .map(position -> position.getAverageCost().multiply(BigDecimal.valueOf(position.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    /**
-     * Calculates the unrealized gain/loss on all positions.
-     *
-     * @param currentPrices map of symbol to current price
-     * @return total unrealized profit/loss
-     */
+
     public BigDecimal getTotalGainLoss(Map<String, BigDecimal> currentPrices) {
         if (positions.isEmpty()) {
             return BigDecimal.ZERO;
@@ -95,12 +71,7 @@ public class PortfolioDTO {
         return positionsValue.subtract(totalCost);
     }
 
-    /**
-     * Calculates the unrealized gain/loss percentage on all positions.
-     *
-     * @param currentPrices map of symbol to current price
-     * @return gain/loss as a percentage, or ZERO if no cost basis
-     */
+
     public BigDecimal getGainLossPercentage(Map<String, BigDecimal> currentPrices) {
         BigDecimal costBasis = getTotalCost();
 

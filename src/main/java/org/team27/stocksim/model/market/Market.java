@@ -17,6 +17,7 @@ public class Market implements IMarket {
     private final SettlementEngine settlementEngine;
     private final List<Trade> completedTrades;
     private final ConcurrentHashMap<Integer, String> orderIdToTraderId;
+    private final OrderValidator orderValidator;
 
     private Consumer<Set<String>> onPriceUpdate;
     private Consumer<Trade> onTradeSettled;
@@ -27,18 +28,56 @@ public class Market implements IMarket {
         this.completedTrades = new CopyOnWriteArrayList<>();
         this.orderIdToTraderId = new ConcurrentHashMap<>();
         this.settlementEngine = new SettlementEngine(orderIdToTraderId, this::handleTradeSettled);
+        this.orderValidator = new OrderValidator();
     }
 
     @Override
     public void placeOrder(Order order, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks) {
+        // Phase 1.2: Validate order before processing
+        OrderValidator.ValidationResult validationResult = orderValidator.validate(order);
+        if (!validationResult.isValid()) {
+            // Log validation failure and reject order
+            System.err.println("Order validation failed: " + validationResult.getErrorMessage() +
+                             " for order " + (order != null ? order.getOrderId() : "null"));
+            return; // Reject invalid order
+        }
 
         settlementEngine.trackOrder(order.getOrderId(), order.getTraderId());
-
 
         recordOrderInHistory(order, traders);
 
 
         processOrder(order, traders, stocks);
+    }
+
+    @Override
+    public void cancelOrder(int orderId, HashMap<String, Trader> traders) {
+        String traderId = orderIdToTraderId.get(orderId);
+        if (traderId == null) {
+            return;
+        }
+
+        Trader trader = traders.get(traderId);
+        if (!(trader instanceof User user)) {
+            return;
+        }
+
+        Order order = user.getOrderHistory().getOrderById(orderId);
+        if (order == null) {
+            return;
+        }
+
+        // Only cancel if the order is active (not filled or already cancelled)
+        if (order.getStatus() != Order.Status.FILLED && order.getStatus() != Order.Status.CANCELLED) {
+            // Remove from order book
+            OrderBook orderBook = getOrderBook(order.getSymbol());
+            if (orderBook != null) {
+                orderBook.remove(order);
+            }
+
+            // Mark as cancelled
+            order.cancel();
+        }
     }
 
     private void recordOrderInHistory(Order order, HashMap<String, Trader> traders) {

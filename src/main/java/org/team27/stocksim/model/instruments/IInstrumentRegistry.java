@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 public interface IInstrumentRegistry {
 
-    boolean createInstrument(String symbol, String stockName, String tickSize, String lotSize, String category);
-
     HashMap<String, Instrument> getAllInstruments();
 
     HashMap<String, Instrument> getInstrumentsByCategory(String category);
@@ -16,4 +14,7 @@ public interface IInstrumentRegistry {
     Instrument getInstrument(String symbol);
 
     boolean hasInstrument(String symbol);
+
+    boolean createInstrument(String symbol, String stockName, String tickSize, String lotSize, String category,
+            String initialPrice);
 }

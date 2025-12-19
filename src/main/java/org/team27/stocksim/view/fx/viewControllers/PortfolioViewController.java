@@ -1,6 +1,5 @@
 package org.team27.stocksim.view.fx.viewControllers;
 
-import org.team27.stocksim.model.util.dto.*;
 import org.team27.stocksim.view.fx.EView;
 
 import javafx.application.Platform;
@@ -10,13 +9,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
+import javafx.geometry.Pos;
+
+import org.team27.stocksim.dto.*;
 import org.team27.stocksim.view.ViewAdapter;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 public class PortfolioViewController extends ViewControllerBase
         implements ViewAdapter.PortfolioChangedListener, ViewAdapter.TradeSettledListener {
@@ -41,6 +48,7 @@ public class PortfolioViewController extends ViewControllerBase
 
     private ObservableList<String> positionsList = FXCollections.observableArrayList();
     private ObservableList<String> ordersList = FXCollections.observableArrayList();
+    private Map<String, Integer> orderStringToIdMap = new HashMap<>();
 
     @Override
     protected void onInit() {
@@ -58,7 +66,58 @@ public class PortfolioViewController extends ViewControllerBase
         }
         if (ordersListView != null) {
             ordersListView.setItems(ordersList);
+            ordersListView.setCellFactory(lv -> new OrderListCell());
         }
+    }
+
+    /**
+     * Custom ListCell for orders with inline cancel button
+     */
+    private class OrderListCell extends ListCell<String> {
+        private final HBox hbox = new HBox(10);
+        private final Label label = new Label();
+        private final Button cancelBtn = new Button("✕");
+
+        public OrderListCell() {
+            super();
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            cancelBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #e74c3c; -fx-font-size: 16px; -fx-cursor: hand; -fx-padding: 2 8 2 8;");
+            cancelBtn.setOnMouseEntered(e -> cancelBtn.setStyle("-fx-background-color: #ffe6e6; -fx-text-fill: #e74c3c; -fx-font-size: 16px; -fx-cursor: hand; -fx-padding: 2 8 2 8; -fx-background-radius: 3;"));
+            cancelBtn.setOnMouseExited(e -> cancelBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #e74c3c; -fx-font-size: 16px; -fx-cursor: hand; -fx-padding: 2 8 2 8;"));
+            cancelBtn.setOnAction(e -> {
+                String orderString = getItem();
+                if (orderString != null) {
+                    Integer orderId = orderStringToIdMap.get(orderString);
+                    if (orderId != null) {
+                        cancelOrder(orderId);
+                    }
+                }
+            });
+            
+            label.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(label, javafx.scene.layout.Priority.ALWAYS);
+            hbox.getChildren().addAll(label, cancelBtn);
+        }
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || item == null || item.equals("No active orders")) {
+                setGraphic(null);
+                setText(item);
+            } else {
+                label.setText(item);
+                setGraphic(hbox);
+                setText(null);
+            }
+        }
+    }
+
+    /**
+     * Cancels an order by its ID
+     */
+    private void cancelOrder(int orderId) {
+        modelController.cancelOrder(orderId);
     }
 
     @Override
@@ -195,6 +254,7 @@ public class PortfolioViewController extends ViewControllerBase
         List<OrderDTO> activeOrders = user.getOrderHistory().getActiveOrders();
 
         ordersList.clear();
+        orderStringToIdMap.clear();
 
         if (activeOrders.isEmpty()) {
             ordersList.add("No active orders");
@@ -207,6 +267,7 @@ public class PortfolioViewController extends ViewControllerBase
                         order.getPrice(),
                         order.getStatus());
                 ordersList.add(orderStr);
+                orderStringToIdMap.put(orderStr, order.getOrderId());
             });
         }
     }

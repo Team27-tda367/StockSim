@@ -1,20 +1,22 @@
 package org.team27.stocksim.model.clock;
 
-import java.time.Clock;
-
 /**
  * Provides access to the game's clock throughout the application.
  * This allows all components to use simulated time instead of system time.
  */
 public class ClockProvider {
 
-    private static Clock clock = Clock.systemDefaultZone();
+    private static GameClock clock = new GameClock();
+
+    private ClockProvider() {
+        // Prevent instantiation
+    }
 
     /**
      * Set the game clock to be used throughout the application.
      * Should be called when the simulation starts.
      */
-    public static void setClock(Clock gameClock) {
+    public static void setClock(GameClock gameClock) {
         clock = gameClock;
     }
 
@@ -29,7 +31,7 @@ public class ClockProvider {
     /**
      * Get the current clock instance.
      */
-    public static Clock getClock() {
+    public static GameClock getClock() {
         return clock;
     }
 
@@ -37,6 +39,7 @@ public class ClockProvider {
      * Reset to system clock (useful for testing).
      */
     public static void reset() {
-        clock = Clock.systemDefaultZone();
+        clock = new GameClock();
     }
+
 }

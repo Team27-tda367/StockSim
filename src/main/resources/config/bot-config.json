@@ -1,0 +1,19 @@
+{
+  "botCount": 1000,
+  "strategies": [
+    "RandomStrategy",
+    "HodlerStrategy",
+    "MomentumTraderStrategy",
+    "DayTraderStrategy",
+    "PanicSellerStrategy",
+    "FocusedTraderStrategy",
+    "InstitutionalInvestorStrategy"
+  ],
+  "positionsPerBot": 3,
+  "balanceMin": 1000,
+  "balanceMax": 100000,
+  "quantityMin": 1,
+  "quantityMax": 1000,
+  "costBasisMin": 99,
+  "costBasisMax": 101
+}

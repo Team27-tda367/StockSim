@@ -1,5 +1,8 @@
 package org.team27.stocksim.model;
 
+import org.team27.stocksim.dto.InstrumentDTO;
+import org.team27.stocksim.dto.StockMapper;
+import org.team27.stocksim.dto.UserDTO;
 import org.team27.stocksim.model.instruments.IInstrumentRegistry;
 import org.team27.stocksim.model.instruments.Instrument;
 import org.team27.stocksim.model.instruments.InstrumentRegistry;
@@ -11,15 +14,14 @@ import org.team27.stocksim.model.market.OrderBook;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.simulation.IMarketSimulator;
 import org.team27.stocksim.model.simulation.MarketSimulator;
+import org.team27.stocksim.model.simulation.SimulationConfig;
 import org.team27.stocksim.model.users.*;
-import org.team27.stocksim.model.util.dto.InstrumentDTO;
-import org.team27.stocksim.model.util.dto.StockMapper;
-import org.team27.stocksim.model.util.dto.UserDTO;
 import org.team27.stocksim.observer.IModelObserver;
 import org.team27.stocksim.observer.IModelSubject;
 import org.team27.stocksim.repository.BotPositionRepository;
 import org.team27.stocksim.repository.StockPriceRepository;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +39,10 @@ public class StockSim implements IModelSubject {
     private final BotActionExecutor botActionExecutor;
 
     public StockSim() {
-        this(3600, 50, 10);
+        this(SimulationConfig.createDefault());
     }
 
-    public StockSim(int simulationSpeed, int tickInterval, int durationInRealSeconds) {
+    public StockSim(SimulationConfig config) {
         // Initialize registries
         this.instrumentRegistry = new InstrumentRegistry(new StockFactory());
         this.traderRegistry = new TraderRegistry(new UserFactory(), new BotFactory());
@@ -68,9 +70,14 @@ public class StockSim implements IModelSubject {
         });
 
         // Initialize simulator with configuration
-        this.marketSimulator = new MarketSimulator(traderRegistry::getBots, this::onSimulationTick, this::saveStockPrices, simulationSpeed, tickInterval, durationInRealSeconds);
-
-        System.out.println("Successfully created Sim-model");
+        this.marketSimulator = new MarketSimulator(
+                traderRegistry::getBots,
+                this::onSimulationTick,
+                this::saveStockPrices,
+                config.getSpeedupFactor(),
+                config.getTickInterval(),
+                config.getDurationInRealSeconds(),
+                config.getInitialTimestamp());
     }
 
     private String getTraderIdForOrder(int orderId) {
@@ -109,8 +116,14 @@ public class StockSim implements IModelSubject {
         market.placeOrder(order, traderRegistry.getAllTraders(), instrumentRegistry.getAllInstruments());
     }
 
-    public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category) {
-        instrumentRegistry.createInstrument(symbol, stockName, tickSize, lotSize, category);
+    public void cancelOrder(int orderId) {
+        market.cancelOrder(orderId, traderRegistry.getAllTraders());
+        notifyPortfolioChanged();
+    }
+
+    public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category,
+            String initialPrice) {
+        instrumentRegistry.createInstrument(symbol, stockName, tickSize, lotSize, category, initialPrice);
     }
 
     public ArrayList<String> getCategories() {
@@ -137,8 +150,8 @@ public class StockSim implements IModelSubject {
         return result;
     }
 
-    public void createUser(String id, String name) {
-        traderRegistry.createUser(id, name);
+    public void createUser(String id, String name, int balance) {
+        traderRegistry.createUser(id, name, balance);
     }
 
     public void createBot(String id, String name) {
@@ -221,26 +234,19 @@ public class StockSim implements IModelSubject {
         return selectionManager;
     }
 
-    /**
-     * Save all stock price histories to JSON database.
-     */
+
     public void saveStockPrices() {
         StockPriceRepository repository = new StockPriceRepository();
         repository.saveStockPrices(instrumentRegistry.getAllInstruments());
     }
 
-    /**
-     * Save all bot positions to JSON database.
-     */
+
     public void saveBotPositions() {
         BotPositionRepository repository = new BotPositionRepository();
         repository.saveBotPositions(traderRegistry.getBots());
     }
 
-    /**
-     * Get instrument by symbol for direct access.
-     * Used by setup classes to configure instruments.
-     */
+
     public Instrument getInstrument(String symbol) {
         return instrumentRegistry.getAllInstruments().get(symbol);
     }

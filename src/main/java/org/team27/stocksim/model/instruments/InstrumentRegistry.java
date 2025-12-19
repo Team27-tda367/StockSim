@@ -14,9 +14,9 @@ public class InstrumentRegistry implements IInstrumentRegistry {
         this.instrumentFactory = instrumentFactory;
     }
 
-
     @Override
-    public boolean createInstrument(String symbol, String stockName, String tickSize, String lotSize, String category) {
+    public boolean createInstrument(String symbol, String stockName, String tickSize, String lotSize, String category,
+            String initialPrice) {
         String highSymbol = symbol.toUpperCase();
 
         if (instruments.containsKey(highSymbol)) {
@@ -28,19 +28,17 @@ public class InstrumentRegistry implements IInstrumentRegistry {
                 stockName,
                 new BigDecimal(tickSize),
                 Integer.parseInt(lotSize),
-                category
-        );
+                category,
+                new BigDecimal(initialPrice));
 
         instruments.put(highSymbol, instrument);
         return true;
     }
 
-
     @Override
     public HashMap<String, Instrument> getAllInstruments() {
         return instruments;
     }
-
 
     @Override
     public HashMap<String, Instrument> getInstrumentsByCategory(String category) {
@@ -57,7 +55,6 @@ public class InstrumentRegistry implements IInstrumentRegistry {
         return filtered;
     }
 
-
     @Override
     public ArrayList<String> getCategories() {
         ArrayList<String> categoryLabels = new ArrayList<>();
@@ -72,9 +69,9 @@ public class InstrumentRegistry implements IInstrumentRegistry {
         return instruments.get(symbol.toUpperCase());
     }
 
-
     @Override
     public boolean hasInstrument(String symbol) {
         return instruments.containsKey(symbol.toUpperCase());
     }
+
 }
