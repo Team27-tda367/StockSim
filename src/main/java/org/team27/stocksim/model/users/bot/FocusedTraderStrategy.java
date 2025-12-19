@@ -9,21 +9,92 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * Focused Trader Strategy - Only trades specific favorite stocks
- * This bot specializes in a limited set of stocks:
- * - Only trades stocks from their watchlist
- * - Knows these stocks well
- * - More active with their favorites
+ * Focused Trader Strategy - Specializes in a limited set of stocks.
+ *
+ * <p>The FocusedTraderStrategy implements a watchlist-based approach where the
+ * bot only trades a small set of "favorite" stocks (3-6 symbols). This represents
+ * investors who specialize in specific sectors or companies they know well,
+ * ignoring the broader market.</p>
+ *
+ * <p><strong>Design Pattern:</strong> Strategy (concrete implementation)</p>
+ * <ul>
+ *   <li>Maintains a personal watchlist of 3-6 favorite stocks</li>
+ *   <li>Only trades stocks on the watchlist</li>
+ *   <li>More active with familiar symbols</li>
+ *   <li>Represents sector-focused or specialized investors</li>
+ *   <li>Ignores opportunities outside watchlist</li>
+ * </ul>
+ *
+ * <h2>Watchlist Management:</h2>
+ * <ul>
+ *   <li>Randomly generated from common stocks at construction</li>
+ *   <li>Can be customized with specific symbols</li>
+ *   <li>Fixed for lifetime of the bot</li>
+ *   <li>Typical watchlist: 3-6 stocks</li>
+ * </ul>
+ *
+ * <h2>Trading Behavior:</h2>
+ * <ul>
+ *   <li>Trade probability: 8% per tick</li>
+ *   <li>55% buy / 45% sell split</li>
+ *   <li>Only considers watchlist stocks</li>
+ *   <li>Sells any holding (even non-watchlist from initialization)</li>
+ * </ul>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * // Use default focused trader (random watchlist)
+ * IBotStrategy strategy = new FocusedTraderStrategy();
+ *
+ * // Custom focused trader with specific watchlist
+ * Set<String> techWatchlist = Set.of("AAPL", "GOOGL", "MSFT", "NVDA");
+ * IBotStrategy strategy = new FocusedTraderStrategy(
+ *     new Random(),
+ *     techWatchlist,
+ *     0.12,  // 12% trade probability
+ *     5,     // min quantity
+ *     30     // max quantity
+ * );
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 1.0
+ * @see AbstractBotStrategy
+ * @see IBotStrategy
  */
 public class FocusedTraderStrategy extends AbstractBotStrategy {
 
+    /**
+     * Set of stock symbols this trader focuses on.
+     */
     private final Set<String> watchlist;
+
+    /**
+     * Probability of trading per tick.
+     */
     private final double tradeProbability;
 
+    /**
+     * Constructs a FocusedTraderStrategy with randomly generated watchlist.
+     * <ul>
+     *   <li>Watchlist: 3-6 random common stocks</li>
+     *   <li>Trade probability: 8%</li>
+     *   <li>Quantity range: 1-15</li>
+     * </ul>
+     */
     public FocusedTraderStrategy() {
         this(new Random(), generateRandomWatchlist(new Random()), 0.08, 1, 15);
     }
 
+    /**
+     * Constructs a FocusedTraderStrategy with custom watchlist and parameters.
+     *
+     * @param random Random number generator
+     * @param watchlist Set of stock symbols to focus on
+     * @param tradeProbability Probability of trading per tick (0.0-1.0)
+     * @param minQuantity Minimum order quantity
+     * @param maxQuantity Maximum order quantity
+     */
     public FocusedTraderStrategy(Random random, Set<String> watchlist, double tradeProbability,
             int minQuantity, int maxQuantity) {
         super(random, minQuantity, maxQuantity);

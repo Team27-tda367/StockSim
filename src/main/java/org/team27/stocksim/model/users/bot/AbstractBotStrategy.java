@@ -14,20 +14,85 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Abstract base class for bot trading strategies
- * Provides common functionality to reduce code duplication:
- * - Random number generation
- * - Stock selection helpers
- * - Order placement utilities
- * - Portfolio analysis methods
- * - Price calculation utilities
+ * Abstract base class for bot trading strategies.
+ *
+ * <p>This class implements the Template Method pattern, providing common
+ * functionality and utilities that reduce code duplication across strategy
+ * implementations. Subclasses inherit helper methods for randomization,
+ * stock selection, order creation, and portfolio analysis.</p>
+ *
+ * <p><strong>Design Pattern:</strong> Template Method + Utility</p>
+ * <ul>
+ *   <li>Reduces code duplication across strategy implementations</li>
+ *   <li>Provides consistent random number generation</li>
+ *   <li>Offers reusable portfolio analysis methods</li>
+ *   <li>Standardizes order creation patterns</li>
+ *   <li>Configurable quantity ranges for all strategies</li>
+ * </ul>
+ *
+ * <h2>Provided Utilities:</h2>
+ * <ul>
+ *   <li>Random stock/holding selection</li>
+ *   <li>Price variation calculations</li>
+ *   <li>Portfolio profitability analysis</li>
+ *   <li>Order creation helpers</li>
+ *   <li>Affordability checks</li>
+ * </ul>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * public class MyCustomStrategy extends AbstractBotStrategy {
+ *     public MyCustomStrategy() {
+ *         super(new Random(), 1, 100); // min/max quantity
+ *     }
+ *
+ *     @Override
+ *     public List<Order> decide(StockSim model, Bot bot) {
+ *         List<Order> orders = new ArrayList<>();
+ *
+ *         // Use inherited utilities
+ *         InstrumentDTO stock = pickRandomStock(model);
+ *         int quantity = randomQuantity();
+ *         BigDecimal price = calculatePriceWithVariation(stock.getPrice(), 0.02);
+ *
+ *         if (canAfford(bot, stock, quantity, price)) {
+ *             orders.add(createBuyOrder(model, bot, stock, quantity, price));
+ *         }
+ *
+ *         return orders;
+ *     }
+ * }
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 2.0
+ * @see IBotStrategy
+ * @see BotStrategyRegistry
  */
 public abstract class AbstractBotStrategy implements IBotStrategy {
 
+    /**
+     * Random number generator for strategy decisions.
+     */
     protected final Random random;
+
+    /**
+     * Minimum quantity for orders created by this strategy.
+     */
     protected final int minQuantity;
+
+    /**
+     * Maximum quantity for orders created by this strategy.
+     */
     protected final int maxQuantity;
 
+    /**
+     * Constructs an AbstractBotStrategy with specified parameters.
+     *
+     * @param random Random number generator for decision-making
+     * @param minQuantity Minimum order quantity
+     * @param maxQuantity Maximum order quantity
+     */
     protected AbstractBotStrategy(Random random, int minQuantity, int maxQuantity) {
         this.random = random;
         this.minQuantity = minQuantity;

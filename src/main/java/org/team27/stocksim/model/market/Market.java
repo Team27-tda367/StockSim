@@ -9,19 +9,99 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
-
+/**
+ * Central marketplace for order matching and trade execution.
+ *
+ * <p>This class implements the core market functionality, coordinating between
+ * order books, matching engine, and settlement engine. It ensures thread-safe
+ * operations using concurrent collections and synchronized blocks at the order
+ * book level.</p>
+ *
+ * <p><strong>Design Patterns:</strong> Facade + Observer + Strategy</p>
+ * <ul>
+ *   <li>Coordinates OrderBook, MatchingEngine, and SettlementEngine subsystems</li>
+ *   <li>Uses callback functions (Observer) for price updates and trade settlements</li>
+ *   <li>Validates orders before processing to ensure market integrity</li>
+ *   <li>Thread-safe operations support concurrent trading by multiple bots/users</li>
+ * </ul>
+ *
+ * <h2>Order Processing Flow:</h2>
+ * <ol>
+ *   <li>Order validation via OrderValidator</li>
+ *   <li>Order recording in trader's history</li>
+ *   <li>Synchronized matching against order book</li>
+ *   <li>Trade settlement with atomic portfolio updates</li>
+ *   <li>Price update notifications to observers</li>
+ * </ol>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * Market market = new Market();
+ * market.setOnPriceUpdate(symbols -> System.out.println("Prices updated: " + symbols));
+ *
+ * Order buyOrder = new Order(Order.Side.BUY, "AAPL", new BigDecimal("150.00"), 10, "trader1");
+ * market.placeOrder(buyOrder, tradersMap, instrumentsMap);
+ *
+ * OrderBook orderBook = market.getOrderBook("AAPL");
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 1.0
+ * @see IMarket
+ * @see OrderBook
+ * @see MatchingEngine
+ * @see SettlementEngine
+ * @see OrderValidator
+ */
 public class Market implements IMarket {
 
+    /**
+     * Map of stock symbols to their corresponding order books.
+     * Uses ConcurrentHashMap for thread-safe access.
+     */
     private final ConcurrentHashMap<String, OrderBook> orderBooks;
+
+    /**
+     * Engine responsible for matching buy and sell orders.
+     */
     private final MatchingEngine matchingEngine;
+
+    /**
+     * Engine responsible for settling trades and updating portfolios.
+     */
     private final SettlementEngine settlementEngine;
+
+    /**
+     * Thread-safe list of all completed trades in the market.
+     */
     private final List<Trade> completedTrades;
+
+    /**
+     * Map tracking which trader placed which order for settlement purposes.
+     */
     private final ConcurrentHashMap<Integer, String> orderIdToTraderId;
+
+    /**
+     * Validator ensuring order integrity before processing.
+     */
     private final OrderValidator orderValidator;
 
+    /**
+     * Callback invoked when stock prices are updated.
+     */
     private Consumer<Set<String>> onPriceUpdate;
+
+    /**
+     * Callback invoked when a trade is settled.
+     */
     private Consumer<Trade> onTradeSettled;
 
+    /**
+     * Constructs a new Market with all necessary subsystems initialized.
+     *
+     * <p>Initializes concurrent collections for thread-safety and creates
+     * the matching engine, settlement engine, and order validator.</p>
+     */
     public Market() {
         this.orderBooks = new ConcurrentHashMap<>();
         this.matchingEngine = new MatchingEngine();

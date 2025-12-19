@@ -12,22 +12,92 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Momentum Trader Strategy - Follows price momentum
- * This bot buys stocks that are rising and sells stocks that are falling:
- * - Identifies upward price trends
- * - Buys rising stocks (momentum)
- * - Sells falling stocks quickly
+ * Momentum Trader Strategy - Follows price trends and momentum signals.
+ *
+ * <p>The MomentumTraderStrategy implements a technical analysis approach that
+ * "buys high and sells higher." It identifies stocks with upward price momentum
+ * and quickly exits positions that show downward trends. This strategy is based
+ * on the principle that stocks in motion tend to stay in motion.</p>
+ *
+ * <p><strong>Design Pattern:</strong> Strategy (concrete implementation)</p>
+ * <ul>
+ *   <li>Analyzes price history over configurable lookback period</li>
+ *   <li>Calculates momentum based on price change percentage</li>
+ *   <li>Sells falling stocks immediately to cut losses</li>
+ *   <li>Buys stocks showing strong upward momentum</li>
+ *   <li>Prioritizes sell decisions over buy decisions</li>
+ * </ul>
+ *
+ * <h2>Trading Logic:</h2>
+ * <ol>
+ *   <li>Check action probability (default: 8% per tick)</li>
+ *   <li>First, scan holdings for falling stocks and sell</li>
+ *   <li>If no sells, look for momentum opportunities to buy</li>
+ *   <li>Calculate momentum using lookback period (default: 10 ticks)</li>
+ *   <li>Only trade if momentum exceeds threshold (default: 3%)</li>
+ * </ol>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * // Use default momentum strategy
+ * IBotStrategy strategy = new MomentumTraderStrategy();
+ *
+ * // Custom momentum trader with tighter parameters
+ * IBotStrategy strategy = new MomentumTraderStrategy(
+ *     new Random(),
+ *     0.15,  // 15% action probability
+ *     5,     // 5-tick lookback
+ *     0.02,  // 2% momentum threshold
+ *     5,     // min quantity
+ *     25     // max quantity
+ * );
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 1.0
+ * @see AbstractBotStrategy
+ * @see IBotStrategy
  */
 public class MomentumTraderStrategy extends AbstractBotStrategy {
 
+    /**
+     * Probability of taking action on each tick.
+     */
     private final double actionProbability;
+
+    /**
+     * Number of historical price points to analyze for momentum.
+     */
     private final int lookbackPeriod;
+
+    /**
+     * Minimum price change percentage to trigger action (e.g., 0.03 = 3%).
+     */
     private final double momentumThreshold;
 
+    /**
+     * Constructs a MomentumTraderStrategy with default parameters.
+     * <ul>
+     *   <li>Action probability: 8%</li>
+     *   <li>Lookback period: 10 ticks</li>
+     *   <li>Momentum threshold: 3%</li>
+     *   <li>Quantity range: 1-12</li>
+     * </ul>
+     */
     public MomentumTraderStrategy() {
         this(new Random(), 0.08, 10, 0.03, 1, 12);
     }
 
+    /**
+     * Constructs a MomentumTraderStrategy with custom parameters.
+     *
+     * @param random Random number generator
+     * @param actionProbability Probability of action per tick (0.0-1.0)
+     * @param lookbackPeriod Number of historical ticks to analyze
+     * @param momentumThreshold Minimum price change to trigger (e.g., 0.03 = 3%)
+     * @param minQuantity Minimum order quantity
+     * @param maxQuantity Maximum order quantity
+     */
     public MomentumTraderStrategy(Random random, double actionProbability, int lookbackPeriod,
             double momentumThreshold, int minQuantity, int maxQuantity) {
         super(random, minQuantity, maxQuantity);
