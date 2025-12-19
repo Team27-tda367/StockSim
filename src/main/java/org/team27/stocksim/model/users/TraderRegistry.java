@@ -71,7 +71,7 @@ public class TraderRegistry implements ITraderRegistry {
         }
 
         Portfolio portfolio = portfolioFactory.apply(startingBalance);
-        Trader bot = new Bot(highId, name, portfolio, strategy);
+        Trader bot = new Bot(highId, name, portfolio, strategy); //TODO
         traders.put(highId, bot);
         return true;
     }

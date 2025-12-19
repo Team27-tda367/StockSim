@@ -32,7 +32,7 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should create instrument successfully")
     void testCreateInstrument() {
-        boolean result = registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology");
+        boolean result = registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology","100");
 
         assertTrue(result);
         assertTrue(registry.hasInstrument("AAPL"));
@@ -41,7 +41,7 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should retrieve created instrument")
     void testRetrieveInstrument() {
-        registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology");
+        registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
 
         Instrument instrument = registry.getInstrument("AAPL");
 
@@ -53,8 +53,8 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should not create duplicate instruments")
     void testPreventDuplicateInstruments() {
-        boolean first = registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        boolean second = registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology");
+        boolean first = registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        boolean second = registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
 
         assertTrue(first);
         assertFalse(second);
@@ -63,7 +63,7 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should handle case-insensitive symbols")
     void testCaseInsensitiveSymbols() {
-        registry.createInstrument("aapl", "Apple Inc.", "0.01", "1", "Technology");
+        registry.createInstrument("aapl", "Apple Inc.", "0.01", "1", "Technology", "100");
 
         assertTrue(registry.hasInstrument("AAPL"));
         assertTrue(registry.hasInstrument("aapl"));
@@ -74,8 +74,8 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should prevent duplicate with different case")
     void testPreventDuplicateDifferentCase() {
-        boolean first = registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        boolean second = registry.createInstrument("aapl", "Apple Inc.", "0.01", "1", "Technology");
+        boolean first = registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        boolean second = registry.createInstrument("aapl", "Apple Inc.", "0.01", "1", "Technology", "100");
 
         assertTrue(first);
         assertFalse(second);
@@ -84,9 +84,9 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should create multiple different instruments")
     void testCreateMultipleInstruments() {
-        registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        registry.createInstrument("GOOGL", "Google", "0.01", "1", "Technology");
-        registry.createInstrument("MSFT", "Microsoft", "0.01", "1", "Technology");
+        registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        registry.createInstrument("GOOGL", "Google", "0.01", "1", "Technology", "100");
+        registry.createInstrument("MSFT", "Microsoft", "0.01", "1", "Technology", "100");
 
         assertEquals(3, registry.getAllInstruments().size());
     }
@@ -94,8 +94,8 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should get all instruments")
     void testGetAllInstruments() {
-        registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        registry.createInstrument("GOOGL", "Google", "0.01", "1", "Technology");
+        registry.createInstrument("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        registry.createInstrument("GOOGL", "Google", "0.01", "1", "Technology", "100");
 
         HashMap<String, Instrument> allInstruments = registry.getAllInstruments();
 
@@ -107,10 +107,10 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should filter instruments by category")
     void testFilterByCategory() {
-        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology");
-        registry.createInstrument("GOOGL", "Google", "0.01", "1", "Technology");
-        registry.createInstrument("JPM", "JP Morgan", "0.01", "1", "Finance");
-        registry.createInstrument("BAC", "Bank of America", "0.01", "1", "Finance");
+        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology", "100");
+        registry.createInstrument("GOOGL", "Google", "0.01", "1", "Technology", "100");
+        registry.createInstrument("JPM", "JP Morgan", "0.01", "1", "Finance", "100");
+        registry.createInstrument("BAC", "Bank of America", "0.01", "1", "Finance", "100");
 
         HashMap<String, Instrument> techStocks = registry.getInstrumentsByCategory("Technology");
         HashMap<String, Instrument> financeStocks = registry.getInstrumentsByCategory("Finance");
@@ -124,8 +124,8 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should return all instruments when filtering by 'All'")
     void testFilterByAllCategory() {
-        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology");
-        registry.createInstrument("JPM", "JP Morgan", "0.01", "1", "Finance");
+        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology", "100");
+        registry.createInstrument("JPM", "JP Morgan", "0.01", "1", "Finance", "100");
 
         HashMap<String, Instrument> allInstruments = registry.getInstrumentsByCategory("All");
 
@@ -135,7 +135,7 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should return empty map for non-existent category")
     void testFilterByNonExistentCategory() {
-        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology");
+        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology", "100");
 
         HashMap<String, Instrument> result = registry.getInstrumentsByCategory("NonExistent");
 
@@ -171,8 +171,8 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should handle instruments with different tick sizes")
     void testDifferentTickSizes() {
-        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology");
-        registry.createInstrument("GOOGL", "Google", "0.05", "1", "Technology");
+        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology", "100");
+        registry.createInstrument("GOOGL", "Google", "0.05", "1", "Technology", "100");
 
         Instrument aapl = registry.getInstrument("AAPL");
         Instrument googl = registry.getInstrument("GOOGL");
@@ -184,8 +184,8 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should handle instruments with different lot sizes")
     void testDifferentLotSizes() {
-        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology");
-        registry.createInstrument("GOOGL", "Google", "0.01", "100", "Technology");
+        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology", "100");
+        registry.createInstrument("GOOGL", "Google", "0.01", "100", "Technology", "100");
 
         Instrument aapl = registry.getInstrument("AAPL");
         Instrument googl = registry.getInstrument("GOOGL");
@@ -202,7 +202,7 @@ class InstrumentRegistryTest {
             "Apple Inc.",
             "0.01",
             "1",
-            "Technology"
+            "Technology", "100"
         );
 
         assertTrue(result);
@@ -224,7 +224,7 @@ class InstrumentRegistryTest {
                 "Stock " + i,
                 "0.01",
                 "1",
-                "Technology"
+                "Technology", "100"
             );
         }
 
@@ -236,8 +236,8 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should retrieve instrument by exact symbol match")
     void testExactSymbolMatch() {
-        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology");
-        registry.createInstrument("AAPLX", "Apple Extended", "0.01", "1", "Technology");
+        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology", "100");
+        registry.createInstrument("AAPLX", "Apple Extended", "0.01", "1", "Technology", "100");
 
         Instrument aapl = registry.getInstrument("AAPL");
         Instrument aaplx = registry.getInstrument("AAPLX");
@@ -250,8 +250,8 @@ class InstrumentRegistryTest {
     @Test
     @DisplayName("Should maintain instruments independently")
     void testIndependentInstruments() {
-        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology");
-        registry.createInstrument("GOOGL", "Google", "0.01", "1", "Technology");
+        registry.createInstrument("AAPL", "Apple", "0.01", "1", "Technology", "100");
+        registry.createInstrument("GOOGL", "Google", "0.01", "1", "Technology", "100");
 
         Instrument aapl = registry.getInstrument("AAPL");
         Instrument googl = registry.getInstrument("GOOGL");

@@ -34,7 +34,7 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should create and retrieve stock")
     void testCreateAndRetrieveStock() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
 
         var stock = stockSim.getStocks().get("AAPL");
         assertNotNull(stock);
@@ -45,7 +45,7 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should create and retrieve user")
     void testCreateAndRetrieveUser() {
-        stockSim.createUser("USER001", "Test User");
+        stockSim.createUser("USER001", "Test User", 10000);
 
         User user = (User) stockSim.getTraders().get("USER001");
         assertNotNull(user);
@@ -64,8 +64,8 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should place buy order")
     void testPlaceBuyOrder() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("USER001", "Test User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("USER001", "Test User", 10000);
 
         Order order = new Order(Order.Side.BUY, "AAPL", money("150.00"), 100, "USER001");
         stockSim.placeOrder(order);
@@ -77,9 +77,9 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should match buy and sell orders")
     void testMatchOrders() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("BUYER", "Buyer User");
-        stockSim.createUser("SELLER", "Seller User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("BUYER", "Buyer User", 10000);
+        stockSim.createUser("SELLER", "Seller User", 10000);
 
         // Give seller some stocks
         User seller = (User) stockSim.getTraders().get("SELLER");
@@ -101,9 +101,9 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should update stock price after trade")
     void testStockPriceUpdate() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("BUYER", "Buyer User");
-        stockSim.createUser("SELLER", "Seller User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("BUYER", "Buyer User", 10000);
+        stockSim.createUser("SELLER", "Seller User", 10000);
 
         User seller = (User) stockSim.getTraders().get("SELLER");
         seller.getPortfolio().addStock("AAPL", 100);
@@ -124,9 +124,9 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should settle trade and update portfolios")
     void testTradeSettlement() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("BUYER", "Buyer User");
-        stockSim.createUser("SELLER", "Seller User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("BUYER", "Buyer User", 10000);
+        stockSim.createUser("SELLER", "Seller User", 10000);
 
         User buyer = (User) stockSim.getTraders().get("BUYER");
         User seller = (User) stockSim.getTraders().get("SELLER");
@@ -158,8 +158,8 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should track order history for users")
     void testOrderHistory() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("USER001", "Test User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("USER001", "Test User", 10000);
 
         User user = (User) stockSim.getTraders().get("USER001");
 
@@ -174,9 +174,9 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should track trade history for users")
     void testTradeHistory() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("BUYER", "Buyer User");
-        stockSim.createUser("SELLER", "Seller User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("BUYER", "Buyer User", 10000);
+        stockSim.createUser("SELLER", "Seller User", 10000);
 
         User buyer = (User) stockSim.getTraders().get("BUYER");
         User seller = (User) stockSim.getTraders().get("SELLER");
@@ -197,9 +197,9 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should handle partial order fills")
     void testPartialFills() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("BUYER", "Buyer User");
-        stockSim.createUser("SELLER", "Seller User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("BUYER", "Buyer User", 10000);
+        stockSim.createUser("SELLER", "Seller User", 10000);
 
         User seller = (User) stockSim.getTraders().get("SELLER");
         seller.getPortfolio().addStock("AAPL", 50);
@@ -221,9 +221,9 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should notify observers on price update")
     void testPriceUpdateNotification() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("BUYER", "Buyer User");
-        stockSim.createUser("SELLER", "Seller User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("BUYER", "Buyer User", 10000);
+        stockSim.createUser("SELLER", "Seller User", 10000);
 
         AtomicInteger notificationCount = new AtomicInteger(0);
 
@@ -260,14 +260,14 @@ class StockSimIntegrationTest {
     @DisplayName("Should handle multiple stocks and traders")
     void testMultipleStocksAndTraders() {
         // Create multiple stocks
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createStock("GOOGL", "Google", "0.01", "1", "Technology");
-        stockSim.createStock("MSFT", "Microsoft", "0.01", "1", "Technology");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createStock("GOOGL", "Google", "0.01", "1", "Technology", "100");
+        stockSim.createStock("MSFT", "Microsoft", "0.01", "1", "Technology", "100");
 
         // Create multiple users
-        stockSim.createUser("USER001", "User One");
-        stockSim.createUser("USER002", "User Two");
-        stockSim.createUser("USER003", "User Three");
+        stockSim.createUser("USER001", "User One", 10000);
+        stockSim.createUser("USER002", "User Two", 10000);
+        stockSim.createUser("USER003", "User Three", 10000);
 
         // Create multiple bots
         stockSim.createBot("BOT001", "Bot One");
@@ -280,9 +280,9 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should prevent insufficient funds trade")
     void testInsufficientFunds() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("BUYER", "Buyer User");
-        stockSim.createUser("SELLER", "Seller User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("BUYER", "Buyer User", 10000);
+        stockSim.createUser("SELLER", "Seller User", 100000);
 
         User buyer = (User) stockSim.getTraders().get("BUYER");
         User seller = (User) stockSim.getTraders().get("SELLER");
@@ -308,9 +308,9 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should track completed trades in order history")
     void testTrackCompletedTrades() {
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology");
-        stockSim.createUser("BUYER", "Buyer User");
-        stockSim.createUser("SELLER", "Seller User");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "100");
+        stockSim.createUser("BUYER", "Buyer User", 10000);
+        stockSim.createUser("SELLER", "Seller User", 10000);
 
         User buyer = (User) stockSim.getTraders().get("BUYER");
         User seller = (User) stockSim.getTraders().get("SELLER");
@@ -330,9 +330,9 @@ class StockSimIntegrationTest {
     @Test
     @DisplayName("Should filter stocks by category")
     void testFilterStocksByCategory() {
-        stockSim.createStock("AAPL", "Apple", "0.01", "1", "Technology");
-        stockSim.createStock("GOOGL", "Google", "0.01", "1", "Technology");
-        stockSim.createStock("JPM", "JP Morgan", "0.01", "1", "Finance");
+        stockSim.createStock("AAPL", "Apple", "0.01", "1", "Technology", "100");
+        stockSim.createStock("GOOGL", "Google", "0.01", "1", "Technology", "100");
+        stockSim.createStock("JPM", "JP Morgan", "0.01", "1", "Finance", "100");
 
         var techStocks = stockSim.getStocks("Technology");
         var financeStocks = stockSim.getStocks("Finance");

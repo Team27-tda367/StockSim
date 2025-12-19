@@ -20,9 +20,9 @@ public class BotMultiThreadedTest {
     void setUp() {
         stockSim = new StockSim();
         // Create some stocks for bots to trade
-        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "100", "Technology");
-        stockSim.createStock("GOOGL", "Alphabet Inc.", "0.01", "100", "Technology");
-        stockSim.createStock("MSFT", "Microsoft Corp.", "0.01", "100", "Technology");
+        stockSim.createStock("AAPL", "Apple Inc.", "0.01", "100", "Technology", "100");
+        stockSim.createStock("GOOGL", "Alphabet Inc.", "0.01", "100", "Technology", "100");
+        stockSim.createStock("MSFT", "Microsoft Corp.", "0.01", "100", "Technology", "100");
     }
 
     @Test
