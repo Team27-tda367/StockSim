@@ -107,7 +107,6 @@ public class SettlementEngine implements ISettlementEngine {
         String sellerTraderId = orderIdToTraderId.get(trade.getSellOrderId());
 
         if (buyerTraderId == null || sellerTraderId == null) {
-            // TODO
             return false;
         }
 
@@ -115,7 +114,6 @@ public class SettlementEngine implements ISettlementEngine {
         Trader seller = traders.get(sellerTraderId);
 
         if (buyer == null || seller == null) {
-            // TODO
             return false;
         }
 
@@ -125,7 +123,6 @@ public class SettlementEngine implements ISettlementEngine {
         Portfolio sellerPortfolio = seller.getPortfolio();
 
         if (!buyerPortfolio.withdraw(tradeValue)) {
-            // TODO
             return false;
         }
 

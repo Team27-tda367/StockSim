@@ -113,7 +113,6 @@ public class Market implements IMarket {
 
     @Override
     public void placeOrder(Order order, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks) {
-        // Phase 1.2: Validate order before processing
         OrderValidator.ValidationResult validationResult = orderValidator.validate(order);
         if (!validationResult.isValid()) {
             // Log validation failure and reject order
@@ -170,7 +169,6 @@ public class Market implements IMarket {
     private void processOrder(Order order, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks) {
         OrderBook orderBook = getOrderBook(order.getSymbol());
 
-        // Synchronize at the orderBook level to ensure atomic matching and settlement
         synchronized (orderBook) {
             List<Trade> trades = matchingEngine.match(order, orderBook);
 
