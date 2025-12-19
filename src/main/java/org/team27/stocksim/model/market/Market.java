@@ -17,6 +17,7 @@ public class Market implements IMarket {
     private final SettlementEngine settlementEngine;
     private final List<Trade> completedTrades;
     private final ConcurrentHashMap<Integer, String> orderIdToTraderId;
+    private final OrderValidator orderValidator;
 
     private Consumer<Set<String>> onPriceUpdate;
     private Consumer<Trade> onTradeSettled;
@@ -27,13 +28,21 @@ public class Market implements IMarket {
         this.completedTrades = new CopyOnWriteArrayList<>();
         this.orderIdToTraderId = new ConcurrentHashMap<>();
         this.settlementEngine = new SettlementEngine(orderIdToTraderId, this::handleTradeSettled);
+        this.orderValidator = new OrderValidator();
     }
 
     @Override
     public void placeOrder(Order order, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks) {
+        // Phase 1.2: Validate order before processing
+        OrderValidator.ValidationResult validationResult = orderValidator.validate(order);
+        if (!validationResult.isValid()) {
+            // Log validation failure and reject order
+            System.err.println("Order validation failed: " + validationResult.getErrorMessage() +
+                             " for order " + (order != null ? order.getOrderId() : "null"));
+            return; // Reject invalid order
+        }
 
         settlementEngine.trackOrder(order.getOrderId(), order.getTraderId());
-
 
         recordOrderInHistory(order, traders);
 
