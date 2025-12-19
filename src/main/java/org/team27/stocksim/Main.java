@@ -1,5 +1,7 @@
 package org.team27.stocksim;
 
+import java.time.Instant;
+
 import org.team27.stocksim.controller.ISimController;
 import org.team27.stocksim.controller.SimController;
 import org.team27.stocksim.model.StockSim;
@@ -52,7 +54,7 @@ public class Main {
         }
 
         // Initialize the model with simulation configuration
-        StockSim model = new StockSim(simulationSpeed, tickInterval, durationInRealSeconds);
+        StockSim model = new StockSim(simulationSpeed, tickInterval, durationInRealSeconds, Instant.EPOCH);
         ISimController controller = new SimController(model);
 
         // Set up initial data (stocks, bots, positions)

@@ -20,36 +20,34 @@ public class MarketSimulator implements IMarketSimulator {
     private MarketState state;
     private GameTicker ticker;
     private int totalTradesExecuted;
-    private GameClock clock;
+    private final Instant simulationStartTime;
 
     public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick) {
-        this(botsSupplier, onTick, null, 3600, 50, 10);
+        this(botsSupplier, onTick, null, 3600, 50, 10, Instant.EPOCH);
     }
 
     public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick, Runnable onSaveData) {
-        this(botsSupplier, onTick, onSaveData, 3600, 50, 10);
+        this(botsSupplier, onTick, onSaveData, 3600, 50, 10, Instant.EPOCH);
     }
 
     public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick, Runnable onSaveData,
-            int speedupFactor, int tickInterval, int durationInRealSeconds) {
+            int speedupFactor, int tickInterval, int durationInRealSeconds, Instant initialTimeStamp) {
         this.state = MarketState.PAUSED;
         this.onTick = onTick;
         this.speedupFactor = speedupFactor;
         this.tickInterval = tickInterval;
         this.totalTradesExecuted = 0;
+        this.simulationStartTime = initialTimeStamp;
     }
 
     @Override
     public void start() {
         state = MarketState.RUNNING;
 
-        clock = new GameClock(
-                ZoneId.of("Europe/Stockholm"),
-                Instant.EPOCH,
+        GameClock clock = new GameClock(
+                ZoneId.systemDefault(),
+                simulationStartTime,
                 speedupFactor);
-
-        // Set the game clock globally so all components use simulation time
-        ClockProvider.setClock(clock);
 
         ticker = new GameTicker(clock, simInstant -> tick(), tickInterval);
         ticker.start();

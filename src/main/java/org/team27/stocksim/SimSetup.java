@@ -41,7 +41,6 @@ public class SimSetup {
             // Load existing prices
             loadStockPrices();
         }
-        // Start the market simulation
         model.startMarketSimulation();
     }
 

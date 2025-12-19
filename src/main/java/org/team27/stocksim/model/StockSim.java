@@ -20,6 +20,7 @@ import org.team27.stocksim.observer.IModelSubject;
 import org.team27.stocksim.repository.BotPositionRepository;
 import org.team27.stocksim.repository.StockPriceRepository;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +38,10 @@ public class StockSim implements IModelSubject {
     private final BotActionExecutor botActionExecutor;
 
     public StockSim() {
-        this(3600, 50, 10);
+        this(3600, 50, 10, Instant.EPOCH);
     }
 
-    public StockSim(int simulationSpeed, int tickInterval, int durationInRealSeconds) {
+    public StockSim(int simulationSpeed, int tickInterval, int durationInRealSeconds, Instant initialTimeStamp) {
         // Initialize registries
         this.instrumentRegistry = new InstrumentRegistry(new StockFactory());
         this.traderRegistry = new TraderRegistry(new UserFactory(), new BotFactory());
@@ -69,7 +70,7 @@ public class StockSim implements IModelSubject {
 
         // Initialize simulator with configuration
         this.marketSimulator = new MarketSimulator(traderRegistry::getBots, this::onSimulationTick,
-                this::saveStockPrices, simulationSpeed, tickInterval, durationInRealSeconds);
+                this::saveStockPrices, simulationSpeed, tickInterval, durationInRealSeconds, initialTimeStamp);
     }
 
     private String getTraderIdForOrder(int orderId) {
