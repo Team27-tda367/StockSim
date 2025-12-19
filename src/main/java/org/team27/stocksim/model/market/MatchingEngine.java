@@ -2,16 +2,27 @@ package org.team27.stocksim.model.market;
 
 import org.team27.stocksim.model.clock.ClockProvider;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MatchingEngine {
 
-    public MatchingEngine() {
+    private final MarketOrderConfig config;
+    private final Map<String, BigDecimal> lastTradePrices;
 
+    public MatchingEngine() {
+        this(MarketOrderConfig.createDefault());
     }
 
-    private static void executeTrade(Order incomingOrder, Order matchingOrder, OrderBook orderBook,
+    public MatchingEngine(MarketOrderConfig config) {
+        this.config = config;
+        this.lastTradePrices = new ConcurrentHashMap<>();
+    }
+
+    private void executeTrade(Order incomingOrder, Order matchingOrder, OrderBook orderBook,
             List<Trade> trades) {
 
         int tradeQuantity = Math.min(incomingOrder.getRemainingQuantity(), matchingOrder.getRemainingQuantity());
@@ -27,6 +38,8 @@ public class MatchingEngine {
                 !incomingOrder.isBuyOrder() ? incomingOrder.getOrderId() : matchingOrder.getOrderId(),
                 incomingOrder.getSymbol(), matchingOrder.getPrice(), tradeQuantity, ClockProvider.getClock().instant());
         trades.add(trade);
+
+        lastTradePrices.put(trade.getStockSymbol(), trade.getPrice());
     }
 
     public List<Trade> match(Order incomingOrder, OrderBook orderBook) {
@@ -52,7 +65,7 @@ public class MatchingEngine {
             }
         }
         
-        // Market orders should not rest in the book - only add if limit order with remaining quantity
+        // Market orders should not rest in the book, only add if limit order with remaining quantity
         if (incomingOrder.getRemainingQuantity() > 0 && !incomingOrder.isMarketOrder()) {
             orderBook.add(incomingOrder);
         }
@@ -62,8 +75,25 @@ public class MatchingEngine {
 
 
     private boolean canMatch(Order incomingOrder, Order restingOrder) {
-        // Market orders always match if there's liquidity
+
+        if (incomingOrder.getTraderId().equals(restingOrder.getTraderId())) {
+            return false;
+        }
+
+
         if (incomingOrder.isMarketOrder()) {
+            BigDecimal lastPrice = lastTradePrices.get(incomingOrder.getSymbol());
+            if (lastPrice != null) {
+                BigDecimal maxAllowedDeviation = lastPrice.multiply(config.getMaxPriceDeviation());
+                BigDecimal maxPrice = lastPrice.add(maxAllowedDeviation);
+                BigDecimal minPrice = lastPrice.subtract(maxAllowedDeviation);
+
+
+                if (restingOrder.getPrice().compareTo(maxPrice) > 0 ||
+                    restingOrder.getPrice().compareTo(minPrice) < 0) {
+                    return false;
+                }
+            }
             return true;
         }
         
