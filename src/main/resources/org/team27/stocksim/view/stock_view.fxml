@@ -21,7 +21,7 @@
 
     <top>
         <HBox alignment="CENTER_LEFT" styleClass="header-bar, spacing-large">
-            <Label text="StonkSim" styleClass="logo"/>
+            <Label text="StockSim" styleClass="logo"/>
             <Button text="Home" styleClass="btn-ghost" onAction="#onMainView"/>
 
             <Button text="Portfolio" styleClass="btn-ghost" onAction="#onPortfolioView"/>
