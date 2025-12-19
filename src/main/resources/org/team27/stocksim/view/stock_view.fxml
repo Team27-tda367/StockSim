@@ -82,7 +82,7 @@
                             <NumberAxis side="BOTTOM" label="Time" autoRanging="true" tickLabelFill="#6B7280"/>
                         </xAxis>
                         <yAxis>
-                            <NumberAxis side="LEFT" label="Price (SEK)" autoRanging="true" tickLabelFill="#6B7280" forceZeroInRange="false" minorTickVisible="false"/>
+                            <NumberAxis side="LEFT" label="Price ($)" autoRanging="true" tickLabelFill="#6B7280" forceZeroInRange="false" minorTickVisible="false"/>
                         </yAxis>
                     </LineChart>
                 </VBox>
@@ -180,7 +180,7 @@
                         <HBox>
                             <Label text="Price" styleClass="info-header"/>
                             <Region HBox.hgrow="ALWAYS"/>
-                            <Label fx:id="orderPriceLabel" text="178.45 SEK" styleClass="info-label"/>
+                            <Label fx:id="orderPriceLabel" text="178.45" styleClass="info-label"/>
                         </HBox>
 
                         <HBox>
@@ -192,7 +192,7 @@
                         <HBox>
                             <Label text="Total" styleClass="info-header"/>
                             <Region HBox.hgrow="ALWAYS"/>
-                            <Label fx:id="orderTotalLabel" text="178.45 SEK" styleClass="info-label"/>
+                            <Label fx:id="orderTotalLabel" text="178.45" styleClass="info-label"/>
                         </HBox>
                     </VBox>
 
