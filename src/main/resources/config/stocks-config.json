@@ -174,5 +174,13 @@
     "lotSize": "100",
     "initialPrice": "100",
     "category": "Technology"
+  },
+  {
+    "symbol": "API",
+    "name": "API Corporation",
+    "tickSize": "0.01",
+    "lotSize": "100",
+    "initialPrice": "100000",
+    "category": "Semiconductors"
   }
 ]

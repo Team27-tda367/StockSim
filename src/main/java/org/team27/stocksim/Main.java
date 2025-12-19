@@ -46,6 +46,11 @@ public class Main {
         int tickInterval = 50; // Check for new simulation seconds every 50ms
         int durationInRealSeconds = 5; // Run fast simulation for 5 seconds
 
+        if (simMode) {
+            System.out.println("Running simulation for " + durationInRealSeconds + " real seconds at speedup factor "
+                    + simulationSpeed + "...");
+        }
+
         // Initialize the model with simulation configuration
         StockSim model = new StockSim(simulationSpeed, tickInterval, durationInRealSeconds);
         ISimController controller = new SimController(model);
@@ -72,6 +77,7 @@ public class Main {
             model.saveStockPrices();
             model.saveBotPositions();
             model.stopMarketSimulation();
+            System.out.println("Simulation completed. Price data and bot positions saved.");
             System.exit(0);
         }
 

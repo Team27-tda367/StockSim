@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class BotDataLoader {
     private static final String CONFIG_BOT_FILE = "/config/bot-config.json";
+    private static final String CONFIG_STOCK_FILE = "/config/stocks-config.json";
     private final Gson gson;
 
     public BotDataLoader() {
@@ -38,14 +39,19 @@ public class BotDataLoader {
 
             InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             BotConfig config = gson.fromJson(reader, BotConfig.class);
+            StockDataLoader stockLoader = new StockDataLoader();
+            List<StockData> stocks = stockLoader.loadStocksFromResource(CONFIG_STOCK_FILE);
 
             BotDataGenerator generator = new BotDataGenerator(
                     config.getBotCount(),
                     config.getStrategies(),
                     config.getQuantityMin(),
                     config.getQuantityMax(),
+                    config.getBalanceMin(),
+                    config.getBalanceMax(),
                     config.getCostBasisMin(),
-                    config.getCostBasisMax());
+                    config.getCostBasisMax(),
+                    stocks.stream().map(StockData::getSymbol).toList());
 
             return generator.generateBots();
         } catch (Exception e) {

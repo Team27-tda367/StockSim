@@ -7,12 +7,14 @@
     "DayTraderStrategy",
     "PanicSellerStrategy",
     "FocusedTraderStrategy",
-    "InstitutionalInvestorStrategy"
+    "InstitutionalInvestorStrategy",
+    "WSBstrategy"
   ],
-
-  "positionsPerBot": 10,
-  "quantityMin": 50,
-  "quantityMax": 200,
-  "costBasisMin": 95.0,
-  "costBasisMax": 105.0
+  "positionsPerBot": 3,
+  "balanceMin": 1000,
+  "balanceMax": 100000,
+  "quantityMin": 1,
+  "quantityMax": 1000,
+  "costBasisMin": 99,
+  "costBasisMax": 101
 }

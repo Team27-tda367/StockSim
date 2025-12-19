@@ -22,7 +22,6 @@ public class MarketSimulator implements IMarketSimulator {
     private int totalTradesExecuted;
     private GameClock clock;
 
-
     public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick) {
         this(botsSupplier, onTick, null, 3600, 50, 10);
     }
@@ -55,13 +54,11 @@ public class MarketSimulator implements IMarketSimulator {
         ticker = new GameTicker(clock, simInstant -> tick(), tickInterval);
         ticker.start();
 
-        System.out.println("Market simulation started");
     }
 
     @Override
     public void pause() {
         state = MarketState.PAUSED;
-        System.out.println("Market simulation paused");
     }
 
     @Override
@@ -71,11 +68,6 @@ public class MarketSimulator implements IMarketSimulator {
         if (ticker != null) {
             ticker.stop();
         }
-
-        System.out.println("\n========================================");
-        System.out.println("Simulation stopped");
-        System.out.println("Total trades executed: " + totalTradesExecuted);
-        System.out.println("========================================\n");
     }
 
     private void tick() {

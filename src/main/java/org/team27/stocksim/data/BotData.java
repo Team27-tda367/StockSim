@@ -6,6 +6,7 @@ public class BotData {
     private String id;
     private String name;
     private String strategy;
+    private int balance;
 
     // Om du vill att output-JSON ska ha "initialPositions" som i exemplet:
     private List<PositionData> initialPositions;
@@ -13,11 +14,12 @@ public class BotData {
     public BotData() {
     }
 
-    public BotData(String id, String name, String strategy, List<PositionData> initialPositions) {
+    public BotData(String id, String name, String strategy, List<PositionData> initialPositions, int balance) {
         this.id = id;
         this.name = name;
         this.strategy = strategy;
         this.initialPositions = initialPositions;
+        this.balance = balance;
     }
 
     public String getId() {
@@ -58,5 +60,13 @@ public class BotData {
 
     public void setPositions(List<PositionData> positions) {
         this.initialPositions = positions;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 }

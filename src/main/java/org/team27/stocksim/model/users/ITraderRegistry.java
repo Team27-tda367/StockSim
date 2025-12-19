@@ -8,6 +8,8 @@ public interface ITraderRegistry {
 
     boolean createUser(String id, String name);
 
+    boolean createUser(String id, String name, int startingBalance);
+
     boolean createBot(String id, String name);
 
     boolean createBot(String id, String name, IBotStrategy strategy);

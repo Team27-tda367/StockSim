@@ -34,7 +34,7 @@ public class SimSetup {
     private void start(boolean loadExistingPrices) {
         createDefaultStocks();
         createBotsFromFile(loadExistingPrices);
-        model.createUser("user1", "Default User");
+        model.createUser("user1", "Default User", 1000000);
         model.setCurrentUser("user1");
 
         if (loadExistingPrices) {

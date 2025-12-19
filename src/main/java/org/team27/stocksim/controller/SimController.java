@@ -76,7 +76,6 @@ public class SimController implements ISimController {
         int availableQuantity = user.getPortfolio().getStockQuantity(stockSymbol);
 
         if (availableQuantity < quantity) {
-            System.out.println("Insufficient stock quantity to sell.");
             quantity = availableQuantity;
         }
         return quantity;

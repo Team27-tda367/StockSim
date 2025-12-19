@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class BotPositionRepository {
                 botData.setId(bot.getId());
                 botData.setName(bot.getDisplayName());
                 botData.setStrategy(bot.getStrategy().getClass().getSimpleName());
+                botData.setBalance(bot.getBalance().intValue());
 
                 // Convert portfolio positions to PositionData
                 List<PositionData> positions = new ArrayList<>();

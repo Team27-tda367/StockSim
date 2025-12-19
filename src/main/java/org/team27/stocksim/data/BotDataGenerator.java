@@ -10,8 +10,11 @@ public class BotDataGenerator {
     private final List<String> strategies;
     private final int quantityMin;
     private final int quantityMax;
+    private final int balanceMin;
+    private final int balanceMax;
     private final double costBasisMin;
     private final double costBasisMax;
+    private final List<String> symbols;
 
     private final Random rnd = new Random();
 
@@ -19,14 +22,20 @@ public class BotDataGenerator {
             List<String> strategies,
             int quantityMin,
             int quantityMax,
+            int balanceMin,
+            int balanceMax,
             double costBasisMin,
-            double costBasisMax) {
+            double costBasisMax,
+            List<String> symbols) {
         this.botCount = botCount;
         this.strategies = strategies;
         this.quantityMin = quantityMin;
         this.quantityMax = quantityMax;
+        this.balanceMin = balanceMin;
+        this.balanceMax = balanceMax;
         this.costBasisMin = costBasisMin;
         this.costBasisMax = costBasisMax;
+        this.symbols = symbols;
     }
 
     public List<BotData> generateBots() {
@@ -39,6 +48,8 @@ public class BotDataGenerator {
             // round-robin (enkel + reproducerbar). Byt till random om du vill.
             String strategy = strategies.get((i - 1) % strategies.size());
 
+            int balance = randInt(balanceMin, balanceMax);
+
             List<PositionData> positions = new ArrayList<>(3); // default 3 (kan göras config om du vill)
             for (int p = 0; p < 3; p++) {
                 String symbol = pickSymbol(); // enkel stub (byt till lista i config om ni vill)
@@ -47,7 +58,7 @@ public class BotDataGenerator {
                 positions.add(new PositionData(symbol, quantity, costBasis));
             }
 
-            BotData botData = new BotData(id, name, strategy, positions);
+            BotData botData = new BotData(id, name, strategy, positions, balance);
             bots.add(botData);
         }
 
@@ -57,11 +68,8 @@ public class BotDataGenerator {
     // ---- Helpers ----
 
     private String pickSymbol() {
-        // Minimal default. Vill du styra via config: skicka in symbol-lista i
-        // konstruktorn.
-        String[] symbols = { "AAPL", "MSFT", "TSLA", "NVDA", "AMD", "META", "CSCO", "BA", "KO", "NFLX", "INTC", "NKE",
-                "PYPL", "V" };
-        return symbols[rnd.nextInt(symbols.length)];
+
+        return symbols.get(rnd.nextInt(symbols.size()));
     }
 
     private int randInt(int min, int max) {

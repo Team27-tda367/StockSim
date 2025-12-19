@@ -9,6 +9,8 @@ public class BotConfig {
     private int positionsPerBot;
     private int quantityMin;
     private int quantityMax;
+    private int balanceMin;
+    private int balanceMax;
     private double costBasisMin;
     private double costBasisMax;
 
@@ -68,5 +70,21 @@ public class BotConfig {
 
     public void setCostBasisMax(double costBasisMax) {
         this.costBasisMax = costBasisMax;
+    }
+
+    public int getBalanceMin() {
+        return balanceMin;
+    }
+
+    public void setBalanceMin(int balanceMin) {
+        this.balanceMin = balanceMin;
+    }
+
+    public int getBalanceMax() {
+        return balanceMax;
+    }
+
+    public void setBalanceMax(int balanceMax) {
+        this.balanceMax = balanceMax;
     }
 }

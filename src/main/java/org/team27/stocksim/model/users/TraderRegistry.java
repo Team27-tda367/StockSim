@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import org.team27.stocksim.model.users.bot.IBotStrategy;
-import static org.team27.stocksim.model.util.MoneyUtils.money;
+import org.team27.stocksim.model.users.bot.RandomStrategy;
 
 public class TraderRegistry implements ITraderRegistry {
 
     private final HashMap<String, Trader> traders;
     private final ITraderFactory userFactory;
     private final ITraderFactory botFactory;
-    private final Function<String, Portfolio> portfolioFactory;
+    private final Function<Integer, Portfolio> portfolioFactory;
     private User currentUser;
 
     public TraderRegistry(ITraderFactory userFactory, ITraderFactory botFactory) {
@@ -36,13 +36,18 @@ public class TraderRegistry implements ITraderRegistry {
 
     @Override
     public boolean createUser(String id, String name) {
+        return createUser(id, name, 10000);
+    }
+
+    @Override
+    public boolean createUser(String id, String name, int balance) {
         String highId = id.toUpperCase();
 
-        if (traders.containsKey(highId)) {
+        if (checkDuplicateId(highId)) {
             return false;
         }
 
-        Portfolio portfolio = portfolioFactory.apply("100000"); // default starting balance
+        Portfolio portfolio = portfolioFactory.apply(balance); // default starting balance
         Trader user = userFactory.createTrader(highId, name, portfolio);
         traders.put(highId, user);
         return true;
@@ -50,33 +55,12 @@ public class TraderRegistry implements ITraderRegistry {
 
     @Override
     public boolean createBot(String id, String name) {
-        String highId = id.toUpperCase();
-        if (checkDuplicateId(highId)) {
-            return false;
-        }
-
-        Portfolio portfolio = portfolioFactory.apply("100000"); // default starting balance
-        Trader bot = botFactory.createTrader(highId, name, portfolio);
-        traders.put(highId, bot);
-        return true;
-    }
-
-    private boolean checkDuplicateId(String id) {
-        return traders.containsKey(id);
+        return createBot(id, name, new RandomStrategy());
     }
 
     @Override
     public boolean createBot(String id, String name, IBotStrategy strategy) {
-        String highId = id.toUpperCase();
-
-        if (checkDuplicateId(highId)) {
-            return false;
-        }
-
-        Portfolio portfolio = portfolioFactory.apply("100000"); // default starting balance
-        Trader bot = new Bot(highId, name, portfolio, strategy);
-        traders.put(highId, bot);
-        return true;
+        return createBot(id, name, strategy, 10000);
     }
 
     public boolean createBot(String id, String name, IBotStrategy strategy, int startingBalance) {
@@ -86,10 +70,14 @@ public class TraderRegistry implements ITraderRegistry {
             return false;
         }
 
-        Portfolio portfolio = portfolioFactory.apply(Integer.toString(startingBalance));
+        Portfolio portfolio = portfolioFactory.apply(startingBalance);
         Trader bot = new Bot(highId, name, portfolio, strategy);
         traders.put(highId, bot);
         return true;
+    }
+
+    private boolean checkDuplicateId(String id) {
+        return traders.containsKey(id);
     }
 
     @Override
@@ -139,8 +127,9 @@ public class TraderRegistry implements ITraderRegistry {
         }
     }
 
-    private Portfolio createDefaultPortfolio(String startingBalance) {
-        BigDecimal startingBalanceDecimal = money(startingBalance);
+    private Portfolio createDefaultPortfolio(int startingBalance) {
+        BigDecimal startingBalanceDecimal = new BigDecimal(startingBalance);
         return new Portfolio(startingBalanceDecimal);
     }
+
 }

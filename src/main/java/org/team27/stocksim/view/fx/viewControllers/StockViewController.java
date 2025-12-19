@@ -22,7 +22,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 import javafx.geometry.Pos;
 
-
 import org.team27.stocksim.model.util.dto.InstrumentDTO;
 import org.team27.stocksim.view.ViewAdapter;
 import org.team27.stocksim.view.fx.EView;
@@ -33,7 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class StockViewController extends ViewControllerBase
-        implements ViewAdapter.PriceUpdateListener, ViewAdapter.TradeSettledListener, ViewAdapter.PortfolioChangedListener {
+        implements ViewAdapter.PriceUpdateListener, ViewAdapter.TradeSettledListener,
+        ViewAdapter.PortfolioChangedListener {
 
     // Stock Information Labels
     @FXML
@@ -264,7 +264,6 @@ public class StockViewController extends ViewControllerBase
                 modelController.placeMarketSellOrder(stock.getSymbol(), quantity);
             }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid quantity for market order");
         }
     }
 

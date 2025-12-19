@@ -70,8 +70,6 @@ public class StockSim implements IModelSubject {
         // Initialize simulator with configuration
         this.marketSimulator = new MarketSimulator(traderRegistry::getBots, this::onSimulationTick,
                 this::saveStockPrices, simulationSpeed, tickInterval, durationInRealSeconds);
-
-        System.out.println("Successfully created Sim-model");
     }
 
     private String getTraderIdForOrder(int orderId) {
@@ -139,8 +137,8 @@ public class StockSim implements IModelSubject {
         return result;
     }
 
-    public void createUser(String id, String name) {
-        traderRegistry.createUser(id, name);
+    public void createUser(String id, String name, int balance) {
+        traderRegistry.createUser(id, name, balance);
     }
 
     public void createBot(String id, String name) {
