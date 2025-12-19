@@ -14,12 +14,14 @@ import org.team27.stocksim.model.market.OrderBook;
 import org.team27.stocksim.model.portfolio.Portfolio;
 import org.team27.stocksim.model.simulation.IMarketSimulator;
 import org.team27.stocksim.model.simulation.MarketSimulator;
+import org.team27.stocksim.model.simulation.SimulationConfig;
 import org.team27.stocksim.model.users.*;
 import org.team27.stocksim.observer.IModelObserver;
 import org.team27.stocksim.observer.IModelSubject;
 import org.team27.stocksim.repository.BotPositionRepository;
 import org.team27.stocksim.repository.StockPriceRepository;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,21 +119,10 @@ public class StockSim implements IModelSubject {
      * </ul>
      */
     public StockSim() {
-        this(3600, 50, 10);
+        this(SimulationConfig.createDefault());
     }
 
-    /**
-     * Constructs a StockSim with custom simulation parameters.
-     *
-     * <p>This constructor initializes all subsystems in the correct order:
-     * registries → market → bot executor → simulator. It also sets up
-     * market callbacks for price updates and trade settlements.</p>
-     *
-     * @param simulationSpeed How many simulated seconds pass per real second
-     * @param tickInterval Milliseconds between simulation ticks
-     * @param durationInRealSeconds Total duration of simulation in real time
-     */
-    public StockSim(int simulationSpeed, int tickInterval, int durationInRealSeconds) {
+    public StockSim(SimulationConfig config) {
         // Initialize registries
         this.instrumentRegistry = new InstrumentRegistry(new StockFactory());
         this.traderRegistry = new TraderRegistry(new UserFactory(), new BotFactory());
@@ -159,8 +150,14 @@ public class StockSim implements IModelSubject {
         });
 
         // Initialize simulator with configuration
-        this.marketSimulator = new MarketSimulator(traderRegistry::getBots, this::onSimulationTick,
-                this::saveStockPrices, simulationSpeed, tickInterval, durationInRealSeconds);
+        this.marketSimulator = new MarketSimulator(
+                traderRegistry::getBots,
+                this::onSimulationTick,
+                this::saveStockPrices,
+                config.getSpeedupFactor(),
+                config.getTickInterval(),
+                config.getDurationInRealSeconds(),
+                config.getInitialTimestamp());
     }
 
     private String getTraderIdForOrder(int orderId) {
@@ -197,6 +194,11 @@ public class StockSim implements IModelSubject {
 
     public void placeOrder(Order order) {
         market.placeOrder(order, traderRegistry.getAllTraders(), instrumentRegistry.getAllInstruments());
+    }
+
+    public void cancelOrder(int orderId) {
+        market.cancelOrder(orderId, traderRegistry.getAllTraders());
+        notifyPortfolioChanged();
     }
 
     public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category,

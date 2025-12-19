@@ -92,6 +92,10 @@ public class GameClock extends Clock {
         this.speed = speed;
     }
 
+    public GameClock() {
+        this(ZoneId.systemDefault(), Instant.EPOCH, 1.0);
+    }
+
     @Override
     public ZoneId getZone() {
         return zone;

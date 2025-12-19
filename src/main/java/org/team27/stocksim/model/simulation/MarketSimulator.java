@@ -102,11 +102,7 @@ public class MarketSimulator implements IMarketSimulator {
      * Counter for total trades executed (for statistics).
      */
     private int totalTradesExecuted;
-
-    /**
-     * Accelerated clock for simulation time.
-     */
-    private GameClock clock;
+    private final Instant simulationStartTime;
 
     /**
      * Constructs a MarketSimulator with default parameters.
@@ -115,7 +111,7 @@ public class MarketSimulator implements IMarketSimulator {
      * @param onTick Callback invoked on each tick
      */
     public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick) {
-        this(botsSupplier, onTick, null, 3600, 50, 10);
+        this(botsSupplier, onTick, null, 3600, 50, 10, Instant.EPOCH);
     }
 
     /**
@@ -126,7 +122,7 @@ public class MarketSimulator implements IMarketSimulator {
      * @param onSaveData Callback for saving data (currently unused)
      */
     public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick, Runnable onSaveData) {
-        this(botsSupplier, onTick, onSaveData, 3600, 50, 10);
+        this(botsSupplier, onTick, onSaveData, 3600, 50, 10, Instant.EPOCH);
     }
 
     /**
@@ -140,12 +136,13 @@ public class MarketSimulator implements IMarketSimulator {
      * @param durationInRealSeconds Simulation duration (currently unused)
      */
     public MarketSimulator(Supplier<HashMap<String, Bot>> botsSupplier, Runnable onTick, Runnable onSaveData,
-            int speedupFactor, int tickInterval, int durationInRealSeconds) {
+            int speedupFactor, int tickInterval, int durationInRealSeconds, Instant initialTimeStamp) {
         this.state = MarketState.PAUSED;
         this.onTick = onTick;
         this.speedupFactor = speedupFactor;
         this.tickInterval = tickInterval;
         this.totalTradesExecuted = 0;
+        this.simulationStartTime = initialTimeStamp;
     }
 
     /**
@@ -158,13 +155,10 @@ public class MarketSimulator implements IMarketSimulator {
     public void start() {
         state = MarketState.RUNNING;
 
-        clock = new GameClock(
-                ZoneId.of("Europe/Stockholm"),
-                Instant.EPOCH,
+        GameClock clock = new GameClock(
+                ZoneId.systemDefault(),
+                simulationStartTime,
                 speedupFactor);
-
-        // Set the game clock globally so all components use simulation time
-        ClockProvider.setClock(clock);
 
         ticker = new GameTicker(clock, simInstant -> tick(), tickInterval);
         ticker.start();

@@ -15,8 +15,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
@@ -29,6 +29,7 @@ import org.team27.stocksim.view.fx.chart.ChartDataService;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StockViewController extends ViewControllerBase
         implements ViewAdapter.PriceUpdateListener, ViewAdapter.TradeSettledListener,
@@ -73,6 +74,7 @@ public class StockViewController extends ViewControllerBase
     // Observable lists for positions and orders
     private ObservableList<String> positionsList = FXCollections.observableArrayList();
     private ObservableList<String> ordersList = FXCollections.observableArrayList();
+    private Map<String, Integer> orderStringToIdMap = new HashMap<>();
 
     // Model Data
     private InstrumentDTO stock;
@@ -127,7 +129,7 @@ public class StockViewController extends ViewControllerBase
     private void initializePriceFields() {
         BigDecimal price = stock.getPrice();
         priceField.setText(price.toString());
-        orderPriceLabel.setText(price + " SEK");
+        orderPriceLabel.setText("$" + price);
     }
 
     private void initializeChart() {
@@ -157,7 +159,58 @@ public class StockViewController extends ViewControllerBase
         }
         if (ordersListView != null) {
             ordersListView.setItems(ordersList);
+            ordersListView.setCellFactory(lv -> new OrderListCell());
         }
+    }
+
+    /**
+     * Custom ListCell for orders with inline cancel button
+     */
+    private class OrderListCell extends ListCell<String> {
+        private final HBox hbox = new HBox(10);
+        private final Label label = new Label();
+        private final Button cancelBtn = new Button("✕");
+
+        public OrderListCell() {
+            super();
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            cancelBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #e74c3c; -fx-font-size: 16px; -fx-cursor: hand; -fx-padding: 2 8 2 8;");
+            cancelBtn.setOnMouseEntered(e -> cancelBtn.setStyle("-fx-background-color: #ffe6e6; -fx-text-fill: #e74c3c; -fx-font-size: 16px; -fx-cursor: hand; -fx-padding: 2 8 2 8; -fx-background-radius: 3;"));
+            cancelBtn.setOnMouseExited(e -> cancelBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #e74c3c; -fx-font-size: 16px; -fx-cursor: hand; -fx-padding: 2 8 2 8;"));
+            cancelBtn.setOnAction(e -> {
+                String orderString = getItem();
+                if (orderString != null) {
+                    Integer orderId = orderStringToIdMap.get(orderString);
+                    if (orderId != null) {
+                        cancelOrder(orderId);
+                    }
+                }
+            });
+            
+            label.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(label, javafx.scene.layout.Priority.ALWAYS);
+            hbox.getChildren().addAll(label, cancelBtn);
+        }
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || item == null || item.startsWith("No active orders")) {
+                setGraphic(null);
+                setText(item);
+            } else {
+                label.setText(item);
+                setGraphic(hbox);
+                setText(null);
+            }
+        }
+    }
+
+    /**
+     * Cancels an order by its ID
+     */
+    private void cancelOrder(int orderId) {
+        modelController.cancelOrder(orderId);
     }
 
     // ==================== Input Validation ====================
@@ -200,8 +253,8 @@ public class StockViewController extends ViewControllerBase
                 BigDecimal price = new BigDecimal(priceText);
                 BigDecimal total = price.multiply(BigDecimal.valueOf(quantity));
 
-                orderPriceLabel.setText(price + " SEK");
-                orderTotalLabel.setText(String.format("%.2f SEK", total));
+                orderPriceLabel.setText("$" + price);
+                orderTotalLabel.setText(String.format("$%.2f", total));
             }
         } catch (NumberFormatException e) {
             // Ignore invalid input
@@ -336,7 +389,7 @@ public class StockViewController extends ViewControllerBase
 
     private void updatePriceDisplay(BigDecimal newPrice) {
         priceLabel.setText(newPrice.toString());
-        orderPriceLabel.setText(newPrice + " SEK");
+        orderPriceLabel.setText("$" + newPrice);
 
         if (priceField != null && priceField.getText().isEmpty()) {
             priceField.setText(newPrice.toString());
@@ -405,6 +458,7 @@ public class StockViewController extends ViewControllerBase
      */
     private void updateOrdersDisplay(UserDTO user) {
         ordersList.clear();
+        orderStringToIdMap.clear();
 
         List<OrderDTO> activeOrders = user.getOrderHistory().getActiveOrdersDTO();
 
@@ -423,6 +477,7 @@ public class StockViewController extends ViewControllerBase
                         order.getPrice(),
                         order.getStatus());
                 ordersList.add(orderStr);
+                orderStringToIdMap.put(orderStr, order.getOrderId());
             });
         }
     }

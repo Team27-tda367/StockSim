@@ -1,7 +1,5 @@
 package org.team27.stocksim.model.clock;
 
-import java.time.Clock;
-
 /**
  * Provides global access to the application's clock for testable time management.
  *
@@ -48,10 +46,11 @@ import java.time.Clock;
  */
 public class ClockProvider {
 
-    /**
-     * The current clock instance (game clock or system clock).
-     */
-    private static Clock clock = Clock.systemDefaultZone();
+    private static GameClock clock = new GameClock();
+
+    private ClockProvider() {
+        // Prevent instantiation
+    }
 
     /**
      * Sets the clock to be used throughout the application.
@@ -61,7 +60,7 @@ public class ClockProvider {
      *
      * @param gameClock The clock to use (typically a GameClock instance)
      */
-    public static void setClock(Clock gameClock) {
+    public static void setClock(GameClock gameClock) {
         clock = gameClock;
     }
 
@@ -83,7 +82,7 @@ public class ClockProvider {
      *
      * @return The configured Clock
      */
-    public static Clock getClock() {
+    public static GameClock getClock() {
         return clock;
     }
 
@@ -94,6 +93,7 @@ public class ClockProvider {
      * where time advances at real-world rate.</p>
      */
     public static void reset() {
-        clock = Clock.systemDefaultZone();
+        clock = new GameClock();
     }
+
 }
