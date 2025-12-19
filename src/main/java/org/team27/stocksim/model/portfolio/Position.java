@@ -7,13 +7,77 @@ import java.util.List;
 
 import org.team27.stocksim.model.market.Trade;
 
-
+/**
+ * Represents a trader's holdings of a specific stock.
+ *
+ * <p>A Position tracks the quantity of shares held, the total cost basis,
+ * and the trade history that built the position. It calculates average cost
+ * and unrealized profit/loss, providing essential portfolio analytics.</p>
+ *
+ * <p><strong>Design Patterns:</strong> Value Object + Aggregate</p>
+ * <ul>
+ *   <li>Tracks cost basis using weighted average method</li>
+ *   <li>Maintains trade history for audit and tax purposes</li>
+ *   <li>Calculates unrealized P&L against current market price</li>
+ *   <li>Proportional cost reduction when selling shares</li>
+ *   <li>Validates sell operations against current holdings</li>
+ * </ul>
+ *
+ * <h2>Cost Basis Calculation:</h2>
+ * <p>Uses weighted average cost method: when shares are added, their cost
+ * is added to the total; when shares are sold, cost is reduced proportionally.</p>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * Position position = new Position("AAPL");
+ *
+ * // Buy 100 shares at $150
+ * position.addShares(100, new BigDecimal("150.00"), buyTrade);
+ *
+ * // Buy 50 more shares at $160
+ * position.addShares(50, new BigDecimal("160.00"), buyTrade2);
+ *
+ * // Average cost: (100*150 + 50*160) / 150 = $153.33
+ * BigDecimal avgCost = position.getAverageCost();
+ *
+ * // Unrealized P&L at current price $170
+ * BigDecimal pnl = position.getUnrealizedPnL(new BigDecimal("170.00"));
+ *
+ * // Sell 50 shares
+ * boolean success = position.removeShares(50, sellTrade);
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 1.0
+ * @see Portfolio
+ * @see Trade
+ */
 public class Position {
+    /**
+     * Stock symbol for this position.
+     */
     private final String symbol;
-    private int quantity;
-    private BigDecimal totalCost; // Total cost of all shares (for average cost calculation)
-    private final List<Trade> trades; // History of trades that built this position
 
+    /**
+     * Number of shares currently held.
+     */
+    private int quantity;
+
+    /**
+     * Total cost of all shares (for weighted average cost calculation).
+     */
+    private BigDecimal totalCost;
+
+    /**
+     * History of trades that built or reduced this position.
+     */
+    private final List<Trade> trades;
+
+    /**
+     * Constructs a new Position for the specified stock symbol.
+     *
+     * @param symbol Stock symbol (e.g., "AAPL", "GOOGL")
+     */
     public Position(String symbol) {
         this.symbol = symbol;
         this.quantity = 0;

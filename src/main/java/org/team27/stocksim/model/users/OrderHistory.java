@@ -13,23 +13,81 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Tracks a trader's order and trade history.
- * Maintains records of all orders placed and trades executed.
- * Provides DTOs for external access to maintain encapsulation.
+ * Tracks a trader's complete order and trade history.
+ *
+ * <p>OrderHistory maintains chronological records of all orders placed and trades
+ * executed by a user. It provides filtered access and converts internal domain
+ * objects to DTOs for safe external consumption, maintaining encapsulation.</p>
+ *
+ * <p><strong>Design Pattern:</strong> Repository + DTO Conversion</p>
+ * <ul>
+ *   <li>Maintains complete audit trail of trading activity</li>
+ *   <li>Converts domain objects to DTOs for view layer</li>
+ *   <li>Provides filtered access by symbol</li>
+ *   <li>Ensures encapsulation by returning DTOs not domain objects</li>
+ *   <li>Supports order history display and reporting</li>
+ * </ul>
+ *
+ * <h2>Key Features:</h2>
+ * <ul>
+ *   <li>Chronological order recording</li>
+ *   <li>Trade execution history</li>
+ *   <li>Symbol-based filtering</li>
+ *   <li>DTO conversion for safe external access</li>
+ *   <li>Separate collections for orders and trades</li>
+ * </ul>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * OrderHistory history = new OrderHistory();
+ *
+ * // Record orders and trades
+ * history.addOrder(buyOrder);
+ * history.addTrade(executedTrade);
+ *
+ * // Retrieve for display
+ * List<OrderDTO> allOrders = history.getAllOrdersDTO();
+ * List<TradeDTO> allTrades = history.getAllTradesDTO();
+ *
+ * // Filter by symbol
+ * List<OrderDTO> appleOrders = history.getOrdersBySymbolDTO("AAPL");
+ * List<TradeDTO> appleTrades = history.getTradesBySymbolDTO("AAPL");
+ *
+ * // Access internal objects (package-private)
+ * List<Order> orders = history.getAllOrders();
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 1.0
+ * @see Order
+ * @see Trade
+ * @see OrderDTO
+ * @see TradeDTO
+ * @see User
  */
 public class OrderHistory {
 
+    /**
+     * Chronological list of all orders placed.
+     */
     private final List<Order> orders;
+
+    /**
+     * Chronological list of all trades executed.
+     */
     private final List<Trade> trades;
 
+    /**
+     * Constructs an empty OrderHistory.
+     */
     public OrderHistory() {
         this.orders = new ArrayList<>();
         this.trades = new ArrayList<>();
     }
 
     /**
-     * Add an order to the history.
-     * 
+     * Adds an order to the history.
+     *
      * @param order The order to record
      */
     public void addOrder(Order order) {
@@ -37,8 +95,8 @@ public class OrderHistory {
     }
 
     /**
-     * Add a trade to the history.
-     * 
+     * Adds a trade to the history.
+     *
      * @param trade The trade to record
      */
     public void addTrade(Trade trade) {
@@ -46,8 +104,8 @@ public class OrderHistory {
     }
 
     /**
-     * Get all orders as DTOs for external consumption.
-     * 
+     * Gets all orders as DTOs for external consumption.
+     *
      * @return List of order DTOs
      */
     public List<OrderDTO> getAllOrdersDTO() {
@@ -57,8 +115,8 @@ public class OrderHistory {
     }
 
     /**
-     * Get all trades as DTOs for external consumption.
-     * 
+     * Gets all trades as DTOs for external consumption.
+     *
      * @return List of trade DTOs
      */
     public List<TradeDTO> getAllTradesDTO() {
@@ -68,8 +126,8 @@ public class OrderHistory {
     }
 
     /**
-     * Get orders for a specific symbol as DTOs.
-     * 
+     * Gets orders for a specific symbol as DTOs.
+     *
      * @param symbol The stock symbol
      * @return List of order DTOs for the symbol
      */

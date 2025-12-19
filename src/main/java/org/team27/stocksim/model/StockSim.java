@@ -25,21 +25,112 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Core facade for the stock market simulation system.
+ *
+ * <p>This class serves as the main entry point and coordinator for the entire stock
+ * market simulation. It implements the Facade pattern to provide a simplified interface
+ * to the complex subsystems (market, instruments, traders, simulation) and the Observer
+ * pattern to notify views of model changes.</p>
+ *
+ * <p><strong>Design Patterns:</strong> Facade + Observer + Dependency Injection</p>
+ * <ul>
+ *   <li>Depends on abstractions (IMarket, IInstrumentRegistry, ITraderRegistry) following DIP</li>
+ *   <li>Coordinates between market, traders, instruments, and simulation subsystems</li>
+ *   <li>Manages observers for MVC architecture communication</li>
+ *   <li>Handles bot action execution and market simulation lifecycle</li>
+ * </ul>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * // Create simulation with default settings
+ * StockSim simulation = new StockSim();
+ *
+ * // Create stocks and traders
+ * simulation.createStock("AAPL", "Apple Inc.", "0.01", "1", "Technology", "150.00");
+ * simulation.createUser("user1", "John Doe", 10000);
+ * simulation.createBot("bot1", "Trading Bot");
+ *
+ * // Place orders
+ * Order buyOrder = new Order(Order.Side.BUY, "AAPL", new BigDecimal("150.00"), 10, "user1");
+ * simulation.placeOrder(buyOrder);
+ *
+ * // Start simulation
+ * simulation.startMarketSimulation();
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 1.0
+ * @see IMarket
+ * @see IInstrumentRegistry
+ * @see ITraderRegistry
+ * @see IMarketSimulator
+ * @see IModelSubject
+ */
 public class StockSim implements IModelSubject {
+    /**
+     * List of observers watching for model changes.
+     * Part of the Observer pattern implementation.
+     */
     private final List<IModelObserver> observers = new ArrayList<>();
+
+    /**
+     * Manages the currently selected stock and user in the UI.
+     */
     private final SelectionManager selectionManager = new SelectionManager();
 
-    // Depend on abstractions (interfaces), not concrete classes - DIP
+    /**
+     * Market subsystem responsible for order matching and trade settlement.
+     * Depends on abstraction (IMarket) following Dependency Inversion Principle.
+     */
     private final IMarket market;
+
+    /**
+     * Registry managing all tradable instruments (stocks).
+     * Depends on abstraction (IInstrumentRegistry) following DIP.
+     */
     private final IInstrumentRegistry instrumentRegistry;
+
+    /**
+     * Registry managing all traders (users and bots).
+     * Depends on abstraction (ITraderRegistry) following DIP.
+     */
     private final ITraderRegistry traderRegistry;
+
+    /**
+     * Market simulator controlling the time-based simulation lifecycle.
+     * Depends on abstraction (IMarketSimulator) following DIP.
+     */
     private final IMarketSimulator marketSimulator;
+
+    /**
+     * Executor handling asynchronous bot trading actions.
+     */
     private final BotActionExecutor botActionExecutor;
 
+    /**
+     * Constructs a StockSim with default configuration.
+     * <ul>
+     *   <li>Simulation speed: 3600 (1 simulated hour = 1 real second)</li>
+     *   <li>Tick interval: 50ms</li>
+     *   <li>Duration: 10 real seconds</li>
+     * </ul>
+     */
     public StockSim() {
         this(3600, 50, 10);
     }
 
+    /**
+     * Constructs a StockSim with custom simulation parameters.
+     *
+     * <p>This constructor initializes all subsystems in the correct order:
+     * registries → market → bot executor → simulator. It also sets up
+     * market callbacks for price updates and trade settlements.</p>
+     *
+     * @param simulationSpeed How many simulated seconds pass per real second
+     * @param tickInterval Milliseconds between simulation ticks
+     * @param durationInRealSeconds Total duration of simulation in real time
+     */
     public StockSim(int simulationSpeed, int tickInterval, int durationInRealSeconds) {
         // Initialize registries
         this.instrumentRegistry = new InstrumentRegistry(new StockFactory());

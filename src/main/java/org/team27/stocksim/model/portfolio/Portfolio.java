@@ -8,12 +8,76 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Manages a trader's cash balance and stock positions.
+ *
+ * <p>The Portfolio class provides thread-safe operations for managing cash
+ * and stock holdings. It tracks initial balance for profit/loss calculations
+ * and maintains individual positions for each stock symbol.</p>
+ *
+ * <p><strong>Design Patterns:</strong> Aggregate Root + Repository Pattern</p>
+ * <ul>
+ *   <li>Thread-safe operations using synchronized methods</li>
+ *   <li>Aggregates multiple Position objects</li>
+ *   <li>Tracks trade history through Position objects</li>
+ *   <li>Validates withdrawals to prevent negative balance</li>
+ *   <li>Automatic position cleanup when holdings reach zero</li>
+ * </ul>
+ *
+ * <h2>Key Operations:</h2>
+ * <ul>
+ *   <li>Cash management: deposit, withdraw with validation</li>
+ *   <li>Stock operations: add/remove with quantity validation</li>
+ *   <li>Position tracking: average cost, unrealized P&L</li>
+ *   <li>Portfolio valuation: total equity calculation</li>
+ * </ul>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * Portfolio portfolio = new Portfolio(new BigDecimal("10000"));
+ *
+ * // Buy stock
+ * boolean withdrawn = portfolio.withdraw(new BigDecimal("1500"));
+ * portfolio.addStock("AAPL", 10, new BigDecimal("150.00"), trade);
+ *
+ * // Sell stock
+ * boolean sold = portfolio.removeStock("AAPL", 5, trade);
+ * portfolio.deposit(new BigDecimal("775"));
+ *
+ * // Check holdings
+ * int quantity = portfolio.getStockQuantity("AAPL");
+ * BigDecimal balance = portfolio.getBalance();
+ * BigDecimal netWorth = portfolio.getNetWorth(currentPrices);
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 1.0
+ * @see Position
+ * @see Trader
+ * @see Trade
+ */
 public class Portfolio {
 
+    /**
+     * Starting balance when portfolio was created.
+     */
     private final BigDecimal initialBalance;
+
+    /**
+     * Current cash balance available for trading.
+     */
     private BigDecimal balance;
+
+    /**
+     * Map of stock positions by symbol.
+     */
     private Map<String, Position> positions; // symbol -> Position
 
+    /**
+     * Constructs a new Portfolio with the specified initial balance.
+     *
+     * @param traderBalance Starting cash balance
+     */
     public Portfolio(BigDecimal traderBalance) {
         this.balance = traderBalance;
         this.initialBalance = traderBalance;

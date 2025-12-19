@@ -8,15 +8,77 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Engine responsible for matching buy and sell orders in the market.
+ *
+ * <p>The matching engine implements price-time priority matching logic, where
+ * orders are matched based on the best available price, and orders at the same
+ * price are matched based on arrival time. It handles both limit orders (with
+ * specific prices) and market orders (executed at best available price with
+ * deviation limits).</p>
+ *
+ * <p><strong>Design Patterns:</strong> Strategy + Chain of Responsibility</p>
+ * <ul>
+ *   <li>Price-time priority matching algorithm</li>
+ *   <li>Market order protection via price deviation limits</li>
+ *   <li>Self-trade prevention (same trader can't match own orders)</li>
+ *   <li>Tracks last trade prices for market order validation</li>
+ *   <li>Generates trades atomically with order book updates</li>
+ * </ul>
+ *
+ * <h2>Matching Rules:</h2>
+ * <ol>
+ *   <li>Buy orders match with sell orders at same or better price</li>
+ *   <li>Self-trades are prevented (same trader ID)</li>
+ *   <li>Market orders match within configured price deviation limits</li>
+ *   <li>Limit orders only rest in book if not market orders</li>
+ *   <li>Filled orders are removed from the order book</li>
+ * </ol>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * MatchingEngine engine = new MatchingEngine();
+ * OrderBook orderBook = new OrderBook("AAPL");
+ *
+ * Order buyOrder = new Order(Order.Side.BUY, "AAPL", new BigDecimal("150.00"), 100, "trader1");
+ * List<Trade> trades = engine.match(buyOrder, orderBook);
+ *
+ * for (Trade trade : trades) {
+ *     System.out.println("Executed trade: " + trade.getQuantity() + " @ $" + trade.getPrice());
+ * }
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 1.0
+ * @see Order
+ * @see OrderBook
+ * @see Trade
+ * @see MarketOrderConfig
+ */
 public class MatchingEngine {
 
+    /**
+     * Configuration for market order behavior (price deviation limits, etc.).
+     */
     private final MarketOrderConfig config;
+
+    /**
+     * Cache of last trade prices by symbol for market order validation.
+     */
     private final Map<String, BigDecimal> lastTradePrices;
 
+    /**
+     * Constructs a MatchingEngine with default configuration.
+     */
     public MatchingEngine() {
         this(MarketOrderConfig.createDefault());
     }
 
+    /**
+     * Constructs a MatchingEngine with custom configuration.
+     *
+     * @param config Configuration controlling market order behavior
+     */
     public MatchingEngine(MarketOrderConfig config) {
         this.config = config;
         this.lastTradePrices = new ConcurrentHashMap<>();
@@ -44,7 +106,7 @@ public class MatchingEngine {
 
     public List<Trade> match(Order incomingOrder, OrderBook orderBook) {
         List<Trade> trades = new ArrayList<>();
-        
+
         if (incomingOrder.isBuyOrder()) {
             while (!incomingOrder.isFilled()) {
                 Order bestAsk = orderBook.getBestAsk();
@@ -64,12 +126,12 @@ public class MatchingEngine {
                 }
             }
         }
-        
+
         // Market orders should not rest in the book, only add if limit order with remaining quantity
         if (incomingOrder.getRemainingQuantity() > 0 && !incomingOrder.isMarketOrder()) {
             orderBook.add(incomingOrder);
         }
-        
+
         return trades;
     }
 

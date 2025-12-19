@@ -10,19 +10,88 @@ import org.team27.stocksim.model.StockSim;
 import org.team27.stocksim.model.market.Order;
 import org.team27.stocksim.model.users.Bot;
 
+/**
+ * Trading strategy that makes random buy/sell decisions.
+ *
+ * <p>The RandomStrategy simulates unpredictable market participants who trade
+ * without following any particular pattern. It randomly decides whether to buy,
+ * sell, or do nothing on each tick, with a slight bias toward buying to
+ * maintain market liquidity.</p>
+ *
+ * <p><strong>Design Pattern:</strong> Strategy (concrete implementation)</p>
+ * <ul>
+ *   <li>Configurable probability of taking action each tick</li>
+ *   <li>Slight bias toward buying (51% vs 49%) for market health</li>
+ *   <li>Random stock selection for both buys and sells</li>
+ *   <li>Random quantities within configured range</li>
+ *   <li>Price variation around current market price</li>
+ * </ul>
+ *
+ * <h2>Behavior:</h2>
+ * <ul>
+ *   <li>1% chance of action per tick (default)</li>
+ *   <li>If acting, 51% chance to buy, 49% to sell</li>
+ *   <li>Buys random stock at slightly varied price</li>
+ *   <li>Sells random holding if portfolio not empty</li>
+ * </ul>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>{@code
+ * // Use default random strategy
+ * IBotStrategy strategy = new RandomStrategy();
+ *
+ * // Custom random strategy with higher activity
+ * IBotStrategy activeStrategy = new RandomStrategy(
+ *     new Random(),
+ *     0.10,  // 10% chance of action
+ *     5,     // min quantity
+ *     50     // max quantity
+ * );
+ * }</pre>
+ *
+ * @author Team 27
+ * @version 1.0
+ * @see AbstractBotStrategy
+ * @see IBotStrategy
+ */
 public class RandomStrategy extends AbstractBotStrategy {
 
+    /**
+     * Enum representing possible actions the bot can take.
+     */
     private enum Action {
         BUY, SELL, NONE
     }
 
+    /**
+     * Probability of taking any action on a given tick.
+     */
     private final double doSomethingProbability;
+
+    /**
+     * Probability of buying when action is taken (vs selling).
+     */
     private final double buyProbability = 0.51;
 
+    /**
+     * Constructs a RandomStrategy with default parameters.
+     * <ul>
+     *   <li>Action probability: 1%</li>
+     *   <li>Quantity range: 1-10</li>
+     * </ul>
+     */
     public RandomStrategy() {
         this(new Random(), 0.01, 1, 10);
     }
 
+    /**
+     * Constructs a RandomStrategy with custom parameters.
+     *
+     * @param random Random number generator
+     * @param doSomethingProbability Probability of action per tick (0.0-1.0)
+     * @param minQuantity Minimum order quantity
+     * @param maxQuantity Maximum order quantity
+     */
     public RandomStrategy(Random random, double doSomethingProbability, int minQuantity, int maxQuantity) {
         super(random, minQuantity, maxQuantity);
         this.doSomethingProbability = doSomethingProbability;
