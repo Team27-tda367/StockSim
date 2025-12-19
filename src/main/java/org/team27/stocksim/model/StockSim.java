@@ -116,6 +116,11 @@ public class StockSim implements IModelSubject {
         market.placeOrder(order, traderRegistry.getAllTraders(), instrumentRegistry.getAllInstruments());
     }
 
+    public void cancelOrder(int orderId) {
+        market.cancelOrder(orderId, traderRegistry.getAllTraders());
+        notifyPortfolioChanged();
+    }
+
     public void createStock(String symbol, String stockName, String tickSize, String lotSize, String category,
             String initialPrice) {
         instrumentRegistry.createInstrument(symbol, stockName, tickSize, lotSize, category, initialPrice);

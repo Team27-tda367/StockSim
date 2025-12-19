@@ -143,6 +143,19 @@ public class OrderHistory {
     }
 
     /**
+     * Get an order by its ID.
+     * 
+     * @param orderId The order ID to find
+     * @return The order, or null if not found
+     */
+    public Order getOrderById(int orderId) {
+        return orders.stream()
+                .filter(order -> order.getOrderId() == orderId)
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
      * Internal method: Get all orders (for model layer use only).
      * External callers should use getAllOrdersDTO().
      * 

@@ -115,4 +115,9 @@ public class SimController implements ISimController {
     public InstrumentDTO getSelectedStock() {
         return model.getSelectionManager().getSelectedStock();
     }
+
+    @Override
+    public void cancelOrder(int orderId) {
+        model.cancelOrder(orderId);
+    }
 }
