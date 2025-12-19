@@ -119,7 +119,7 @@ public class StockViewController extends ViewControllerBase
     private void initializePriceFields() {
         BigDecimal price = stock.getPrice();
         priceField.setText(price.toString());
-        orderPriceLabel.setText(price + " SEK");
+        orderPriceLabel.setText("$" + price);
     }
 
     private void initializeChart() {
@@ -192,8 +192,8 @@ public class StockViewController extends ViewControllerBase
                 BigDecimal price = new BigDecimal(priceText);
                 BigDecimal total = price.multiply(BigDecimal.valueOf(quantity));
 
-                orderPriceLabel.setText(price + " SEK");
-                orderTotalLabel.setText(String.format("%.2f SEK", total));
+                orderPriceLabel.setText("$" + price);
+                orderTotalLabel.setText(String.format("$%.2f", total));
             }
         } catch (NumberFormatException e) {
             // Ignore invalid input
@@ -329,7 +329,7 @@ public class StockViewController extends ViewControllerBase
 
     private void updatePriceDisplay(BigDecimal newPrice) {
         priceLabel.setText(newPrice.toString());
-        orderPriceLabel.setText(newPrice + " SEK");
+        orderPriceLabel.setText("$" + newPrice);
 
         if (priceField != null && priceField.getText().isEmpty()) {
             priceField.setText(newPrice.toString());

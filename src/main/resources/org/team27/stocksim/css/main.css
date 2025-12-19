@@ -157,6 +157,34 @@
     -fx-text-fill: #dc2626;
 }
 
+/* ============================================
+   POSITION LIST CELLS
+   ============================================ */
+
+.position-row {
+    -fx-spacing: 5;
+}
+
+.position-cell {
+    -fx-font-size: 14px;
+}
+
+.position-stock {
+    -fx-pref-width: 152;
+}
+
+.position-quantity {
+    -fx-pref-width: 155;
+}
+
+.position-price {
+    -fx-pref-width: 110;
+}
+
+.position-gain-loss {
+    -fx-pref-width: 194;
+}
+
 .text-primary {
     -fx-text-fill: #2563eb;
 }

@@ -11,8 +11,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import org.team27.stocksim.view.ViewAdapter;
 
 import java.math.BigDecimal;
@@ -38,12 +41,12 @@ public class PortfolioViewController extends ViewControllerBase
     private Label totalGainLossPercentLabel;
 
     @FXML
-    private ListView<String> positionsListView;
+    private ListView<PositionData> positionsListView;
 
     @FXML
     private ListView<String> ordersListView;
 
-    private ObservableList<String> positionsList = FXCollections.observableArrayList();
+    private ObservableList<PositionData> positionsList = FXCollections.observableArrayList();
     private ObservableList<String> ordersList = FXCollections.observableArrayList();
 
     @Override
@@ -59,6 +62,53 @@ public class PortfolioViewController extends ViewControllerBase
         // Set up ListViews
         if (positionsListView != null) {
             positionsListView.setItems(positionsList);
+            positionsListView.setFixedCellSize(48); // Set fixed cell height for better rendering
+            // Custom cell factory to display data in columns
+            positionsListView.setCellFactory(lv -> new ListCell<PositionData>() {
+                @Override
+                protected void updateItem(PositionData item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        HBox hbox = new HBox();
+                        hbox.setAlignment(Pos.CENTER_LEFT);
+                        
+                        // Stock - 152px
+                        Label stockLabel = new Label(item.symbol);
+                        stockLabel.setPrefWidth(152);
+                        stockLabel.setAlignment(Pos.CENTER);
+                        
+                        // Quantity - 155px
+                        Label qtyLabel = new Label(String.valueOf(item.quantity));
+                        qtyLabel.setPrefWidth(155);
+                        qtyLabel.setAlignment(Pos.CENTER);
+                        
+                        // Current Price - 110px
+                        Label priceLabel = new Label(String.format("$%.2f", item.currentPrice));
+                        priceLabel.setPrefWidth(110);
+                        priceLabel.setAlignment(Pos.CENTER);
+                        
+                        // Gain/Loss - 194px
+                        String sign = item.gainLoss.compareTo(BigDecimal.ZERO) >= 0 ? "+" : "";
+                        Label gainLabel = new Label(sign + String.format("$%.2f", item.gainLoss));
+                        gainLabel.setPrefWidth(194);
+                        gainLabel.setAlignment(Pos.CENTER);
+                        
+                        // Color coding
+                        if (item.gainLoss.compareTo(BigDecimal.ZERO) > 0) {
+                            gainLabel.getStyleClass().add("text-positive");
+                        } else if (item.gainLoss.compareTo(BigDecimal.ZERO) < 0) {
+                            gainLabel.getStyleClass().add("text-negative");
+                        }
+                        
+                        hbox.getChildren().addAll(stockLabel, qtyLabel, priceLabel, gainLabel);
+                        setGraphic(hbox);
+                        setText(null);
+                    }
+                }
+            });
         }
         if (ordersListView != null) {
             ordersListView.setItems(ordersList);
@@ -129,11 +179,11 @@ public class PortfolioViewController extends ViewControllerBase
             totalGainLossLabel.setText(sign + "$" + String.format("%.2f", totalGainLoss));
 
             // Apply styling based on profit/loss
-            totalGainLossLabel.getStyleClass().removeAll("text-success", "text-danger");
+            totalGainLossLabel.getStyleClass().removeAll("text-positive", "text-negative");
             if (totalGainLoss.compareTo(BigDecimal.ZERO) > 0) {
-                totalGainLossLabel.getStyleClass().add("text-success");
+                totalGainLossLabel.getStyleClass().add("text-positive");
             } else if (totalGainLoss.compareTo(BigDecimal.ZERO) < 0) {
-                totalGainLossLabel.getStyleClass().add("text-danger");
+                totalGainLossLabel.getStyleClass().add("text-negative");
             }
         }
 
@@ -143,11 +193,11 @@ public class PortfolioViewController extends ViewControllerBase
             totalGainLossPercentLabel.setText(sign + String.format("%.2f", gainLossPercent) + "%");
 
             // Apply styling based on profit/loss
-            totalGainLossPercentLabel.getStyleClass().removeAll("text-success", "text-danger");
+            totalGainLossPercentLabel.getStyleClass().removeAll("text-positive", "text-negative");
             if (gainLossPercent.compareTo(BigDecimal.ZERO) > 0) {
-                totalGainLossPercentLabel.getStyleClass().add("text-success");
+                totalGainLossPercentLabel.getStyleClass().add("text-positive");
             } else if (gainLossPercent.compareTo(BigDecimal.ZERO) < 0) {
-                totalGainLossPercentLabel.getStyleClass().add("text-danger");
+                totalGainLossPercentLabel.getStyleClass().add("text-negative");
             }
         }
     }
@@ -174,21 +224,26 @@ public class PortfolioViewController extends ViewControllerBase
      */
     private void updatePositionsDisplay(Portfolio portfolio) {
         Map<String, Position> positions = portfolio.getPositions();
+        Map<String, BigDecimal> currentPrices = getCurrentPrices();
 
         positionsList.clear();
 
-        if (positions.isEmpty()) {
-            positionsList.add("No positions");
-        } else {
+        if (!positions.isEmpty()) {
             positions.forEach((symbol, position) -> {
                 int quantity = position.getQuantity();
                 BigDecimal avgCost = position.getAverageCost();
                 BigDecimal totalCost = avgCost.multiply(BigDecimal.valueOf(quantity));
+                BigDecimal currentPrice = currentPrices.getOrDefault(symbol, BigDecimal.ZERO);
+                BigDecimal currentValue = currentPrice.multiply(BigDecimal.valueOf(quantity));
+                BigDecimal gainLoss = currentValue.subtract(totalCost);
 
-                String positionStr = String.format("%s: %d shares @ $%.2f avg (Total: $%.2f)",
-                        symbol, quantity, avgCost, totalCost);
-                positionsList.add(positionStr);
+                positionsList.add(new PositionData(symbol, quantity, currentPrice, gainLoss));
             });
+        }
+        
+        // Force ListView to refresh its layout
+        if (positionsListView != null) {
+            positionsListView.refresh();
         }
     }
 
@@ -218,6 +273,23 @@ public class PortfolioViewController extends ViewControllerBase
     @FXML
     public void onMainView(ActionEvent event) {
         viewSwitcher.switchTo(EView.MAINVIEW);
+    }
+
+    /**
+     * Data class to hold position information for display
+     */
+    private static class PositionData {
+        final String symbol;
+        final int quantity;
+        final BigDecimal currentPrice;
+        final BigDecimal gainLoss;
+
+        PositionData(String symbol, int quantity, BigDecimal currentPrice, BigDecimal gainLoss) {
+            this.symbol = symbol;
+            this.quantity = quantity;
+            this.currentPrice = currentPrice;
+            this.gainLoss = gainLoss;
+        }
     }
 
 }

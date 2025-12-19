@@ -163,6 +163,8 @@ public class MainViewController extends ViewControllerBase
             meta.getStyleClass().add("stock-meta");
             price = new Label();
             price.getStyleClass().add("stock-price");
+            price.setPrefWidth(100);
+            price.setAlignment(Pos.CENTER);
 
             VBox stockInfo = new VBox(symbol, meta);
             stockInfo.getStyleClass().add("stock-info");
@@ -184,6 +186,14 @@ public class MainViewController extends ViewControllerBase
             content = new HBox(stockInfo, spacer, price, actionButton);
             content.setAlignment(Pos.CENTER_LEFT);
             content.getStyleClass().add("content");
+            
+            // Make the entire row clickable
+            content.setOnMouseClicked(event -> {
+                InstrumentDTO instrument = getItem();
+                if (instrument != null) {
+                    handleRowClick(instrument);
+                }
+            });
         }
 
         @Override
@@ -202,6 +212,15 @@ public class MainViewController extends ViewControllerBase
 
         // Trade button handler
         private void handleButtonClick(InstrumentDTO instrument) {
+            // 1. Save selected stock using controller
+            modelController.setSelectedStock(instrument);
+
+            // 2. Switch to stock view
+            viewSwitcher.switchTo(EView.STOCKVIEW);
+        }
+        
+        // Row click handler
+        private void handleRowClick(InstrumentDTO instrument) {
             // 1. Save selected stock using controller
             modelController.setSelectedStock(instrument);
 

@@ -189,7 +189,7 @@
                            <Insets top="10.0" />
                         </VBox.margin>
                         </HBox>
-                     <ListView fx:id="positionsListView" pickOnBounds="false" prefHeight="407.0" prefWidth="668.0" stylesheets="@../css/main.css">
+                     <ListView fx:id="positionsListView" prefHeight="407.0" prefWidth="668.0" stylesheets="@../css/main.css">
                         <styleClass>
                            <String fx:value="list-view-custom" />
                            <String fx:value="panel-body" />
