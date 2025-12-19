@@ -8,7 +8,6 @@ public class BotData {
     private String strategy;
     private int balance;
 
-    // Om du vill att output-JSON ska ha "initialPositions" som i exemplet:
     private List<PositionData> initialPositions;
 
     public BotData() {

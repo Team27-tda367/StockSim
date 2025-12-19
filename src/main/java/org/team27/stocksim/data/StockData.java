@@ -8,7 +8,7 @@ public class StockData {
     private String category;
     private String initialPrice;
 
-    // Default constructor for JSON deserialization
+
     public StockData() {
     }
 

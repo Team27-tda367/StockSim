@@ -7,9 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-/**
- * Loads bot data from JSON resources.
- */
+
 public class BotDataLoader {
     private static final String CONFIG_BOT_FILE = "/config/bot-config.json";
     private static final String CONFIG_STOCK_FILE = "/config/stocks-config.json";
@@ -19,12 +17,7 @@ public class BotDataLoader {
         this.gson = new Gson();
     }
 
-    /**
-     * Load default bots from the bundled JSON resource.
-     * 
-     * @return List of bot data
-     * @throws RuntimeException if the file cannot be loaded
-     */
+
     public List<BotData> loadDefaultBots() {
         // Call script and load from config file, then return loaded bots
 

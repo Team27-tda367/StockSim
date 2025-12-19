@@ -60,10 +60,7 @@ public class MatchingEngine {
         return trades;
     }
 
-    /**
-     * Determines if an incoming order can match with a resting order.
-     * Market orders match at any price, limit orders only match when price is acceptable.
-     */
+
     private boolean canMatch(Order incomingOrder, Order restingOrder) {
         // Market orders always match if there's liquidity
         if (incomingOrder.isMarketOrder()) {

@@ -17,10 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Repository for persisting stock price history to JSON.
- * Handles reading and writing price data to stock_prices.json.
- */
+
 public class StockPriceRepository {
 
     private static final String RESOURCE_PATH = "/data/stock_prices.json";
@@ -33,11 +30,7 @@ public class StockPriceRepository {
                 .create();
     }
 
-    /**
-     * Save all stock price histories to JSON file.
-     * 
-     * @param instruments Map of stock symbol to instrument
-     */
+
     public void saveStockPrices(Map<String, Instrument> instruments) {
         try {
             Map<String, StockPriceData> priceData = new HashMap<>();
@@ -65,11 +58,7 @@ public class StockPriceRepository {
         }
     }
 
-    /**
-     * Load stock price histories from JSON file.
-     * 
-     * @return Map of stock symbol to price data
-     */
+
     public Map<String, StockPriceData> loadStockPrices() {
         try {
             // Try loading from classpath first (for JAR execution)
@@ -104,9 +93,6 @@ public class StockPriceRepository {
         }
     }
 
-    /**
-     * Data class for JSON serialization of stock price information.
-     */
     public static class StockPriceData {
         public String symbol;
         public String name;

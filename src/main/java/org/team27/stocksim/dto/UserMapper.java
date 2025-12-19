@@ -4,7 +4,7 @@ import org.team27.stocksim.model.users.User;
 
 public class UserMapper {
 
-    // Convert Instrument to InstrumentDTO
+
 
     public static UserDTO toDto(User user, PortfolioDTO portfolio, OrderHistoryDTO orderHistory) {
 

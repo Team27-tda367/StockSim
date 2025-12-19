@@ -3,25 +3,12 @@ package org.team27.stocksim.model.instruments;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Service class for processing and filtering price history data.
- * This class contains business logic for data sampling, filtering, and
- * windowing
- * without any dependencies on UI frameworks.
- * 
- * Follows Single Responsibility Principle - only handles data processing logic.
- */
+
 public class PriceHistoryService {
 
     private static final int MAX_DISPLAY_POINTS = 200;
 
-    /**
-     * Filters price history data to show the most recent points.
-     * Returns a subset of price points optimized for display.
-     * 
-     * @param priceHistory The complete price history
-     * @return Filtered list of the most recent price points
-     */
+
     public List<PricePoint> filterPriceData(PriceHistory priceHistory) {
         if (priceHistory == null) {
             return new ArrayList<>();
@@ -41,15 +28,7 @@ public class PriceHistoryService {
         return new ArrayList<>(allPoints);
     }
 
-    /**
-     * Calculates incremental updates to price data.
-     * Returns only new points that should be added to an existing filtered dataset.
-     * 
-     * @param priceHistory  The complete price history
-     * @param lastKnownSize The number of points previously processed
-     * @return FilterResult containing new points and whether a full redraw is
-     *         needed
-     */
+
     public FilterResult getIncrementalUpdate(
             PriceHistory priceHistory,
             int lastKnownSize) {
@@ -103,10 +82,7 @@ public class PriceHistoryService {
         );
     }
 
-    /**
-     * Result class containing filtered price points and metadata about the
-     * filtering operation.
-     */
+
     public static class FilterResult {
         private final List<PricePoint> points;
         private final int newSize;
