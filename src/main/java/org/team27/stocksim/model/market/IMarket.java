@@ -10,6 +10,8 @@ public interface IMarket {
 
     void placeOrder(Order order, HashMap<String, Trader> traders, HashMap<String, Instrument> stocks);
 
+    void cancelOrder(int orderId, HashMap<String, Trader> traders);
+
     void addOrderBook(String symbol, OrderBook orderBook);
 
     void removeOrderBook(String symbol);

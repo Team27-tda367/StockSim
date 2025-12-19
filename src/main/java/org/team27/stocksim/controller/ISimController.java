@@ -38,4 +38,6 @@ public interface ISimController {
     void setSelectedStock(InstrumentDTO stock);
 
     InstrumentDTO getSelectedStock();
+
+    void cancelOrder(int orderId);
 }

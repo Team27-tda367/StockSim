@@ -41,6 +41,36 @@ public class Market implements IMarket {
         processOrder(order, traders, stocks);
     }
 
+    @Override
+    public void cancelOrder(int orderId, HashMap<String, Trader> traders) {
+        String traderId = orderIdToTraderId.get(orderId);
+        if (traderId == null) {
+            return;
+        }
+
+        Trader trader = traders.get(traderId);
+        if (!(trader instanceof User user)) {
+            return;
+        }
+
+        Order order = user.getOrderHistory().getOrderById(orderId);
+        if (order == null) {
+            return;
+        }
+
+        // Only cancel if the order is active (not filled or already cancelled)
+        if (order.getStatus() != Order.Status.FILLED && order.getStatus() != Order.Status.CANCELLED) {
+            // Remove from order book
+            OrderBook orderBook = getOrderBook(order.getSymbol());
+            if (orderBook != null) {
+                orderBook.remove(order);
+            }
+
+            // Mark as cancelled
+            order.cancel();
+        }
+    }
+
     private void recordOrderInHistory(Order order, HashMap<String, Trader> traders) {
         Trader trader = traders.get(order.getTraderId());
         if (trader instanceof User) {
