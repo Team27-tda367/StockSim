@@ -157,6 +157,14 @@
     -fx-text-fill: #dc2626;
 }
 
+.text-success {
+    -fx-text-fill: #16a34a;
+}
+
+.text-danger {
+    -fx-text-fill: #dc2626;
+}
+
 .text-primary {
     -fx-text-fill: #2563eb;
 }
